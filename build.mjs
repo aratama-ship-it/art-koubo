@@ -117,10 +117,10 @@ ${g.amount ? `<div class="a">${esc(g.amount)}</div>` : ''}
     : '出演・制作にかかる費用の当てとして、次のような助成金があります。';
   let groups = '';
   if (r.isOverseas) {
-    groups = `<div class="gh">💰 海外での活動に使える可能性のある助成金</div>${r.national.map((g) => gcard(g, '国際枠あり')).join('')}`;
+    groups = `<div class="gh">💰 海外での活動に使える可能性のある助成金</div><div class="grow">${r.national.map((g) => gcard(g, '国際枠あり')).join('')}</div>`;
   } else {
-    if (r.local.length) groups += `<div class="gh">📍 ${esc(r.bk.label)}を拠点に活動する方向け</div>${r.local.map((g) => gcard(g, `${esc(r.bk.label)}拠点`)).join('')}`;
-    if (r.national.length) groups += `<div class="gh">🗾 全国どこからでも応募できる助成金</div>${r.national.map((g) => gcard(g, '全国')).join('')}`;
+    if (r.local.length) groups += `<div class="gh">📍 ${esc(r.bk.label)}を拠点に活動する方向け</div><div class="grow">${r.local.map((g) => gcard(g, `${esc(r.bk.label)}拠点`)).join('')}</div>`;
+    if (r.national.length) groups += `<div class="gh">🗾 全国どこからでも応募できる助成金</div><div class="grow">${r.national.map((g) => gcard(g, '全国')).join('')}</div>`;
   }
   return `<div class="grantbox">
 <div class="grantbox-h">公募に通ったあとの<strong>資金の当て</strong>を探す</div>
@@ -190,10 +190,13 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .grantbox-h strong{color:#0f6b40}
 .grantbox .gnote{color:var(--sub);font-size:12.5px;margin:6px 0 4px}
 .grantbox .gh{font-size:12.5px;color:#3d6b53;font-weight:700;margin:14px 0 6px}
-.gcard{display:block;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin:7px 0}
+.grow{display:flex;gap:10px;overflow-x:auto;margin:0 0 4px;padding:2px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.grow::-webkit-scrollbar{height:6px}
+.grow::-webkit-scrollbar-thumb{background:#cfe9d9;border-radius:3px}
+.gcard{display:block;flex:0 0 200px;width:200px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;scroll-snap-align:start}
 .gcard:hover{border-color:#1a8f5a;text-decoration:none}
-.gcard .t{font-weight:600;color:var(--ink);font-size:14px}
-.gcard .m{color:var(--sub);font-size:12px;margin-top:2px}
+.gcard .t{font-weight:600;color:var(--ink);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gcard .m{color:var(--sub);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gcard .a{color:#147a4a;font-size:12px;font-weight:600;margin-top:3px}
 .gtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
 .tag.glabel{background:#e6f5ee;color:#1a8f5a;font-weight:600}

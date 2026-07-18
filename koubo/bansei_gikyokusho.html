@@ -56,10 +56,13 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .grantbox-h strong{color:#0f6b40}
 .grantbox .gnote{color:var(--sub);font-size:12.5px;margin:6px 0 4px}
 .grantbox .gh{font-size:12.5px;color:#3d6b53;font-weight:700;margin:14px 0 6px}
-.gcard{display:block;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin:7px 0}
+.grow{display:flex;gap:10px;overflow-x:auto;margin:0 0 4px;padding:2px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.grow::-webkit-scrollbar{height:6px}
+.grow::-webkit-scrollbar-thumb{background:#cfe9d9;border-radius:3px}
+.gcard{display:block;flex:0 0 200px;width:200px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;scroll-snap-align:start}
 .gcard:hover{border-color:#1a8f5a;text-decoration:none}
-.gcard .t{font-weight:600;color:var(--ink);font-size:14px}
-.gcard .m{color:var(--sub);font-size:12px;margin-top:2px}
+.gcard .t{font-weight:600;color:var(--ink);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gcard .m{color:var(--sub);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gcard .a{color:#147a4a;font-size:12px;font-weight:600;margin-top:3px}
 .gtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
 .tag.glabel{background:#e6f5ee;color:#1a8f5a;font-weight:600}
@@ -107,7 +110,7 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 <div class="grantbox">
 <div class="grantbox-h">公募に通ったあとの<strong>資金の当て</strong>を探す</div>
 <p class="gnote">出演・制作にかかる費用の当てとして、次のような助成金があります。 <b>応募資格は助成金ごとに異なります</b>——地域助成の多くは「その地域を拠点に活動していること」が条件です。各詳細で必ずご確認ください。</p>
-<div class="gh">📍 東京を拠点に活動する方向け</div><a class="gcard" href="https://aratama-ship-it.github.io/stage-grants/grants/act_c1.html" target="_blank" rel="noopener">
+<div class="gh">📍 東京を拠点に活動する方向け</div><div class="grow"><a class="gcard" href="https://aratama-ship-it.github.io/stage-grants/grants/act_c1.html" target="_blank" rel="noopener">
 <div class="t">東京芸術文化創造発信助成 カテゴリーI（芸術創造・単年）</div>
 <div class="m">アーツカウンシル東京</div>
 <div class="a">団体200万（国内）／400万（国際）・個人50万（1/2以内）</div>
@@ -115,7 +118,7 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 <div class="t">東京芸術文化創造発信助成 カテゴリーII（芸術創造・長期）</div>
 <div class="m">アーツカウンシル東京</div>
 <div class="a">800万（2年）／1,200万（3年）・1/2以内</div>
-<div class="gtags"><span class="tag dl">受付中</span><span class="tag">東京都</span><span class="tag glabel">東京拠点</span></div></a><div class="gh">🗾 全国どこからでも応募できる助成金</div><a class="gcard" href="https://aratama-ship-it.github.io/stage-grants/grants/eujapan_mobility.html" target="_blank" rel="noopener">
+<div class="gtags"><span class="tag dl">受付中</span><span class="tag">東京都</span><span class="tag glabel">東京拠点</span></div></a></div><div class="gh">🗾 全国どこからでも応募できる助成金</div><div class="grow"><a class="gcard" href="https://aratama-ship-it.github.io/stage-grants/grants/eujapan_mobility.html" target="_blank" rel="noopener">
 <div class="t">EU・ジャパンフェスト Mobility Support Program</div>
 <div class="m">EU・ジャパンフェスト日本委員会</div>
 <div class="a">上限15万円（日欧間・初回）／10万円（2回目〜）</div>
@@ -123,7 +126,7 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 <div class="t">美術工芸振興佐藤基金 研究助成</div>
 <div class="m">美術工芸振興佐藤基金</div>
 <div class="a">1件 上限約70万円（総額350万・5件程度）</div>
-<div class="gtags"><span class="tag dl">受付中</span><span class="tag">全国</span><span class="tag glabel">全国</span></div></a>
+<div class="gtags"><span class="tag dl">受付中</span><span class="tag">全国</span><span class="tag glabel">全国</span></div></a></div>
 <p style="margin:12px 0 0"><a class="cta sister" href="https://aratama-ship-it.github.io/stage-grants/regions/tokyo.html" target="_blank" rel="noopener">東京で使える助成金をすべて見る（助成ものさし）→</a></p>
 </div>
 <h2>東京の他の公募</h2><a class="gitem" href="../koubo/tokyo_stage_opencall.html">
