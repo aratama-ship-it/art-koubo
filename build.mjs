@@ -48,6 +48,88 @@ const BUCKETS = [
 ];
 const openKoubos = koubos.filter((k) => k.dlOpen);
 
+// ---- 姉妹サイト「助成ものさし」の助成データ（ビルド時にローカルで読み込み、候補を各公募ページへ焼き込む）----
+// 配信は純静的のまま。両リポジトリはローカルで隣接（app-dev/stage-grants-site）している前提。
+// データが見つからなければこの機能は静かに無効化し、従来のリンクにフォールバックする（ビルドは壊さない）。
+// ※助成データを更新したら、公募側も node build.mjs で再生成して反映する必要がある。
+let GRANTS = [];
+try {
+  const graw = readFileSync(join(ROOT, '../stage-grants-site/data/programs.data.json'), 'utf8');
+  GRANTS = JSON.parse(graw).map((g) => {
+    const region = g.region || '';
+    const isNational = /全国|46道府県/.test(region);
+    let prefSlug = null;
+    if (!/以外/.test(region)) for (const s of PREF_ORDER) if (region.includes(s)) { prefSlug = PREF_KEY[s]; break; }
+    // 国際的な活動に対応しうるか（海外公募向けの優先判定に使う）
+    const intl = /海外|国際|アジア|欧|グローバル/.test(region + (g.amount || '') + (g.note || ''));
+    return { id: g.id, name: g.name, funder: g.funder, region, deadline: g.deadline,
+             dlUrgent: !!g.dlUrgent, amount: g.amount || '', genres: g.genres || [], isNational, prefSlug, intl };
+  });
+} catch { GRANTS = []; }
+
+// 公募の細かいジャンル → 助成側の大分類（並べ替えのソフトな一致判定にのみ使用。ジャンルは絞り込みには使わない）
+const GENRE_BROAD = {
+  '演劇': '舞台', 'ダンス': '舞台', 'バレエ': '舞台', 'コンテンポラリーダンス': '舞台', 'ストリートダンス': '舞台',
+  'サーカス・ジャグリング': '舞台', '大道芸': '舞台', 'パフォーマンス': '舞台', '人形劇': '舞台', 'ミュージカル': '舞台',
+  '日本舞踊': '文芸・伝統芸能', '伝統芸能': '文芸・伝統芸能', '伝統文化': '文芸・伝統芸能', '文芸・戯曲': '文芸・伝統芸能',
+  '音楽': '音楽', 'オペラ': '音楽', '美術': '美術',
+};
+const broadGenresOf = (k) => [...new Set((k.genres || []).map((g) => GENRE_BROAD[g]).filter(Boolean))];
+
+// ある公募に対して「資金の当て」候補となる助成金を返す（最大4件）。
+// 正直さの要: 地域助成は「開催地」ではなく「応募者の活動拠点」条件なので、全国／地域を明示的に分けて出す。
+function relatedGrants(k) {
+  if (!GRANTS.length) return null;
+  const bk = bucketOf(k.region);
+  const isOverseas = bk.key === 'overseas';
+  const prefSlug = (bk.key !== 'national' && bk.key !== 'overseas') ? bk.key : null;
+  const wantBroad = broadGenresOf(k);
+  const gMatch = (g) => !wantBroad.length || g.genres.some((x) => wantBroad.includes(x));
+  const score = (g) => (g.dlUrgent ? 2 : 0) + (gMatch(g) ? 1 : 0);
+
+  let local = [];
+  if (prefSlug) local = GRANTS.filter((g) => g.prefSlug === prefSlug && !g.isNational).sort((a, b) => score(b) - score(a)).slice(0, 2);
+  let national = GRANTS.filter((g) => g.isNational)
+    .sort((a, b) => (isOverseas ? (Number(b.intl) - Number(a.intl)) : 0) || (score(b) - score(a)));
+  const localIds = new Set(local.map((g) => g.id));
+  const nationalPick = national.filter((g) => !localIds.has(g.id)).slice(0, isOverseas ? 4 : (local.length ? 2 : 4));
+  if (!local.length && !nationalPick.length) return null;
+  return { bk, prefSlug, isOverseas, local, national: nationalPick };
+}
+
+// 助成金候補ブロック（公募詳細ページに焼き込む）
+function grantBlock(k) {
+  const gcard = (g, note) => `<a class="gcard" href="${SISTER_URL}grants/${esc(g.id)}.html" target="_blank" rel="noopener">
+<div class="t">${esc(g.name)}</div>
+<div class="m">${esc(g.funder)}</div>
+${g.amount ? `<div class="a">${esc(g.amount)}</div>` : ''}
+<div class="gtags">${g.dlUrgent ? '<span class="tag dl">受付中</span>' : ''}<span class="tag">${esc(g.region)}</span>${note ? `<span class="tag glabel">${note}</span>` : ''}</div></a>`;
+
+  const r = relatedGrants(k);
+  if (!r) {
+    return `<div class="grantbox"><div class="grantbox-h">公募に通ったあとの<strong>資金の当て</strong>を探す</div>
+<p style="margin:8px 0 0"><a class="cta sister" href="${SISTER_URL}" target="_blank" rel="noopener">この活動に使える助成金を「助成ものさし」で探す →</a></p></div>`;
+  }
+  const deep = r.prefSlug ? `${SISTER_URL}regions/${r.prefSlug}.html` : `${SISTER_URL}regions/national.html`;
+  const deepLabel = r.prefSlug ? `${esc(r.bk.label)}で使える助成金をすべて見る` : (r.isOverseas ? '海外・国際に使える助成金を見る' : '全国の助成金をすべて見る');
+  const intro = r.isOverseas
+    ? 'この公募は海外での活動です。渡航・滞在・制作費の当てとして、次のような助成金があります。'
+    : '出演・制作にかかる費用の当てとして、次のような助成金があります。';
+  let groups = '';
+  if (r.isOverseas) {
+    groups = `<div class="gh">💰 海外での活動に使える可能性のある助成金</div>${r.national.map((g) => gcard(g, '国際枠あり')).join('')}`;
+  } else {
+    if (r.local.length) groups += `<div class="gh">📍 ${esc(r.bk.label)}を拠点に活動する方向け</div>${r.local.map((g) => gcard(g, `${esc(r.bk.label)}拠点`)).join('')}`;
+    if (r.national.length) groups += `<div class="gh">🗾 全国どこからでも応募できる助成金</div>${r.national.map((g) => gcard(g, '全国')).join('')}`;
+  }
+  return `<div class="grantbox">
+<div class="grantbox-h">公募に通ったあとの<strong>資金の当て</strong>を探す</div>
+<p class="gnote">${intro} <b>応募資格は助成金ごとに異なります</b>——地域助成の多くは「その地域を拠点に活動していること」が条件です。各詳細で必ずご確認ください。</p>
+${groups}
+<p style="margin:12px 0 0"><a class="cta sister" href="${deep}" target="_blank" rel="noopener">${deepLabel}（助成ものさし）→</a></p>
+</div>`;
+}
+
 // ---- 共通レイアウト ----
 const WRITTEN = [];
 function layout({ title, desc, rel, body, active }) {
@@ -103,6 +185,18 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .cta{display:inline-block;background:var(--accent);color:#fff;padding:11px 18px;border-radius:11px;font-weight:700}
 .cta:hover{text-decoration:none;opacity:.94}
 .cta.sister{background:#1a8f5a}
+.grantbox{background:#f1faf4;border:1px solid #cfe9d9;border-radius:14px;padding:16px 18px;margin:18px 0}
+.grantbox-h{font-weight:700;font-size:16px;color:#147a4a}
+.grantbox-h strong{color:#0f6b40}
+.grantbox .gnote{color:var(--sub);font-size:12.5px;margin:6px 0 4px}
+.grantbox .gh{font-size:12.5px;color:#3d6b53;font-weight:700;margin:14px 0 6px}
+.gcard{display:block;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin:7px 0}
+.gcard:hover{border-color:#1a8f5a;text-decoration:none}
+.gcard .t{font-weight:600;color:var(--ink);font-size:14px}
+.gcard .m{color:var(--sub);font-size:12px;margin-top:2px}
+.gcard .a{color:#147a4a;font-size:12px;font-weight:600;margin-top:3px}
+.gtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.tag.glabel{background:#e6f5ee;color:#1a8f5a;font-weight:600}
 .kv{margin:10px 0}.kv .k{font-size:12px;color:var(--sub)}.kv .v{font-size:15px}
 ul.cond{margin:8px 0 0;padding-left:0;list-style:none}
 ul.cond li{padding:7px 0;border-top:1px dashed var(--line);font-size:14px}
@@ -312,7 +406,7 @@ ${k.note ? `<p class="note">ℹ️ ${esc(k.note)}</p>` : ''}
 <div class="src">📄 出典: <a href="${esc(k.src)}" target="_blank" rel="noopener">${esc(k.organizer)} 公式ページ</a></div>
 <p class="verified">最終確認: ${esc(k.verified)}（公式ページで一次確認）</p>
 </div>
-<p><a class="cta sister" href="${SISTER_URL}" target="_blank" rel="noopener">この活動に使える助成金を「助成ものさし」で探す →</a></p>
+${grantBlock(k)}
 ${related.length ? `<h2>${esc(bucketOf(k.region).label)}の他の公募</h2>${related.map((q) => gitem(q, '../')).join('')}` : ''}
 <div class="discl">掲載情報は募集要項の明示内容に基づく参考情報で、採択・出演を保証するものではありません。応募前に必ず公式の最新要項をご確認ください。締切・条件・金額は変動します。</div>`;
   write(`koubo/${k.id}.html`, layout({ title: `${esc(k.name)}｜${esc(k.organizer)}の公募｜${SITE_NAME}`, desc: `${esc(k.organizer)}「${esc(k.name)}」。${esc(k.region)}／${m.label}／${esc(k.type)}。締切・応募資格・出典を掲載。`, rel: '../', active: 'koubo', body }));
