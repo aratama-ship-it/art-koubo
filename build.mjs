@@ -35,12 +35,17 @@ const PREF_KEY = {
 };
 const PREF_ORDER = Object.keys(PREF_KEY);
 function bucketOf(region) {
+  if (region.includes('海外')) return { key: 'overseas', label: '海外' };
   if (region.includes('全国')) return { key: 'national', label: '全国' };
   for (const s of PREF_ORDER) if (region.includes(s)) return { key: PREF_KEY[s], label: s };
   return { key: 'national', label: '全国' };
 }
 const activeBucketKeys = new Set(koubos.map((k) => bucketOf(k.region).key));
-const BUCKETS = [{ key: 'national', label: '全国' }, ...PREF_ORDER.filter((s) => activeBucketKeys.has(PREF_KEY[s])).map((s) => ({ key: PREF_KEY[s], label: s }))];
+const BUCKETS = [
+  { key: 'national', label: '全国' },
+  ...PREF_ORDER.filter((s) => activeBucketKeys.has(PREF_KEY[s])).map((s) => ({ key: PREF_KEY[s], label: s })),
+  ...(activeBucketKeys.has('overseas') ? [{ key: 'overseas', label: '海外' }] : []),
+];
 const openKoubos = koubos.filter((k) => k.dlOpen);
 
 // ---- 共通レイアウト ----
@@ -192,8 +197,12 @@ function write(rel, html) {
     ? `<a class="pref" href="regions/${PREF_KEY[name]}.html">${name}</a>`
     : `<span class="pref" title="収録準備中">${name}</span>`;
   const nationalN = koubos.filter((k) => bucketOf(k.region).key === 'national').length;
+  const overseasN = koubos.filter((k) => bucketOf(k.region).key === 'overseas').length;
   const regionPane = `
-<div class="regionbar"><a class="pref" href="regions/national.html" style="font-size:14px;padding:9px 16px">全国（${nationalN}件）</a></div>
+<div class="regionbar">
+<a class="pref" href="regions/national.html" style="font-size:14px;padding:9px 16px">全国（${nationalN}件）</a>
+${overseasN ? `<a class="pref" href="regions/overseas.html" style="font-size:14px;padding:9px 16px">海外（${overseasN}件）</a>` : ''}
+</div>
 <p class="note" style="margin:0 0 6px">開催地から探す（掲載のある地域が青。順次拡充します）</p>
 ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}</div><div class="prefs">${prefs.map(prefChip).join('')}</div></div>`).join('')}`;
   const closedN = koubos.length - openKoubos.length;
