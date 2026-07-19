@@ -239,6 +239,12 @@ const HOME_CSS = `
 .home-hero .home-lede{grid-column:1;grid-row:3;align-self:start;max-width:650px}
 .home-mascot{grid-column:2;grid-row:1/4;justify-self:end;width:188px;aspect-ratio:1;display:grid;place-items:center;margin:-4px 0 -8px}
 .home-mascot img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(28,28,34,.09))}
+.home-stat{display:grid;grid-template-columns:repeat(3,minmax(100px,1fr)) minmax(220px,1.55fr);gap:10px;align-items:stretch}
+.home-stat>div{display:flex;flex-direction:column;justify-content:center}
+.home-stat .stat-sister{display:flex;flex-direction:column;justify-content:center;background:#e6f5ee;border:1px solid #cfe9d9;border-radius:10px;padding:10px 14px;color:#1a8f5a;box-shadow:var(--shadow);line-height:1.45}
+.home-stat .stat-sister:hover{border-color:#1a8f5a;text-decoration:none}
+.stat-sister-kicker{font-size:11px;font-weight:700;letter-spacing:.06em}
+.stat-sister-name{font-size:13px;font-weight:800}
 @media(max-width:640px){
   .home-hero{grid-template-columns:minmax(0,1fr) 108px;grid-template-rows:auto auto auto;column-gap:8px;min-height:0;padding:2px 0 7px}
   .home-site-name{grid-column:1/3;grid-row:1;font-size:14px;gap:7px;margin-top:4px}
@@ -246,6 +252,12 @@ const HOME_CSS = `
   .home-hero h1{grid-column:1;grid-row:2;font-size:22px;line-height:1.48;margin:3px 0 4px}
   .home-hero .home-lede{grid-column:1/3;grid-row:3;margin-top:3px}
   .home-mascot{grid-column:2;grid-row:2;width:108px;margin:-4px 0 -5px}
+  .home-stat{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .home-stat>div{padding:9px 7px;text-align:center}
+  .home-stat .n{font-size:20px}
+  .home-stat .l{white-space:nowrap}
+  .home-stat .stat-sister{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px;padding:10px 12px}
+  .home-stat .stat-sister-name{text-align:right}
 }
 @media(max-width:380px){.home-hero{grid-template-columns:minmax(0,1fr) 92px}.home-hero h1{font-size:20px}.home-mascot{width:92px}}`;
 
@@ -324,6 +336,9 @@ function layout({ title, desc, rel, body, active, extraCss = '' }) {
     ['calendar.html', '締切・募集状況', 'calendar'],
     ['about.html', 'このサイトについて', 'about'],
   ].map(([href, label, key]) => `<a href="${rel}${href}"${key === active ? ' class="on"' : ''}>${label}</a>`).join('');
+  const sisterNav = active === 'home'
+    ? ''
+    : `<a class="sister" href="${SISTER_URL}" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a>`;
   const url = BASE_URL + rel.replace(/^\.\.\//, '').replace(/^index\.html$/, '') === BASE_URL + rel ? BASE_URL + rel : BASE_URL; // 下でcanonicalは個別算出
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -428,7 +443,7 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 ${extraCss}</style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><span class="brand">${SITE_NAME}</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu">${nav}<a class="sister" href="${SISTER_URL}" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
+<div class="nav"><div class="nav-in"><span class="brand">${SITE_NAME}</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu">${nav}${sisterNav}</div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>720)close()})})();
 </script>
@@ -531,12 +546,12 @@ ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}
 <p class="lede home-lede">演劇祭・レジデンス・戯曲賞・コンペなど、舞台芸術の出演・出展・滞在制作の公募を「参加費がかかる／無償／報酬・賞金が出る」まで一目で。${koubos.length}件を収録（無料）。</p>
 <div class="home-mascot"><img src="assets/mascot-body-art.png" width="512" height="512" alt="踊るものさしのキャラクター" fetchpriority="high" decoding="async"></div>
 </div>
-<div class="stat">
+<div class="stat home-stat">
 <div><div class="n">${koubos.length}</div><div class="l">収録公募</div></div>
 <div><div class="n">${openKoubos.length}</div><div class="l">受付中</div></div>
 <div><div class="n">${koubos.filter((k) => k.money === 'reward').length}</div><div class="l">報酬・賞金あり</div></div>
+<a class="stat-sister" href="${SISTER_URL}" target="_blank" rel="noopener"><span class="stat-sister-kicker">姉妹サイト</span><span class="stat-sister-name">助成ものさしへ →</span></a>
 </div>
-<p><a class="cta sister" href="${SISTER_URL}" target="_blank" rel="noopener">公募に通ったら、使える助成金を「助成ものさし」で探す →</a></p>
 ${searchForm()}
 
 <div class="tabs" role="tablist">
