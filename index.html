@@ -89,7 +89,17 @@ footer{border-top:1px solid var(--line);background:#fff;margin-top:30px}
 .pref{font-size:13px;border:1px solid var(--line);border-radius:8px;padding:6px 11px;background:#fafafb;color:#b4b6c0}
 a.pref{color:var(--accent);border-color:#d7ddf6;background:#eef0fa;font-weight:600}
 a.pref:hover{text-decoration:none;border-color:var(--accent)}
-</style>
+
+.searchbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin:16px 0;box-shadow:var(--shadow)}
+.searchbox label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.searchline{display:flex;gap:8px}
+.searchline input{min-width:0;flex:1;border:1px solid #cfd2de;border-radius:10px;padding:11px 12px;font:inherit;color:var(--ink);background:#fff}
+.searchline input:focus{outline:3px solid #dbe2ff;border-color:var(--accent)}
+.searchline button{border:0;border-radius:10px;padding:0 17px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.search-help,.search-status{font-size:12px;color:var(--sub);margin:7px 0 0}
+.search-status{font-weight:600;color:var(--accent)}
+.search-empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:18px;margin:14px 0;color:var(--sub)}
+.search-group[hidden],.gitem[hidden],.search-empty[hidden]{display:none!important}</style>
 </head>
 <body>
 <div class="nav"><div class="nav-in"><span class="brand">公募ものさし</span><a href="index.html" class="on">ホーム</a><a href="koubo.html">公募を探す</a><a href="calendar.html">締切・募集状況</a><a href="about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div>
@@ -103,6 +113,12 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 <div><div class="n">85</div><div class="l">報酬・賞金あり</div></div>
 </div>
 <p><a class="cta sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">公募に通ったら、使える助成金を「助成ものさし」で探す →</a></p>
+<form class="searchbox" action="koubo.html" method="get" role="search">
+<label for="koubo-q">名前・地域・ジャンル・応募条件からフリーワード検索</label>
+<div class="searchline"><input id="koubo-q" name="q" type="search" autocomplete="off" placeholder="例：兵庫 9月 演劇" aria-describedby="koubo-search-help"><button type="submit">探す</button></div>
+<p class="search-help" id="koubo-search-help">スペースで区切ると、すべての言葉を含む公募に絞れます。</p>
+
+</form>
 
 <div class="tabs" role="tablist">
 <button class="tab on" data-tab="money" role="tab">お金の向きから探す</button>

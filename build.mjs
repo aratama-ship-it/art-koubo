@@ -48,6 +48,17 @@ const BUCKETS = [
 ];
 const openKoubos = koubos.filter((k) => k.dlOpen);
 
+// フリーワード検索用。表示カードには、見えている項目だけでなく応募条件・注記も検索語として持たせる。
+function searchTextOf(k) {
+  const raw = [
+    k.name, k.organizer, k.region, k.deadline, k.type, k.moneyLabel,
+    ...(k.genres || []), ...(k.conditions || []), k.note,
+  ].filter(Boolean).join(' ').normalize('NFKC').toLowerCase();
+  // 「9/18」と「9月18日」のどちらで入力しても拾えるよう、検索専用の別表記を加える。
+  const dateAliases = [...raw.matchAll(/(\d{1,2})\/(\d{1,2})/g)].map((m) => `${m[1]}月${m[2]}日`).join(' ');
+  return `${raw} ${dateAliases}`;
+}
+
 // ---- 姉妹サイト「助成ものさし」の助成データ（ビルド時にローカルで読み込み、候補を各公募ページへ焼き込む）----
 // 配信は純静的のまま。両リポジトリはローカルで隣接（app-dev/stage-grants-site）している前提。
 // データが見つからなければこの機能は静かに無効化し、従来のリンクにフォールバックする（ビルドは壊さない）。
@@ -75,6 +86,90 @@ const GENRE_BROAD = {
   '音楽': '音楽', 'オペラ': '音楽', '美術': '美術',
 };
 const broadGenresOf = (k) => [...new Set((k.genres || []).map((g) => GENRE_BROAD[g]).filter(Boolean))];
+
+// ---- 巡演候補（開催日が明示された公募だけを使う）----
+// deadline の文章を推測で解析せず、eventStart / eventEnd が入力済みのレコードだけを対象にする。
+const DAY_MS = 24 * 60 * 60 * 1000;
+function eventWindowOf(k) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(k.eventStart || '')) return null;
+  const endText = k.eventEnd || k.eventStart;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(endText)) return null;
+  const start = Date.parse(`${k.eventStart}T00:00:00Z`);
+  const end = Date.parse(`${endText}T00:00:00Z`);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null;
+  return { start, end, startText: k.eventStart, endText };
+}
+function eventLabel(k) {
+  const w = eventWindowOf(k);
+  if (!w) return '';
+  const [sy, sm, sd] = w.startText.split('-').map(Number);
+  const [ey, em, ed] = w.endText.split('-').map(Number);
+  if (w.startText === w.endText) return `${sy}年${sm}月${sd}日`;
+  if (sy === ey && sm === em) return `${sy}年${sm}月${sd}〜${ed}日`;
+  if (sy === ey) return `${sy}年${sm}月${sd}日〜${em}月${ed}日`;
+  return `${sy}年${sm}月${sd}日〜${ey}年${em}月${ed}日`;
+}
+function intervalGapDays(a, b) {
+  if (a.end < b.start) return Math.round((b.start - a.end) / DAY_MS);
+  if (b.end < a.start) return Math.round((a.start - b.end) / DAY_MS);
+  return 0;
+}
+function tourCandidates(k) {
+  const current = eventWindowOf(k);
+  if (!current) return [];
+  return koubos.map((q) => {
+    if (q.id === k.id || q.organizer === k.organizer) return null;
+    const other = eventWindowOf(q);
+    if (!other) return null;
+    const sharedGenres = (k.genres || []).filter((g) => (q.genres || []).includes(g));
+    if (!sharedGenres.length) return null;
+    const gapDays = intervalGapDays(current, other);
+    if (gapDays > 45) return null;
+    const samePref = bucketOf(q.region).key === bucketOf(k.region).key;
+    const score = (45 - gapDays) + sharedGenres.length * 12 + (samePref ? 10 : 0) + (q.dlOpen ? 2 : 0);
+    return { q, sharedGenres, score };
+  }).filter(Boolean).sort((a, b) => b.score - a.score || a.q.name.localeCompare(b.q.name, 'ja')).slice(0, 4);
+}
+
+function tourBlock(k) {
+  const candidates = tourCandidates(k);
+  if (!candidates.length) return '';
+  const cards = candidates.map(({ q, sharedGenres }) => `<a class="tcard" href="../koubo/${esc(q.id)}.html">
+<div class="when">開催 ${esc(eventLabel(q))}</div>
+<div class="t">${esc(q.name)}</div>
+<div class="m">${esc(q.region)}</div>
+<div class="tags"><span class="tag">共通: ${sharedGenres.map(esc).join('・')}</span><span class="tag ${moneyOf(q).cls}">${moneyOf(q).label}</span></div></a>`).join('');
+  return `<section class="tourbox" aria-labelledby="tour-${esc(k.id)}">
+<div class="tour-eyebrow">TOUR FINDER</div>
+<h2 id="tour-${esc(k.id)}">同じ作品を、次の土地へ</h2>
+<p class="tour-intro">${esc(eventLabel(k))}の前後45日以内に開催され、ジャンルが重なる別主催の公募です。開催日が明記された案件だけを掲載しています。作品をそのまま巡演できるとは限らないため、応募資格・上演時間・会場条件は各詳細でご確認ください。</p>
+<div class="tourrow">${cards}</div>
+</section>`;
+}
+
+const SEARCH_CSS = `
+.searchbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin:16px 0;box-shadow:var(--shadow)}
+.searchbox label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.searchline{display:flex;gap:8px}
+.searchline input{min-width:0;flex:1;border:1px solid #cfd2de;border-radius:10px;padding:11px 12px;font:inherit;color:var(--ink);background:#fff}
+.searchline input:focus{outline:3px solid #dbe2ff;border-color:var(--accent)}
+.searchline button{border:0;border-radius:10px;padding:0 17px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.search-help,.search-status{font-size:12px;color:var(--sub);margin:7px 0 0}
+.search-status{font-weight:600;color:var(--accent)}
+.search-empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:18px;margin:14px 0;color:var(--sub)}
+.search-group[hidden],.gitem[hidden],.search-empty[hidden]{display:none!important}`;
+
+const TOUR_CSS = `
+.tourbox{background:#fffdf8;border:1px solid #e8dfca;border-left:4px solid #b7791f;border-radius:14px;padding:16px 18px;margin:18px 0}
+.tourbox h2{margin:1px 0 4px}
+.tour-eyebrow{font-size:10px;letter-spacing:.15em;color:#8a641d;font-weight:800}
+.tour-intro{font-size:12.5px;color:var(--sub);margin:4px 0 12px}
+.tourrow{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.tcard{display:block;flex:0 0 220px;width:220px;background:#fff;border:1px solid #e8dfca;border-radius:11px;padding:11px 13px;scroll-snap-align:start}
+.tcard:hover{border-color:#b7791f;text-decoration:none}
+.tcard .when{font-size:11.5px;color:#8a641d;font-weight:700;margin-bottom:4px}
+.tcard .t{font-weight:600;color:var(--ink);font-size:13.5px}
+.tcard .m{color:var(--sub);font-size:12px;margin-top:3px}`;
 
 // ある公募に対して「資金の当て」候補となる助成金を返す（最大4件）。
 // 正直さの要: 地域助成は「開催地」ではなく「応募者の活動拠点」条件なので、全国／地域を明示的に分けて出す。
@@ -132,7 +227,7 @@ ${groups}
 
 // ---- 共通レイアウト ----
 const WRITTEN = [];
-function layout({ title, desc, rel, body, active }) {
+function layout({ title, desc, rel, body, active, extraCss = '' }) {
   const nav = [
     ['index.html', 'ホーム', 'home'],
     ['koubo.html', '公募を探す', 'koubo'],
@@ -223,7 +318,7 @@ footer{border-top:1px solid var(--line);background:#fff;margin-top:30px}
 .pref{font-size:13px;border:1px solid var(--line);border-radius:8px;padding:6px 11px;background:#fafafb;color:#b4b6c0}
 a.pref{color:var(--accent);border-color:#d7ddf6;background:#eef0fa;font-weight:600}
 a.pref:hover{text-decoration:none;border-color:var(--accent)}
-</style>
+${extraCss}</style>
 </head>
 <body>
 <div class="nav"><div class="nav-in"><span class="brand">${SITE_NAME}</span>${nav}<a class="sister" href="${SISTER_URL}" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div>
@@ -247,11 +342,20 @@ function statusTags(k) {
   t.push(`<span class="tag">${esc(k.type)}</span>`);
   return t.join('');
 }
-function gitem(k, rel) {
-  return `<a class="gitem" href="${rel}koubo/${k.id}.html">
+function gitem(k, rel, searchable = false) {
+  return `<a class="gitem"${searchable ? ` data-search="${esc(searchTextOf(k))}"` : ''} href="${rel}koubo/${k.id}.html">
 <div class="t">${esc(k.name)}</div>
 <div class="m">${esc(k.organizer)} ・ ${esc(k.region)}</div>
 <div class="tags">${statusTags(k)}</div></a>`;
+}
+
+function searchForm({ action = 'koubo.html', live = false } = {}) {
+  return `<form class="searchbox"${live ? ' id="koubo-search"' : ''} action="${action}" method="get" role="search">
+<label for="koubo-q${live ? '-live' : ''}">名前・地域・ジャンル・応募条件からフリーワード検索</label>
+<div class="searchline"><input id="koubo-q${live ? '-live' : ''}" name="q" type="search" autocomplete="off" placeholder="例：兵庫 9月 演劇" aria-describedby="koubo-search-help${live ? '-live' : ''}"><button type="submit">探す</button></div>
+<p class="search-help" id="koubo-search-help${live ? '-live' : ''}">スペースで区切ると、すべての言葉を含む公募に絞れます。</p>
+${live ? '<p class="search-status" id="koubo-search-status" aria-live="polite"></p>' : ''}
+</form>`;
 }
 
 function write(rel, html) {
@@ -319,6 +423,7 @@ ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}
 <div><div class="n">${koubos.filter((k) => k.money === 'reward').length}</div><div class="l">報酬・賞金あり</div></div>
 </div>
 <p><a class="cta sister" href="${SISTER_URL}" target="_blank" rel="noopener">公募に通ったら、使える助成金を「助成ものさし」で探す →</a></p>
+${searchForm()}
 
 <div class="tabs" role="tablist">
 <button class="tab on" data-tab="money" role="tab">お金の向きから探す</button>
@@ -340,19 +445,54 @@ b.classList.add('on');
 document.getElementById('tab-'+b.dataset.tab).classList.remove('hidden');
 };});
 </script>`;
-  write('index.html', layout({ title: `${SITE_NAME}｜アートの公募をお金の向きつきで探す`, desc: `舞台芸術の公募（演劇祭・レジデンス・戯曲賞・コンペ）を、締切・開催地・「参加費がかかる/無償/報酬・賞金が出る」つきで探せる無料サイト。${koubos.length}件を収録。`, rel: '', active: 'home', body }));
+  write('index.html', layout({ title: `${SITE_NAME}｜アートの公募をお金の向きつきで探す`, desc: `舞台芸術の公募（演劇祭・レジデンス・戯曲賞・コンペ）を、締切・開催地・「参加費がかかる/無償/報酬・賞金が出る」つきで探せる無料サイト。${koubos.length}件を収録。`, rel: '', active: 'home', body, extraCss: SEARCH_CSS }));
 }
 
 // ---- 公募一覧 ----
 {
   let body = `<h1>公募を探す（${koubos.length}件）</h1>
-<p class="lede">開催地別に全公募を掲載。各ページで締切・お金の向き・応募資格・出典を確認できます。</p>`;
+<p class="lede">開催地別に全公募を掲載。各ページで締切・お金の向き・応募資格・出典を確認できます。</p>
+${searchForm({ live: true })}
+<div class="search-empty" id="koubo-search-empty" hidden>該当する公募がありません。地域名・月・ジャンルなど、言葉を短くしてお試しください。</div>`;
   for (const b of BUCKETS) {
     const list = koubos.filter((k) => bucketOf(k.region).key === b.key);
     if (!list.length) continue;
-    body += `<h2>${b.label}（${list.length}）</h2>` + list.map((k) => gitem(k, '')).join('');
+    body += `<section class="search-group"><h2>${b.label}（${list.length}）</h2>${list.map((k) => gitem(k, '', true)).join('')}</section>`;
   }
-  write('koubo.html', layout({ title: `公募一覧（${koubos.length}件）｜${SITE_NAME}`, desc: `舞台芸術の公募${koubos.length}件を開催地別に一覧。締切・お金の向き・応募資格つき。`, rel: '', active: 'koubo', body }));
+  body += `<script>
+(function(){
+var form=document.getElementById('koubo-search');
+var input=document.getElementById('koubo-q-live');
+var status=document.getElementById('koubo-search-status');
+var empty=document.getElementById('koubo-search-empty');
+var items=Array.prototype.slice.call(document.querySelectorAll('.search-group .gitem'));
+var groups=Array.prototype.slice.call(document.querySelectorAll('.search-group'));
+function norm(s){return String(s||'').normalize('NFKC').toLowerCase().trim();}
+function apply(){
+  var terms=norm(input.value).split(/\\s+/).filter(Boolean);
+  var shown=0;
+  items.forEach(function(item){
+    var hay=norm(item.getAttribute('data-search'));
+    var match=terms.every(function(term){return hay.indexOf(term)!==-1;});
+    item.hidden=!match;if(match)shown++;
+  });
+  groups.forEach(function(group){group.hidden=!group.querySelector('.gitem:not([hidden])');});
+  empty.hidden=shown!==0;
+  status.textContent=terms.length ? shown+'件見つかりました' : '${koubos.length}件すべて表示しています';
+}
+var initial=new URLSearchParams(location.search).get('q')||'';
+input.value=initial;
+input.addEventListener('input',apply);
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  var url=new URL(location.href);var q=input.value.trim();
+  if(q)url.searchParams.set('q',q);else url.searchParams.delete('q');
+  history.replaceState(null,'',url.pathname+url.search+url.hash);apply();
+});
+apply();
+})();
+</script>`;
+  write('koubo.html', layout({ title: `公募一覧（${koubos.length}件）｜${SITE_NAME}`, desc: `舞台芸術の公募${koubos.length}件を開催地別に一覧。締切・お金の向き・応募資格つき。`, rel: '', active: 'koubo', body, extraCss: SEARCH_CSS }));
 }
 
 // ---- 締切・募集状況 ----
@@ -396,6 +536,7 @@ ${list.map((k) => gitem(k, '../')).join('')}
 for (const k of koubos) {
   const related = koubos.filter((q) => bucketOf(q.region).key === bucketOf(k.region).key && q.id !== k.id).slice(0, 5);
   const m = moneyOf(k);
+  const tour = tourBlock(k);
   const body = `<p class="note"><a href="../koubo.html">公募一覧</a> ／ <a href="../regions/${bucketOf(k.region).key}.html">${esc(bucketOf(k.region).label)}</a> ／ <a href="../money/${k.money || 'unknown'}.html">${m.label}</a></p>
 <h1>${esc(k.name)}</h1>
 <p class="lede">${esc(k.organizer)} ・ ${esc(k.region)}</p>
@@ -409,10 +550,10 @@ ${k.note ? `<p class="note">ℹ️ ${esc(k.note)}</p>` : ''}
 <div class="src">📄 出典: <a href="${esc(k.src)}" target="_blank" rel="noopener">${esc(k.organizer)} 公式ページ</a></div>
 <p class="verified">最終確認: ${esc(k.verified)}（公式ページで一次確認）</p>
 </div>
-${grantBlock(k)}
+${grantBlock(k)}${tour ? `\n${tour}` : ''}
 ${related.length ? `<h2>${esc(bucketOf(k.region).label)}の他の公募</h2>${related.map((q) => gitem(q, '../')).join('')}` : ''}
 <div class="discl">掲載情報は募集要項の明示内容に基づく参考情報で、採択・出演を保証するものではありません。応募前に必ず公式の最新要項をご確認ください。締切・条件・金額は変動します。</div>`;
-  write(`koubo/${k.id}.html`, layout({ title: `${esc(k.name)}｜${esc(k.organizer)}の公募｜${SITE_NAME}`, desc: `${esc(k.organizer)}「${esc(k.name)}」。${esc(k.region)}／${m.label}／${esc(k.type)}。締切・応募資格・出典を掲載。`, rel: '../', active: 'koubo', body }));
+  write(`koubo/${k.id}.html`, layout({ title: `${esc(k.name)}｜${esc(k.organizer)}の公募｜${SITE_NAME}`, desc: `${esc(k.organizer)}「${esc(k.name)}」。${esc(k.region)}／${m.label}／${esc(k.type)}。締切・応募資格・出典を掲載。`, rel: '../', active: 'koubo', body, extraCss: tour ? TOUR_CSS : '' }));
 }
 
 // ---- ポリシー ----
@@ -425,6 +566,7 @@ write('about.html', layout({
 <ul>
 <li>「参加費がかかる／無償・施設提供／報酬・賞金が出る」という<strong>お金の向き</strong>を、各公募の第一級情報として掲載します。「出せるようになった、でもお金が厳しい」に直結する情報です。</li>
 <li>公募に通ったあとの資金は、姉妹サイト「助成ものさし」の助成金検索に繋げられます。</li>
+<li>名前・地域・ジャンル・応募条件をフリーワードで横断検索できます。開催日が明記された公募では、同時期・同ジャンルの別主催案件も巡演候補として案内します。</li>
 <li>各公募に出典（公式ページ）と最終確認日を明記し、募集要項の全文転載はせず事実項目のみを掲載します。</li>
 </ul>
 <h2>情報源と更新</h2>
