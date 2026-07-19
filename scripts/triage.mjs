@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// 身体芸術公募ものさしの確認順を決める読み取り専用ツール。
+// 身体芸術・公募ものさしの確認順を決める読み取り専用ツール。
 // データは変更せず、優先度・理由・推奨確認日だけを標準出力へ返す。
 
 import { readFileSync } from 'node:fs';
@@ -212,7 +212,7 @@ function parseArgs(argv) {
 }
 
 function printText(report, limit) {
-  console.log(`身体芸術公募ものさし トリアージ基準日: ${report.generatedAt}`);
+  console.log(`身体芸術・公募ものさし トリアージ基準日: ${report.generatedAt}`);
   console.log(`総数 ${report.total} / P0 ${report.counts.P0} / P1 ${report.counts.P1} / P2 ${report.counts.P2} / P3 ${report.counts.P3} / 保留 ${report.counts.hold}`);
   console.log(`上位 ${Math.min(limit, report.items.length)} 件（データは変更していません）`);
   for (const [index, item] of report.items.slice(0, limit).entries()) {

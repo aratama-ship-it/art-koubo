@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const VERIFIED = '2026-07-18';
-const SITE_NAME = '身体芸術公募ものさし';                           // 姉妹＝助成ものさし
+const SITE_NAME = '身体芸術・公募ものさし';                         // 姉妹＝助成ものさし
 const BASE_URL = 'https://aratama-ship-it.github.io/art-koubo/';    // 公開後に確定
 const SISTER_URL = 'https://aratama-ship-it.github.io/stage-grants/'; // 助成ものさし
 const FORM_URL = 'https://forms.gle/sX3hTrCRdipxKsmCA';             // 情報訂正・お問い合わせ（当面 共通フォーム）

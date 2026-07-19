@@ -1,4 +1,4 @@
-# 身体芸術公募ものさし 運用プラン（OPERATIONS.md）
+# 身体芸術・公募ものさし 運用プラン（OPERATIONS.md）
 
 > **この文書の位置づけ**: 2026-07-19 に Claude Code と Codex(gpt-5.6, xhigh) で壁打ちして作った運用設計。
 > **段階実装中**。新フィールド（`status` / `deadlineMachine` / `nextCheck` など）と
