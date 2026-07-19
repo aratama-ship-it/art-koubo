@@ -598,10 +598,13 @@ write('about.html', layout({
   title: `このサイトについて｜${SITE_NAME}`, desc: `${SITE_NAME}の目的・情報源・更新方針。`, rel: '', active: 'about',
   body: `<h1>このサイトについて</h1>
 <section class="mission" aria-labelledby="mission-title">
+<div class="mission-copy">
 <h2 id="mission-title">あなたの表現を、待っている場所へ。</h2>
 <p>作品をつくること。稽古を重ねること。人と出会い、観客へ届けること。舞台芸術や身体表現に関わる人の時間と力が、できるだけそうした営みに使われてほしい——それが、このプロジェクトで最も大切にしている思いです。</p>
 <p>一方で、出演や発表の機会を探し、数多くの公募情報をめぐり、募集要項を読み、自分が対象かを確かめ、締切・開催地・費用を整理する作業には、多くの時間と体力が必要です。作品を届ける場所を探すために、作品をつくる力が削られてしまう。身体芸術・公募ものさしは、その負担を少しでも小さくするために生まれました。</p>
 <p>応募そのものをなくすことはできません。それでも、散らばった機会を、場所・時期・ジャンル・お金の向きから見つけやすくし、「探す・比べる・確かめる」時間を短くすることはできます。あなたの表現が、次の土地、次の観客、次の出会いへ届くことを目指しています。</p>
+</div>
+<div class="mission-character" role="img" aria-label="正面を向いた、身体芸術・公募ものさしのキャラクター"></div>
 </section>
 <div class="card">
 <h2>身体芸術・公募ものさしについて</h2>
@@ -617,9 +620,12 @@ write('about.html', layout({
 <p>掲載情報は各主催の公式サイト・募集要項を一次確認したものです（最終確認: ${VERIFIED}）。多くの公募は毎年募集時期が変わるため順次更新しますが、応募前には必ず各主催の最新要項をご確認ください。</p>
 <p>掲載内容の誤り・更新・新しい公募のご連絡は <a href="disclaimer.html">情報訂正の窓口</a> へ。</p>
 </div>`,
-  extraCss: `.mission{background:#eef3ff;border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;margin:12px 0 24px}
+  extraCss: `.mission{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:14px;align-items:end;overflow:hidden;background:#eef3ff;border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;margin:12px 0 24px}
+.mission-copy{min-width:0}
 .mission h2{margin:0 0 8px;font-size:20px;line-height:1.5;color:var(--accent)}
-.mission p{margin:9px 0}`,
+.mission p{margin:9px 0}
+.mission-character{width:180px;height:310px;justify-self:end;background-color:#eef3ff;background-image:url('assets/mascot-body-art-turnaround.png');background-blend-mode:multiply;background-repeat:no-repeat;background-size:auto 310px;background-position:left center}
+@media(max-width:680px){.mission{grid-template-columns:1fr}.mission-character{width:175px;height:275px;justify-self:center;background-size:auto 290px;background-position:left center;margin-top:-4px}}`,
 }));
 
 write('privacy.html', layout({
