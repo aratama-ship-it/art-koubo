@@ -1,8 +1,8 @@
 # 公募ものさし 運用プラン（OPERATIONS.md）
 
 > **この文書の位置づけ**: 2026-07-19 に Claude Code と Codex(gpt-5.6, xhigh) で壁打ちして作った運用設計。
-> **まだ計画段階**であり、ここに出てくる新フィールド（`status` / `deadlineMachine` / `nextCheck` など）や
-> `scripts/*.mjs`、GitHub Actions ワークフローは**未実装**。実装は 90 日プランの順序で進める。
+> **段階実装中**。新フィールド（`status` / `deadlineMachine` / `nextCheck` など）と
+> GitHub Actions ワークフローは未実装。`scripts/triage.mjs` から 90 日プランの順序で進める。
 > 現行データは `data/koubo.data.json`（409件）＋ `node build.mjs`＋GitHub Pages のみ。
 
 ---
@@ -26,6 +26,13 @@
 - money: `paid` 131 / `unknown` 113 / `reward` 85 / `free` 80
 - 薄いジャンル: 美術 7 / 映像 0 / 文芸・戯曲 27（濃い: ダンス215 / 演劇182 / 音楽162）
 - 必須フィールド充足・ID重複なし・不正money値なし・verified形式不正なし（＝いま導入する好機）
+
+### 立ち上げ進捗
+
+- **2026-07-19 / Phase 1A**: 読み取り専用の `scripts/triage.mjs` を実装。409件をP0〜P3・保留に分類し、理由・締切候補・推奨確認日を出力する。公募データは変更しない。
+- 基準日2026-07-19の初回結果は **P0 0 / P1 30 / P2 75 / P3 35 / 保留 269**。開始日・告知日を締切と誤認した2件は、データを変えず抽出ルールと回帰テストを修正した。
+- 実行: `node scripts/triage.mjs --date 2026-07-19 --limit 30`。当日基準なら `--date` を省略でき、機械処理用は `--format json` を使う。
+- この時点ではUI、グローバル `VERIFIED`、受付状態、掲載内容を変更していない。次の段階へ進む前に結果をレビューする。
 
 ---
 
@@ -252,7 +259,7 @@ permissions:
 
 | ファイル | 入出力 |
 |---|---|
-| **`scripts/triage.mjs`** ★1本目 | `koubo.data.json`＋基準日 → 優先度・理由・推奨確認日を出力。データは変えない |
+| **`scripts/triage.mjs`** ★実装済み | `koubo.data.json`＋基準日 → 優先度・理由・推奨確認日を出力。データは変えない |
 | `scripts/validate-data.mjs` | 必須項目・enum・重複・日付・URL・status矛盾を検査。重大エラーで exit 1（ビルド前提） |
 | `scripts/check-links.mjs` | `src` を低速HEAD確認 → `ok/redirected/blocked/missing/timeout` をJSON出力 |
 | `scripts/diff-records.mjs` | Git HEAD版と現在版をID単位で比較し、変更フィールドだけ表示 |
