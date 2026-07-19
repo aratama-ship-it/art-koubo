@@ -488,13 +488,20 @@ function write(rel, html) {
   const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || SITE_NAME;
   const desc = (html.match(/<meta name="description" content="([\s\S]*?)">/) || [])[1] || '';
   const head = `<link rel="canonical" href="${url}">
+<link rel="icon" type="image/png" href="${BASE_URL}assets/mascot-body-art.png">
+<link rel="apple-touch-icon" href="${BASE_URL}assets/mascot-body-art.png">
 <meta property="og:site_name" content="${esc(SITE_NAME)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:locale" content="ja_JP">
-<meta name="twitter:card" content="summary">`;
+<meta property="og:image" content="${BASE_URL}assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="身体芸術・公募ものさし — あなたの表現を、待っている場所へ。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${BASE_URL}assets/og-card.png">`;
   html = html.replace(/(<meta name="description" content="[\s\S]*?">)/, `$1\n${head}`);
   WRITTEN.push(rel);
   const abs = join(ROOT, rel);
@@ -504,7 +511,8 @@ function write(rel, html) {
 
 // ---- トップ ----
 {
-  const openList = openKoubos.map((k) => gitem(k, '')).join('') || '<p class="note">現在受付中の公募はありません。次回募集の目安は各カードでご確認ください。</p>';
+  const homeOpenKoubos = openKoubos.slice(0, 12);
+  const openList = homeOpenKoubos.map((k) => gitem(k, '')).join('') || '<p class="note">現在受付中の公募はありません。次回募集の目安は各カードでご確認ください。</p>';
   const moneyTiles = ['reward', 'free', 'paid', 'unknown'].map((key) => {
     const n = koubos.filter((k) => (k.money || 'unknown') === key).length;
     if (!n) return '';
@@ -563,9 +571,10 @@ ${searchForm()}
 <div class="tabpane hidden" id="tab-region">${regionPane}</div>
 <div class="tabpane hidden" id="tab-deadline">${deadlinePane}</div>
 
-<h2>いま応募できる公募（${openKoubos.length}）</h2>
-<p class="note" style="margin-top:-7px">締切が近い順。締切日を特定できない随時募集などは、その後に表示しています。</p>
+<h2>受付中の公募（締切が近い${homeOpenKoubos.length}件）</h2>
+<p class="note" style="margin-top:-7px">トップでは締切が近い順に一部を掲載しています。</p>
 ${openList}
+${openKoubos.length > homeOpenKoubos.length ? `<p><a class="cta" href="calendar.html">受付中の公募をすべて見る（${openKoubos.length}件）→</a></p>` : ''}
 <div class="discl">これは開発中のプロトタイプです。掲載は募集要項の事実項目に基づく参考情報で、採択・出演を保証するものではありません。応募前に必ず各主催の最新要項をご確認ください。「お金の向き」は主催が明示していない場合「費用は要確認」としています。</div>
 <script>
 document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
