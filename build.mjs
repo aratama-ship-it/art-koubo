@@ -450,7 +450,7 @@ ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}
 <p><a class="cta" href="calendar.html">締切・募集状況の一覧を見る →</a></p>`;
   const body = `
 <div class="home-hero">
-<h1>あなたの表現を、もっと遠くへ。</h1>
+<h1>あなたの表現を、待っている場所へ。</h1>
 <p class="lede home-lede">演劇祭・レジデンス・戯曲賞・コンペなど、舞台芸術の出演・出展・滞在制作の公募を「参加費がかかる／無償／報酬・賞金が出る」まで一目で。${koubos.length}件を収録（無料）。</p>
 <div class="home-mascot"><img src="assets/mascot-body-art.png" width="512" height="512" alt="踊るものさしのキャラクター" fetchpriority="high" decoding="async"></div>
 </div>
@@ -598,7 +598,7 @@ write('about.html', layout({
   title: `このサイトについて｜${SITE_NAME}`, desc: `${SITE_NAME}の目的・情報源・更新方針。`, rel: '', active: 'about',
   body: `<h1>このサイトについて</h1>
 <section class="mission" aria-labelledby="mission-title">
-<h2 id="mission-title">あなたの表現を、もっと遠くへ。</h2>
+<h2 id="mission-title">あなたの表現を、待っている場所へ。</h2>
 <p>作品をつくること。稽古を重ねること。人と出会い、観客へ届けること。舞台芸術や身体表現に関わる人の時間と力が、できるだけそうした営みに使われてほしい——それが、このプロジェクトで最も大切にしている思いです。</p>
 <p>一方で、出演や発表の機会を探し、数多くの公募情報をめぐり、募集要項を読み、自分が対象かを確かめ、締切・開催地・費用を整理する作業には、多くの時間と体力が必要です。作品を届ける場所を探すために、作品をつくる力が削られてしまう。身体芸術・公募ものさしは、その負担を少しでも小さくするために生まれました。</p>
 <p>応募そのものをなくすことはできません。それでも、散らばった機会を、場所・時期・ジャンル・お金の向きから見つけやすくし、「探す・比べる・確かめる」時間を短くすることはできます。あなたの表現が、次の土地、次の観客、次の出会いへ届くことを目指しています。</p>
