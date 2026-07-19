@@ -159,6 +159,20 @@ const SEARCH_CSS = `
 .search-empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:18px;margin:14px 0;color:var(--sub)}
 .search-group[hidden],.gitem[hidden],.search-empty[hidden]{display:none!important}`;
 
+const HOME_CSS = `
+.home-hero{display:grid;grid-template-columns:minmax(0,1fr) 188px;grid-template-rows:auto auto;align-items:center;column-gap:24px;min-height:190px;padding:4px 4px 8px 0}
+.home-hero h1{grid-column:1;grid-row:1;align-self:end;font-size:clamp(25px,3.4vw,32px);line-height:1.45;letter-spacing:-.015em;margin:10px 0 5px}
+.home-hero .home-lede{grid-column:1;grid-row:2;align-self:start;max-width:650px}
+.home-mascot{grid-column:2;grid-row:1/3;justify-self:end;width:188px;aspect-ratio:1;display:grid;place-items:center;margin:-4px 0 -8px}
+.home-mascot img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(28,28,34,.09))}
+@media(max-width:640px){
+  .home-hero{grid-template-columns:minmax(0,1fr) 108px;grid-template-rows:auto auto;column-gap:8px;min-height:0;padding:2px 0 7px}
+  .home-hero h1{grid-column:1;grid-row:1;font-size:22px;line-height:1.48;margin:8px 0 4px}
+  .home-hero .home-lede{grid-column:1/3;grid-row:2;margin-top:3px}
+  .home-mascot{grid-column:2;grid-row:1;width:108px;margin:-4px 0 -5px}
+}
+@media(max-width:380px){.home-hero{grid-template-columns:minmax(0,1fr) 92px}.home-hero h1{font-size:20px}.home-mascot{width:92px}}`;
+
 const TOUR_CSS = `
 .tourbox{background:#fffdf8;border:1px solid #e8dfca;border-left:4px solid #b7791f;border-radius:14px;padding:16px 18px;margin:18px 0}
 .tourbox h2{margin:1px 0 4px}
@@ -415,8 +429,11 @@ ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}
 </div>
 <p><a class="cta" href="calendar.html">締切・募集状況の一覧を見る →</a></p>`;
   const body = `
+<div class="home-hero">
 <h1>あなたが応募できるアートの公募を、お金の向きつきで。</h1>
-<p class="lede">演劇祭・レジデンス・戯曲賞・コンペなど、舞台芸術の出演・出展・滞在制作の公募を「参加費がかかる／無償／報酬・賞金が出る」まで一目で。${koubos.length}件を収録（無料）。</p>
+<p class="lede home-lede">演劇祭・レジデンス・戯曲賞・コンペなど、舞台芸術の出演・出展・滞在制作の公募を「参加費がかかる／無償／報酬・賞金が出る」まで一目で。${koubos.length}件を収録（無料）。</p>
+<div class="home-mascot"><img src="assets/mascot-body-art.png" width="512" height="512" alt="踊るものさしのキャラクター" fetchpriority="high" decoding="async"></div>
+</div>
 <div class="stat">
 <div><div class="n">${koubos.length}</div><div class="l">収録公募</div></div>
 <div><div class="n">${openKoubos.length}</div><div class="l">いま受付中</div></div>
@@ -445,7 +462,7 @@ b.classList.add('on');
 document.getElementById('tab-'+b.dataset.tab).classList.remove('hidden');
 };});
 </script>`;
-  write('index.html', layout({ title: `${SITE_NAME}｜アートの公募をお金の向きつきで探す`, desc: `舞台芸術の公募（演劇祭・レジデンス・戯曲賞・コンペ）を、締切・開催地・「参加費がかかる/無償/報酬・賞金が出る」つきで探せる無料サイト。${koubos.length}件を収録。`, rel: '', active: 'home', body, extraCss: SEARCH_CSS }));
+  write('index.html', layout({ title: `${SITE_NAME}｜アートの公募をお金の向きつきで探す`, desc: `舞台芸術の公募（演劇祭・レジデンス・戯曲賞・コンペ）を、締切・開催地・「参加費がかかる/無償/報酬・賞金が出る」つきで探せる無料サイト。${koubos.length}件を収録。`, rel: '', active: 'home', body, extraCss: SEARCH_CSS + HOME_CSS }));
 }
 
 // ---- 公募一覧 ----
