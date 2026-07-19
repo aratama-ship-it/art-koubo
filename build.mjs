@@ -232,16 +232,20 @@ const SEARCH_CSS = `
 .search-group[hidden],.gitem[hidden],.search-empty[hidden]{display:none!important}`;
 
 const HOME_CSS = `
-.home-hero{display:grid;grid-template-columns:minmax(0,1fr) 188px;grid-template-rows:auto auto;align-items:center;column-gap:24px;min-height:190px;padding:4px 4px 8px 0}
-.home-hero h1{grid-column:1;grid-row:1;align-self:end;font-size:clamp(25px,3.4vw,32px);line-height:1.45;letter-spacing:-.015em;margin:10px 0 5px}
-.home-hero .home-lede{grid-column:1;grid-row:2;align-self:start;max-width:650px}
-.home-mascot{grid-column:2;grid-row:1/3;justify-self:end;width:188px;aspect-ratio:1;display:grid;place-items:center;margin:-4px 0 -8px}
+.home-hero{display:grid;grid-template-columns:minmax(0,1fr) 188px;grid-template-rows:auto auto auto;align-items:center;column-gap:24px;min-height:190px;padding:4px 4px 8px 0}
+.home-site-name{grid-column:1;grid-row:1;align-self:end;display:flex;align-items:center;gap:9px;margin:4px 0 0;color:var(--accent);font-size:17px;font-weight:800;letter-spacing:.045em}
+.home-site-name::before{content:"";width:25px;height:3px;border-radius:2px;background:var(--accent);flex:0 0 auto}
+.home-hero h1{grid-column:1;grid-row:2;align-self:end;font-size:clamp(25px,3.4vw,32px);line-height:1.45;letter-spacing:-.015em;margin:3px 0 5px}
+.home-hero .home-lede{grid-column:1;grid-row:3;align-self:start;max-width:650px}
+.home-mascot{grid-column:2;grid-row:1/4;justify-self:end;width:188px;aspect-ratio:1;display:grid;place-items:center;margin:-4px 0 -8px}
 .home-mascot img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(28,28,34,.09))}
 @media(max-width:640px){
-  .home-hero{grid-template-columns:minmax(0,1fr) 108px;grid-template-rows:auto auto;column-gap:8px;min-height:0;padding:2px 0 7px}
-  .home-hero h1{grid-column:1;grid-row:1;font-size:22px;line-height:1.48;margin:8px 0 4px}
-  .home-hero .home-lede{grid-column:1/3;grid-row:2;margin-top:3px}
-  .home-mascot{grid-column:2;grid-row:1;width:108px;margin:-4px 0 -5px}
+  .home-hero{grid-template-columns:minmax(0,1fr) 108px;grid-template-rows:auto auto auto;column-gap:8px;min-height:0;padding:2px 0 7px}
+  .home-site-name{grid-column:1/3;grid-row:1;font-size:14px;gap:7px;margin-top:4px}
+  .home-site-name::before{width:18px;height:2px}
+  .home-hero h1{grid-column:1;grid-row:2;font-size:22px;line-height:1.48;margin:3px 0 4px}
+  .home-hero .home-lede{grid-column:1/3;grid-row:3;margin-top:3px}
+  .home-mascot{grid-column:2;grid-row:2;width:108px;margin:-4px 0 -5px}
 }
 @media(max-width:380px){.home-hero{grid-template-columns:minmax(0,1fr) 92px}.home-hero h1{font-size:20px}.home-mascot{width:92px}}`;
 
@@ -338,7 +342,7 @@ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .nav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
 .nav-in{max-width:900px;margin:0 auto;display:flex;gap:4px;align-items:center;padding:10px 14px}
-.brand{font-weight:700;font-size:15px;margin-right:10px;color:var(--ink);flex:0 0 auto}
+.brand{font-weight:800;font-size:17px;margin-right:10px;color:var(--ink);flex:0 0 auto;letter-spacing:.015em}
 .nav-links{display:flex;align-items:center;gap:4px;flex:1;min-width:0;flex-wrap:wrap}
 .menu-toggle{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:0;align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer}
 .menu-toggle .bar{display:block;width:20px;height:2px;border-radius:2px;background:currentColor;transition:transform .18s ease,opacity .18s ease}
@@ -351,7 +355,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .nav .sister{margin-left:auto;background:#e6f5ee;color:#1a8f5a;font-weight:600}
 @media(max-width:720px){
   .nav-in{padding:7px 12px;gap:8px;flex-wrap:wrap}
-  .brand{margin-right:auto;max-width:calc(100% - 56px);font-size:14px;line-height:1.4}
+  .brand{margin-right:auto;max-width:calc(100% - 56px);font-size:15px;line-height:1.4}
   .menu-toggle{display:flex;flex:0 0 44px}
   .nav-links{display:none;flex:0 0 100%;width:100%;flex-direction:column;align-items:stretch;gap:2px;padding:8px 0 3px;border-top:1px solid var(--line)}
   .nav-links.is-open{display:flex}
@@ -522,6 +526,7 @@ ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}
 <p><a class="cta" href="calendar.html">締切・募集状況の一覧を見る →</a></p>`;
   const body = `
 <div class="home-hero">
+<p class="home-site-name">${SITE_NAME}</p>
 <h1>あなたの表現を、待っている場所へ。</h1>
 <p class="lede home-lede">演劇祭・レジデンス・戯曲賞・コンペなど、舞台芸術の出演・出展・滞在制作の公募を「参加費がかかる／無償／報酬・賞金が出る」まで一目で。${koubos.length}件を収録（無料）。</p>
 <div class="home-mascot"><img src="assets/mascot-body-art.png" width="512" height="512" alt="踊るものさしのキャラクター" fetchpriority="high" decoding="async"></div>
@@ -677,7 +682,7 @@ write('about.html', layout({
 <p>一方で、出演や発表の機会を探し、数多くの公募情報をめぐり、募集要項を読み、自分が対象かを確かめ、締切・開催地・費用を整理する作業には、多くの時間と体力が必要です。作品を届ける場所を探すために、作品をつくる力が削られてしまう。身体芸術・公募ものさしは、その負担を少しでも小さくするために生まれました。</p>
 <p>応募そのものをなくすことはできません。それでも、散らばった機会を、場所・時期・ジャンル・お金の向きから見つけやすくし、「探す・比べる・確かめる」時間を短くすることはできます。あなたの表現が、次の土地、次の観客、次の出会いへ届くことを目指しています。</p>
 </div>
-<div class="mission-character" role="img" aria-label="正面を向いた、身体芸術・公募ものさしのキャラクター"></div>
+<div class="mission-character"><img src="assets/mascot-body-art-front.png" width="1254" height="1254" alt="正面を向いた、身体芸術・公募ものさしのキャラクター" loading="lazy" decoding="async"></div>
 </section>
 <div class="card">
 <h2>身体芸術・公募ものさしについて</h2>
@@ -697,8 +702,9 @@ write('about.html', layout({
 .mission-copy{min-width:0}
 .mission h2{margin:0 0 8px;font-size:20px;line-height:1.5;color:var(--accent)}
 .mission p{margin:9px 0}
-.mission-character{width:180px;height:310px;justify-self:end;background-color:#eef3ff;background-image:url('assets/mascot-body-art-turnaround.png');background-blend-mode:multiply;background-repeat:no-repeat;background-size:auto 310px;background-position:left center}
-@media(max-width:680px){.mission{grid-template-columns:1fr}.mission-character{width:175px;height:275px;justify-self:center;background-size:auto 290px;background-position:left center;margin-top:-4px}}`,
+.mission-character{width:180px;height:310px;justify-self:end;overflow:hidden;display:grid;place-items:center}
+.mission-character img{display:block;width:310px;height:310px;max-width:none;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(28,28,34,.08))}
+@media(max-width:680px){.mission{grid-template-columns:1fr}.mission-character{width:175px;height:275px;justify-self:center;margin-top:-4px}.mission-character img{width:290px;height:290px}}`,
 }));
 
 write('privacy.html', layout({
