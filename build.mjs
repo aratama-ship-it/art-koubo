@@ -40,13 +40,85 @@ function bucketOf(region) {
   for (const s of PREF_ORDER) if (region.includes(s)) return { key: PREF_KEY[s], label: s };
   return { key: 'national', label: '全国' };
 }
+
+// 受付中の公募は、表示用の締切文から確認できる最終日を読み取り、近い順に並べる。
+// 随時募集・締切未確認・「利用日の○日前」のような相対期限は、固定日案件の後ろへ置く。
+const sourceOrder = new Map(koubos.map((k, i) => [k.id, i]));
+const todayParts = Object.fromEntries(new Intl.DateTimeFormat('en', {
+  timeZone: 'Asia/Tokyo', year: 'numeric', month: 'numeric', day: 'numeric',
+}).formatToParts(new Date()).filter((part) => part.type !== 'literal').map((part) => [part.type, Number(part.value)]));
+const { year: sortYear, month: sortMonth, day: sortDay } = todayParts;
+const sortBaseTime = Date.UTC(sortYear, sortMonth - 1, sortDay);
+const dateTokenSource = '(?:\\d{4}年\\d{1,2}月\\d{1,2}日|\\d{4}\\/\\d{1,2}\\/\\d{1,2}|\\d{1,2}月\\d{1,2}日|\\d{1,2}\\/\\d{1,2})';
+
+function deadlineTimeOf(k) {
+  if (!k.dlOpen) return Number.POSITIVE_INFINITY;
+  const text = String(k.deadline || '').replace(/令和(\d+)年/g, (_, year) => `${2018 + Number(year)}年`);
+  // 開催日や二次情報しかない案件は、日付を締切として扱わない。
+  if (/(?:とみられる|二次情報|正確な締切|締切日.*要確認|詳細締切.*未確認|締切明記なし|チケット販売中|種目により異なる|事前申込不要|開催直前まで|使用日の|使用希望日の|公演日の|利用希望日の|本番\d+週間前|順次開始)/.test(text)) {
+    return Number.POSITIVE_INFINITY;
+  }
+  if (/(?:ローリング|ほぼ毎月).*(?:例:|例：)/.test(text)) return Number.POSITIVE_INFINITY;
+
+  const candidates = [];
+  const tokenRe = new RegExp(dateTokenSource, 'g');
+  let match;
+  while ((match = tokenRe.exec(text))) {
+    const token = match[0];
+    let year = sortYear;
+    let month;
+    let day;
+    let parts = token.match(/^(?:(\d{4})年)?(\d{1,2})月(\d{1,2})日$/);
+    if (parts) {
+      year = Number(parts[1] || sortYear);
+      month = Number(parts[2]);
+      day = Number(parts[3]);
+    } else {
+      parts = token.match(/^(?:(\d{4})\/)?(\d{1,2})\/(\d{1,2})$/);
+      if (!parts) continue;
+      year = Number(parts[1] || sortYear);
+      month = Number(parts[2]);
+      day = Number(parts[3]);
+    }
+
+    const time = Date.UTC(year, month - 1, day);
+    if (time < sortBaseTime) continue;
+    const before = text.slice(Math.max(0, match.index - 24), match.index);
+    const after = text.slice(match.index + token.length, match.index + token.length + 24);
+    let score = 0;
+    if (/(?:締切|必着|消印|期限|エントリー期間|作品受付|申込)[^。、（）()]{0,16}$/.test(before)) score += 100;
+    const closeAt = after.search(/締切|必着|消印|まで/);
+    const anotherDateAt = after.search(new RegExp(dateTokenSource));
+    if (closeAt >= 0 && (anotherDateAt < 0 || closeAt < anotherDateAt)) score += 100;
+    if (/〜\s*$/.test(before)) score += 160;
+    if (!candidates.length && /^★?(?:受付中|募集中|次回募集)/.test(text)) score += 60;
+    if (/^[^。、（）()]{0,6}(?:開催分|実施分|対象)/.test(after)) score -= 200;
+    candidates.push({ time, score });
+  }
+
+  if (!candidates.length) return Number.POSITIVE_INFINITY;
+  const maxScore = Math.max(...candidates.map((candidate) => candidate.score));
+  if (maxScore < 50) return Number.POSITIVE_INFINITY;
+  return Math.min(...candidates.filter((candidate) => candidate.score === maxScore).map((candidate) => candidate.time));
+}
+
+const orderedKoubos = [...koubos].sort((a, b) => {
+  const openFirst = Number(Boolean(b.dlOpen)) - Number(Boolean(a.dlOpen));
+  if (openFirst) return openFirst;
+  if (a.dlOpen && b.dlOpen) {
+    const byDeadline = deadlineTimeOf(a) - deadlineTimeOf(b);
+    if (byDeadline) return byDeadline;
+  }
+  return (sourceOrder.get(a.id) ?? 0) - (sourceOrder.get(b.id) ?? 0);
+});
+
 const activeBucketKeys = new Set(koubos.map((k) => bucketOf(k.region).key));
 const BUCKETS = [
   { key: 'national', label: '全国' },
   ...PREF_ORDER.filter((s) => activeBucketKeys.has(PREF_KEY[s])).map((s) => ({ key: PREF_KEY[s], label: s })),
   ...(activeBucketKeys.has('overseas') ? [{ key: 'overseas', label: '海外' }] : []),
 ];
-const openKoubos = koubos.filter((k) => k.dlOpen);
+const openKoubos = orderedKoubos.filter((k) => k.dlOpen);
 
 // フリーワード検索用。表示カードには、見えている項目だけでなく応募条件・注記も検索語として持たせる。
 function searchTextOf(k) {
@@ -472,6 +544,7 @@ ${searchForm()}
 <div class="tabpane hidden" id="tab-deadline">${deadlinePane}</div>
 
 <h2>いま応募できる公募（${openKoubos.length}）</h2>
+<p class="note" style="margin-top:-7px">締切が近い順。締切日を特定できない随時募集などは、その後に表示しています。</p>
 ${openList}
 <div class="discl">これは開発中のプロトタイプです。掲載は募集要項の事実項目に基づく参考情報で、採択・出演を保証するものではありません。応募前に必ず各主催の最新要項をご確認ください。「お金の向き」は主催が明示していない場合「費用は要確認」としています。</div>
 <script>
@@ -488,11 +561,11 @@ document.getElementById('tab-'+b.dataset.tab).classList.remove('hidden');
 // ---- 公募一覧 ----
 {
   let body = `<h1>公募を探す（${koubos.length}件）</h1>
-<p class="lede">開催地別に全公募を掲載。各ページで締切・お金の向き・応募資格・出典を確認できます。</p>
+<p class="lede">開催地別に全公募を掲載。地域内では受付中・締切が近い順に並び、各ページで締切・お金の向き・応募資格・出典を確認できます。</p>
 ${searchForm({ live: true })}
 <div class="search-empty" id="koubo-search-empty" hidden>該当する公募がありません。地域名・月・ジャンルなど、言葉を短くしてお試しください。</div>`;
   for (const b of BUCKETS) {
-    const list = koubos.filter((k) => bucketOf(k.region).key === b.key);
+    const list = orderedKoubos.filter((k) => bucketOf(k.region).key === b.key);
     if (!list.length) continue;
     body += `<section class="search-group"><h2>${b.label}（${list.length}）</h2>${list.map((k) => gitem(k, '', true)).join('')}</section>`;
   }
@@ -536,7 +609,7 @@ apply();
 {
   const closed = koubos.filter((k) => !k.dlOpen);
   const body = `<h1>締切・募集状況</h1>
-<p class="lede">「受付中」と「締切済み・次回募集の目安」を一覧。多くの公募は春〜初夏締切→秋〜翌冬本番のサイクルです。</p>
+<p class="lede">「受付中」と「締切済み・次回募集の目安」を一覧。受付中は締切が近い順で、日付を特定できない随時募集などはその後に表示します。</p>
 <h2>受付中（${openKoubos.length}）</h2>
 ${openKoubos.map((k) => gitem(k, '')).join('') || '<p class="note">現在受付中の公募はありません。</p>'}
 <h2>締切済み・次回募集待ち（${closed.length}）</h2>
@@ -546,10 +619,10 @@ ${closed.map((k) => gitem(k, '')).join('')}`;
 
 // ---- 地域別 ----
 for (const b of BUCKETS) {
-  const list = koubos.filter((k) => bucketOf(k.region).key === b.key);
+  const list = orderedKoubos.filter((k) => bucketOf(k.region).key === b.key);
   const open = list.filter((k) => k.dlOpen);
   const body = `<h1>${b.label}のアート公募（${list.length}件）</h1>
-<p class="lede">${b.label}で応募できる舞台芸術の公募。締切・お金の向き・応募資格つき。</p>
+<p class="lede">${b.label}で応募できる舞台芸術の公募。受付中・締切が近い順で、締切・お金の向き・応募資格を掲載しています。</p>
 ${open.length ? `<h2>受付中（${open.length}）</h2>${open.map((k) => gitem(k, '../')).join('')}` : ''}
 <h2>公募一覧</h2>
 ${list.map((k) => gitem(k, '../')).join('')}
@@ -559,7 +632,7 @@ ${list.map((k) => gitem(k, '../')).join('')}
 
 // ---- お金の向き別 ----
 for (const key of ['reward', 'free', 'paid', 'unknown']) {
-  const list = koubos.filter((k) => (k.money || 'unknown') === key);
+  const list = orderedKoubos.filter((k) => (k.money || 'unknown') === key);
   if (!list.length) continue;
   const m = MONEY[key];
   const body = `<h1>${m.label}の公募（${list.length}件）</h1>
