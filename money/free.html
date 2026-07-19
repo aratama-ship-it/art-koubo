@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aratama-ship-it.github.io/art-koubo/assets/og-card.png">
 <style>
-:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;
+:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;--accent-soft:#eaeeff;--accent-line:#d7ddf6;
 --ok:#1a8f5a;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#c05621;--dl-bg:#fff4f0;
 --shadow:0 1px 3px rgba(20,20,40,.06),0 8px 24px rgba(20,20,40,.05)}
 *{box-sizing:border-box}
@@ -65,6 +65,32 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .gitem:hover{border-color:var(--accent);text-decoration:none}
 .gitem .t{font-weight:600;color:var(--ink)}
 .gitem .m{color:var(--sub);font-size:12.5px;margin-top:2px}
+.gitem-wrap{position:relative;margin:9px 0}
+.gitem-wrap .gitem{margin:0;padding-right:58px;min-height:62px}
+.save-toggle{min-width:44px;height:44px;border:1px solid var(--accent-line);border-radius:10px;background:#fff;color:var(--accent);font:inherit;font-weight:800;cursor:pointer;line-height:1}
+.save-toggle:hover{background:var(--accent-soft)}
+.save-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.save-toggle[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.save-toggle:disabled{opacity:.45;cursor:not-allowed}
+.save-card{position:absolute;top:8px;right:8px;z-index:1;font-size:21px}
+.save-inline{width:auto;padding:0 15px;margin:10px 0 2px;line-height:1.4}
+.saved-count{display:inline-grid;place-items:center;min-width:19px;height:19px;margin-left:3px;padding:0 5px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;vertical-align:middle}
+.nav a.on .saved-count{background:#fff}
+.saved-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.saved-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.saved-card h2{font-size:15px;margin:0 0 4px;line-height:1.55}
+.saved-card .saved-meta{font-size:12.5px;color:var(--sub);margin:0 0 10px}
+.saved-card .saved-fields{display:grid;grid-template-columns:78px 1fr;gap:5px 9px;margin:0 0 14px;font-size:13px}
+.saved-card .saved-fields dt{color:var(--sub)}
+.saved-card .saved-fields dd{margin:0}
+.saved-actions{display:flex;gap:8px;align-items:center;margin-top:auto}
+.saved-actions a{flex:1;text-align:center;padding:8px 10px;border-radius:9px;background:var(--accent-soft);font-size:13px;font-weight:700}
+.saved-actions .save-toggle{flex:0 0 44px;padding:0}
+.saved-tools{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:14px 0}
+.quiet-button{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--sub);font:inherit;padding:8px 13px;cursor:pointer}
+.quiet-button:hover{border-color:var(--accent);color:var(--accent)}
+.saved-empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:24px 18px;text-align:center;color:var(--sub)}
+@media(max-width:640px){.saved-grid{grid-template-columns:1fr}}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:11.5px;background:#f4f5fa;color:var(--sub);border-radius:6px;padding:3px 8px}
 .tag.dl{background:var(--dl-bg);color:var(--dl);font-weight:600}
@@ -116,259 +142,349 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
+<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>720)close()})})();
+</script>
+<script>
+(()=>{const key="monosashi-koubo-saved-v1";let available=true;
+const read=()=>{try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value.map(String):[]}catch(error){available=false;return[]}};
+const write=(ids)=>{try{localStorage.setItem(key,JSON.stringify(Array.from(new Set(ids.map(String)))))}catch(error){available=false}sync()};
+const sync=()=>{const ids=read();document.querySelectorAll('.saved-count').forEach((node)=>{node.textContent=String(ids.length)});document.querySelectorAll('[data-save-id]').forEach((button)=>{const saved=ids.includes(String(button.dataset.saveId));const name=button.dataset.saveName||'この項目';button.disabled=!available;button.setAttribute('aria-pressed',String(saved));button.setAttribute('aria-label',saved?name+'をあとで見るから外す':name+'をあとで見るに追加');button.textContent=button.classList.contains('save-inline')?(saved?'★ 保存済み':'☆ あとで見る'):(saved?'★':'☆')})};
+const toggle=(id)=>{const ids=read();const value=String(id);write(ids.includes(value)?ids.filter((x)=>x!==value):[...ids,value]);window.dispatchEvent(new CustomEvent('monosashi:saved'))};
+document.addEventListener('click',(event)=>{const button=event.target.closest('[data-save-id]');if(!button||button.disabled)return;event.preventDefault();toggle(button.dataset.saveId)});
+window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.addEventListener('monosashi:saved',sync);window.MonosashiSaved={get:read,set:write,toggle,sync};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
 </script>
 <main>
 <h1>無償・施設提供の公募（80件）</h1>
 <p class="lede">金銭の授受はなく、会場や滞在の場が提供される公募。</p>
-<a class="gitem" href="../koubo/miyazaki_to_r_mansion_meros.html">
+<div class="gitem-wrap"><a class="gitem" href="../koubo/miyazaki_to_r_mansion_meros.html">
 <div class="t">【出演者募集】to R mansion『走れ☆星の王子メロス』</div>
 <div class="m">公益財団法人宮崎県立芸術劇場 ・ 宮崎県宮崎市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年7月26日必着）</span><span class="tag">公演出演者公募</span></div></a><a class="gitem" href="../koubo/fukushima_machinaka_ongakusai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年7月26日必着）</span><span class="tag">公演出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="miyazaki_to_r_mansion_meros" data-save-name="【出演者募集】to R mansion『走れ☆星の王子メロス』" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fukushima_machinaka_ongakusai.html">
 <div class="t">ふくしままちなか音楽祭2026 出演者募集</div>
 <div class="m">福島市（文化スポーツ振興室文化振興課） ・ 福島県福島市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（令和8年6月25日〜7月31日必着）</span><span class="tag">野外音楽祭 出演者公募</span></div></a><a class="gitem" href="../koubo/okayama_arts_festival_welcome_performance.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（令和8年6月25日〜7月31日必着）</span><span class="tag">野外音楽祭 出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fukushima_machinaka_ongakusai" data-save-name="ふくしままちなか音楽祭2026 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/okayama_arts_festival_welcome_performance.html">
 <div class="t">おかやまアーツフェスティバル2026 ウェルカムパフォーマンス出演者</div>
 <div class="m">おかやまアーツフェスティバル実行委員会（岡山文化芸術創造） ・ 岡山県岡山市北区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月1日12:00必着）</span><span class="tag">市民出演者公募（駅前ストリートステージ）</span></div></a><a class="gitem" href="../koubo/kurata_midori_ninja_dance_mie.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月1日12:00必着）</span><span class="tag">市民出演者公募（駅前ストリートステージ）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="okayama_arts_festival_welcome_performance" data-save-name="おかやまアーツフェスティバル2026 ウェルカムパフォーマンス出演者" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kurata_midori_ninja_dance_mie.html">
 <div class="t">倉田翠×忍者ダンス公演 出演者募集（おどる・からだ・こころプロジェクト）</div>
 <div class="m">三重県文化会館（伊賀市文化都市協会共催、文化庁助成） ・ 三重県津市（本番会場）・伊賀市（稽古会場）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月2日必着）</span><span class="tag">出演者オーディション（社会参加型ダンス公演）</span></div></a><a class="gitem" href="../koubo/mie_bunka_geijutsusai_chiiki_jishu_program.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月2日必着）</span><span class="tag">出演者オーディション（社会参加型ダンス公演）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kurata_midori_ninja_dance_mie" data-save-name="倉田翠×忍者ダンス公演 出演者募集（おどる・からだ・こころプロジェクト）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/mie_bunka_geijutsusai_chiiki_jishu_program.html">
 <div class="t">令和9年度みえ文化芸術祭 第33回みえ県民文化祭 地域自主プログラム</div>
 <div class="m">三重県環境生活部文化振興課 ・ 三重県</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年7月15日〜8月12日必着）</span><span class="tag">文化祭自主企画プログラム認定（公募）</span></div></a><a class="gitem" href="../koubo/fureai_nukumori_festa_kitakyushu.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年7月15日〜8月12日必着）</span><span class="tag">文化祭自主企画プログラム認定（公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="mie_bunka_geijutsusai_chiiki_jishu_program" data-save-name="令和9年度みえ文化芸術祭 第33回みえ県民文化祭 地域自主プログラム" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fureai_nukumori_festa_kitakyushu.html">
 <div class="t">ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）</div>
 <div class="m">公益財団法人北九州市身体障害者福祉協会 ・ 福岡県北九州市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月1日〜8月15日必着）</span><span class="tag">障害者芸術祭・ステージ出演者募集</span></div></a><a class="gitem" href="../koubo/kippu_u35_program.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月1日〜8月15日必着）</span><span class="tag">障害者芸術祭・ステージ出演者募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fureai_nukumori_festa_kitakyushu" data-save-name="ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kippu_u35_program.html">
 <div class="t">ロームシアター京都×京都芸術センター U35創造支援プログラム「KIPPU」2027年度参加アーティスト募集</div>
 <div class="m">ロームシアター京都・京都芸術センター（共同事業） ・ 京都府京都市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年7月6日〜8月21日必着）</span><span class="tag">創造支援プログラム（劇場・稽古場提供）</span></div></a><a class="gitem" href="../koubo/kochi_geijutsusai_kyosai_kyosan.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年7月6日〜8月21日必着）</span><span class="tag">創造支援プログラム（劇場・稽古場提供）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kippu_u35_program" data-save-name="ロームシアター京都×京都芸術センター U35創造支援プログラム「KIPPU」2027年度参加アーティスト募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kochi_geijutsusai_kyosai_kyosan.html">
 <div class="t">高知県芸術祭 共催行事・協賛行事</div>
 <div class="m">高知県芸術祭執行委員会（高知県文化財団内） ・ 高知県</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（HP/Facebook掲載枠は2026年8月24日必着。ガイドブック掲載枠は終了済み）</span><span class="tag">芸術祭 共催・協賛事業公募</span></div></a><a class="gitem" href="../koubo/yamaguchi_shogaisha_geijutsu_bunkasai_stage.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（HP/Facebook掲載枠は2026年8月24日必着。ガイドブック掲載枠は終了済み）</span><span class="tag">芸術祭 共催・協賛事業公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kochi_geijutsusai_kyosai_kyosan" data-save-name="高知県芸術祭 共催行事・協賛行事" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yamaguchi_shogaisha_geijutsu_bunkasai_stage.html">
 <div class="t">第32回山口県障害者芸術文化祭 ステージ部門（出演者募集）</div>
 <div class="m">山口県障害者社会参加推進センター ・ 山口県山口市（カリエンテ山口）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月31日まで）</span><span class="tag">障害者芸術文化祭 ステージ部門（出演者公募）</span></div></a><a class="gitem" href="../koubo/showa_kumin_fureai_geijutsusai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月31日まで）</span><span class="tag">障害者芸術文化祭 ステージ部門（出演者公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yamaguchi_shogaisha_geijutsu_bunkasai_stage" data-save-name="第32回山口県障害者芸術文化祭 ステージ部門（出演者募集）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/showa_kumin_fureai_geijutsusai.html">
 <div class="t">令和8年度 区民ふれあい芸術祭 参加者募集</div>
 <div class="m">名古屋市昭和区／昭和文化小劇場 ・ 愛知県名古屋市昭和区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年9月15日必着）</span><span class="tag">区民文化祭 出演者募集</span></div></a><a class="gitem" href="../koubo/akita_bunka_souzoukan_challenge_market.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年9月15日必着）</span><span class="tag">区民文化祭 出演者募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="showa_kumin_fureai_geijutsusai" data-save-name="令和8年度 区民ふれあい芸術祭 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/akita_bunka_souzoukan_challenge_market.html">
 <div class="t">チャレンジマーケット（出店・出演者募集）</div>
 <div class="m">秋田市文化創造館（NPO法人アーツセンターあきた） ・ 秋田県秋田市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（第6回: 2026年6月24日〜7月18日、開催日は2026年9月23日）</span><span class="tag">自主企画 出店・出演者公募</span></div></a><a class="gitem" href="../koubo/center_air.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（第6回: 2026年6月24日〜7月18日、開催日は2026年9月23日）</span><span class="tag">自主企画 出店・出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="akita_bunka_souzoukan_challenge_market" data-save-name="チャレンジマーケット（出店・出演者募集）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/center_air.html">
 <div class="t">Center AiR 2026</div>
 <div class="m">Center AiR ・ 栃木県</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年9月30日締切）</span><span class="tag">AIR・滞在制作</span></div></a><a class="gitem" href="../koubo/moya_residence.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年9月30日締切）</span><span class="tag">AIR・滞在制作</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="center_air" data-save-name="Center AiR 2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/moya_residence.html">
 <div class="t">MOYA Creative Residence Program 2026</div>
 <div class="m">MOYA ・ 山形県</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年9月30日締切）</span><span class="tag">AIR・滞在制作</span></div></a><a class="gitem" href="../koubo/yamagata_minzoku_geinou_ninaite.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年9月30日締切）</span><span class="tag">AIR・滞在制作</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="moya_residence" data-save-name="MOYA Creative Residence Program 2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yamagata_minzoku_geinou_ninaite.html">
 <div class="t">山形県民俗芸能等担い手確保応援事業（担い手参加者募集）</div>
 <div class="m">山形県（観光文化スポーツ部県民文化芸術振興課） ・ 山形県（米沢市・山形市・遊佐町・真室川町・白鷹町）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（団体ごとに異なる: 梓山獅子踊5/22〜9/30、豊烈神社の打毬6/10〜8/2等）</span><span class="tag">伝統芸能の担い手（参加者）募集</span></div></a><a class="gitem" href="../koubo/oita_kenmin_geibunsai_sanka.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（団体ごとに異なる: 梓山獅子踊5/22〜9/30、豊烈神社の打毬6/10〜8/2等）</span><span class="tag">伝統芸能の担い手（参加者）募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yamagata_minzoku_geinou_ninaite" data-save-name="山形県民俗芸能等担い手確保応援事業（担い手参加者募集）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/oita_kenmin_geibunsai_sanka.html">
 <div class="t">大分県民芸術文化祭 参加行事募集</div>
 <div class="m">大分県民芸術文化祭実行委員会 ・ 大分県内全域</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（令和8年9月1日〜12月31日開催分を11月30日まで随時受付。冊子掲載希望は7月末日まで）</span><span class="tag">文化祭参加事業登録（無償版）</span></div></a><a class="gitem" href="../koubo/toyama_yagai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（令和8年9月1日〜12月31日開催分を11月30日まで随時受付。冊子掲載希望は7月末日まで）</span><span class="tag">文化祭参加事業登録（無償版）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="oita_kenmin_geibunsai_sanka" data-save-name="大分県民芸術文化祭 参加行事募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/toyama_yagai.html">
 <div class="t">戸山公園野外演劇祭</div>
 <div class="m">東京都公園協会 ・ 東京都新宿区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: 随時受付（応募多数時は選考）</span><span class="tag">野外演劇祭</span></div></a><a class="gitem" href="../koubo/fujinokuni_geijutsusai_engeki.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: 随時受付（応募多数時は選考）</span><span class="tag">野外演劇祭</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="toyama_yagai" data-save-name="戸山公園野外演劇祭" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fujinokuni_geijutsusai_engeki.html">
 <div class="t">第66回静岡県芸術祭2026 演劇コンクール（参加団体募集）</div>
 <div class="m">静岡県・静岡県教育委員会・静岡県文化協会（静岡県芸術祭事務局） ・ 静岡県内（公演会場は参加団体の活動地・自主公演会場による）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（公演日の50日前までに随時受付。対象公演期間: 2026年6月1日〜12月6日）</span><span class="tag">演劇コンクール（自主公演を対象とした県主催コンテスト形式の公募）</span></div></a><a class="gitem" href="../koubo/okinawa_eisa_seinenkai_boshu.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（公演日の50日前までに随時受付。対象公演期間: 2026年6月1日〜12月6日）</span><span class="tag">演劇コンクール（自主公演を対象とした県主催コンテスト形式の公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fujinokuni_geijutsusai_engeki" data-save-name="第66回静岡県芸術祭2026 演劇コンクール（参加団体募集）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/okinawa_eisa_seinenkai_boshu.html">
 <div class="t">沖縄市内エイサー青年会 新規団員募集（例: 沖縄市久保田青年会）</div>
 <div class="m">沖縄市久保田青年会（沖縄市内には同種の青年会が20以上存在） ・ 沖縄県沖縄市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★随時（通年、締切なし）</span><span class="tag">団体加入（新規団員募集）</span></div></a><a class="gitem" href="../koubo/kumamoto_shiminkaikan_bukatsu_shien.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★随時（通年、締切なし）</span><span class="tag">団体加入（新規団員募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="okinawa_eisa_seinenkai_boshu" data-save-name="沖縄市内エイサー青年会 新規団員募集（例: 沖縄市久保田青年会）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kumamoto_shiminkaikan_bukatsu_shien.html">
 <div class="t">熊本市民会館（シアーズホーム夢ホール）部活動等支援事業（令和8年度下半期）</div>
 <div class="m">一般財団法人熊本市文化スポーツ財団 ・ 熊本県熊本市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（使用日の1か月前まで、予算上限到達次第終了。対象使用期間は令和8年10月1日〜令和9年3月31日）</span><span class="tag">施設利用助成（利用団体支援）</span></div></a><a class="gitem" href="../koubo/kurume_machinaka_open_stage.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（使用日の1か月前まで、予算上限到達次第終了。対象使用期間は令和8年10月1日〜令和9年3月31日）</span><span class="tag">施設利用助成（利用団体支援）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kumamoto_shiminkaikan_bukatsu_shien" data-save-name="熊本市民会館（シアーズホーム夢ホール）部活動等支援事業（令和8年度下半期）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kurume_machinaka_open_stage.html">
 <div class="t">まちなかオープンステージ 出演者募集</div>
 <div class="m">久留米シティプラザ ・ 福岡県久留米市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（ほぼ毎月開催のローリング募集。例: 10/23公演→8/17締切）</span><span class="tag">商業施設内オープンステージ・出演者募集（通年ローリング）</span></div></a><a class="gitem" href="../koubo/yamagata_jido_gekidan_kyakuhon.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（ほぼ毎月開催のローリング募集。例: 10/23公演→8/17締切）</span><span class="tag">商業施設内オープンステージ・出演者募集（通年ローリング）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kurume_machinaka_open_stage" data-save-name="まちなかオープンステージ 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yamagata_jido_gekidan_kyakuhon.html">
 <div class="t">山形市児童劇団 上演脚本募集</div>
 <div class="m">山形市民会館（山形市児童劇団事務局） ・ 山形県山形市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（例年公募、正確な締切日は要確認）</span><span class="tag">脚本募集（戯曲公募）</span></div></a><a class="gitem" href="../koubo/izumo_lobby_concert.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（例年公募、正確な締切日は要確認）</span><span class="tag">脚本募集（戯曲公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yamagata_jido_gekidan_kyakuhon" data-save-name="山形市児童劇団 上演脚本募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/izumo_lobby_concert.html">
 <div class="t">音楽のまち出雲 市役所ロビーコンサート 出演者募集</div>
 <div class="m">出雲市（出雲市芸術文化振興財団と連携） ・ 島根県出雲市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★随時募集（令和8年7月〜令和9年3月の実施分、2か月に1回程度）</span><span class="tag">ロビーコンサート出演者公募</span></div></a><a class="gitem" href="../koubo/awaodori_niwaka_ren.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★随時募集（令和8年7月〜令和9年3月の実施分、2か月に1回程度）</span><span class="tag">ロビーコンサート出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="izumo_lobby_concert" data-save-name="音楽のまち出雲 市役所ロビーコンサート 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/awaodori_niwaka_ren.html">
 <div class="t">阿波おどり「にわか連」飛び入り参加</div>
 <div class="m">阿波おどり未来へつなぐ実行委員会 ・ 徳島県徳島市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★事前申込不要（開催期間中は毎日実施、2026年徳島市は8/12〜15開催予定）</span><span class="tag">祭り 個人飛び入り参加</span></div></a><a class="gitem" href="../koubo/shimin_kensho_yosakoi_odorikotai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★事前申込不要（開催期間中は毎日実施、2026年徳島市は8/12〜15開催予定）</span><span class="tag">祭り 個人飛び入り参加</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="awaodori_niwaka_ren" data-save-name="阿波おどり「にわか連」飛び入り参加" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/shimin_kensho_yosakoi_odorikotai.html">
 <div class="t">市民憲章よさこい踊り子隊</div>
 <div class="m">よさこい祭振興会 ・ 高知県高知市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★事前申込不要（祭り当日、2026年は8月10・11日に高知追手前高等学校でエントリー）</span><span class="tag">祭り 個人飛び入り参加</span></div></a><a class="gitem" href="../koubo/kyoto_ex_fringe.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★事前申込不要（祭り当日、2026年は8月10・11日に高知追手前高等学校でエントリー）</span><span class="tag">祭り 個人飛び入り参加</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="shimin_kensho_yosakoi_odorikotai" data-save-name="市民憲章よさこい踊り子隊" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kyoto_ex_fringe.html">
 <div class="t">KYOTO EXPERIMENT フリンジ「More Experiments」</div>
 <div class="m">KYOTO EXPERIMENT実行委員会 ・ 京都府</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年6月頃（2026年分は6/26締切・終了）</span><span class="tag">フリンジ（登録制）</span></div></a><a class="gitem" href="../koubo/kiac_air.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年6月頃（2026年分は6/26締切・終了）</span><span class="tag">フリンジ（登録制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kyoto_ex_fringe" data-save-name="KYOTO EXPERIMENT フリンジ「More Experiments」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kiac_air.html">
 <div class="t">城崎国際アートセンター（KIAC）アーティスト・イン・レジデンス</div>
 <div class="m">城崎国際アートセンター（豊岡市） ・ 兵庫県</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年6月末（次回は例年6月頃・要確認）</span><span class="tag">AIR・滞在制作</span></div></a><a class="gitem" href="../koubo/akiyoshidai_air.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年6月末（次回は例年6月頃・要確認）</span><span class="tag">AIR・滞在制作</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kiac_air" data-save-name="城崎国際アートセンター（KIAC）アーティスト・イン・レジデンス" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/akiyoshidai_air.html">
 <div class="t">秋吉台国際芸術村 レジデンス・フェローシップ</div>
 <div class="m">山口きらめき財団 ・ 山口県</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年12月開始〜1月末（次回は要確認）</span><span class="tag">AIR・滞在制作</span></div></a><a class="gitem" href="../koubo/kyunasaka_support.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年12月開始〜1月末（次回は要確認）</span><span class="tag">AIR・滞在制作</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="akiyoshidai_air" data-save-name="秋吉台国際芸術村 レジデンス・フェローシップ" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kyunasaka_support.html">
 <div class="t">急な坂スタジオ サポートアーティスト</div>
 <div class="m">急な坂スタジオ（NPO法人アートプラットフォーム） ・ 神奈川県</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">数年に一度の枠（次回は要確認）</span><span class="tag">AIR・活動支援</span></div></a><a class="gitem" href="../koubo/be_drastic.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">数年に一度の枠（次回は要確認）</span><span class="tag">AIR・活動支援</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kyunasaka_support" data-save-name="急な坂スタジオ サポートアーティスト" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/be_drastic.html">
 <div class="t">若手カンパニー・シード・プログラム「ビー・ドラ（Be Drastic）」</div>
 <div class="m">東京芸術劇場（東京都歴史文化財団） ・ 東京都豊島区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年春募集（2026年分は5/10締切・済／次回は来春の見込み）</span><span class="tag">若手育成・上演機会（利用団体募集）</span></div></a><a class="gitem" href="../koubo/theater_tram_ng.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年春募集（2026年分は5/10締切・済／次回は来春の見込み）</span><span class="tag">若手育成・上演機会（利用団体募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="be_drastic" data-save-name="若手カンパニー・シード・プログラム「ビー・ドラ（Be Drastic）」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/theater_tram_ng.html">
 <div class="t">シアタートラム・ネクストジェネレーション</div>
 <div class="m">世田谷パブリックシアター（せたがや文化財団） ・ 東京都世田谷区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">隔年で演劇↔フィジカルを交互募集（vol.18演劇は2025/7/6締切・済／次回はフィジカル回の見込み）</span><span class="tag">若手ショーケース（公募）</span></div></a><a class="gitem" href="../koubo/hokutopia_engekisai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">隔年で演劇↔フィジカルを交互募集（vol.18演劇は2025/7/6締切・済／次回はフィジカル回の見込み）</span><span class="tag">若手ショーケース（公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="theater_tram_ng" data-save-name="シアタートラム・ネクストジェネレーション" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/hokutopia_engekisai.html">
 <div class="t">北とぴあ演劇祭 参加団体募集</div>
 <div class="m">北とぴあ演劇祭実行委員会／北区文化振興財団 ・ 東京都北区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年3月頃募集・締切済（本祭は9〜10月／次回は例年春頃）</span><span class="tag">地域演劇祭（参加団体募集）</span></div></a><a class="gitem" href="../koubo/shimokita_engeki.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年3月頃募集・締切済（本祭は9〜10月／次回は例年春頃）</span><span class="tag">地域演劇祭（参加団体募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="hokutopia_engekisai" data-save-name="北とぴあ演劇祭 参加団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/shimokita_engeki.html">
 <div class="t">下北沢演劇創作プログラム（下北沢演劇祭）</div>
 <div class="m">下北沢演劇祭実行委員会 ・ 東京都世田谷区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">毎年2月開催、参加団体募集は例年秋頃（次回募集時期は要確認）</span><span class="tag">演劇祭（公募創作）</span></div></a><a class="gitem" href="../koubo/itabashi_engeki.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">毎年2月開催、参加団体募集は例年秋頃（次回募集時期は要確認）</span><span class="tag">演劇祭（公募創作）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="shimokita_engeki" data-save-name="下北沢演劇創作プログラム（下北沢演劇祭）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/itabashi_engeki.html">
 <div class="t">板橋区民文化祭「演劇のつどい」</div>
 <div class="m">板橋区／板橋区文化団体連合会・区文化国際交流財団 ・ 東京都板橋区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年6〜7月に出演者募集（2026年分は7/10締切・済）</span><span class="tag">区民演劇祭</span></div></a><a class="gitem" href="../koubo/nakano_geinousai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年6〜7月に出演者募集（2026年分は7/10締切・済）</span><span class="tag">区民演劇祭</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="itabashi_engeki" data-save-name="板橋区民文化祭「演劇のつどい」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nakano_geinousai.html">
 <div class="t">なかのZERO区民フェスタ「なかの芸能祭」出演団体募集</div>
 <div class="m">なかのZERO（中野区もみじ山文化センター） ・ 東京都中野区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年2月締切（次回2027年2月頃見込み）</span><span class="tag">区民ホール発表・出演団体募集</span></div></a><a class="gitem" href="../koubo/harukaze_koza_associate.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年2月締切（次回2027年2月頃見込み）</span><span class="tag">区民ホール発表・出演団体募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nakano_geinousai" data-save-name="なかのZERO区民フェスタ「なかの芸能祭」出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/harukaze_koza_associate.html">
 <div class="t">アトリエ春風舎講座（2026年度受講生募集）＋アソシエイトアーティスト</div>
 <div class="m">有限会社アゴラ企画（青年団／平田オリザ） ・ 東京都板橋区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年春頃募集（2025年度は4/27締切、2026年度の正確な締切は要確認）</span><span class="tag">育成（無料講座＋アソシエイト公募）</span></div></a><a class="gitem" href="../koubo/toyooka_fringe_street.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年春頃募集（2025年度は4/27締切、2026年度の正確な締切は要確認）</span><span class="tag">育成（無料講座＋アソシエイト公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="harukaze_koza_associate" data-save-name="アトリエ春風舎講座（2026年度受講生募集）＋アソシエイトアーティスト" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/toyooka_fringe_street.html">
 <div class="t">豊岡演劇祭 フリンジプログラム公募（ストリート部門）</div>
 <div class="m">豊岡演劇祭実行委員会 ・ 兵庫県豊岡市（城崎温泉街・豊岡市街地）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年は3/2〜4/1締切で終了済み。開催は2026年9/19〜21(城崎)・9/25〜27(豊岡市街地)</span><span class="tag">演劇祭 ストリートパフォーマー公募</span></div></a><a class="gitem" href="../koubo/kac_partnership_program.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年は3/2〜4/1締切で終了済み。開催は2026年9/19〜21(城崎)・9/25〜27(豊岡市街地)</span><span class="tag">演劇祭 ストリートパフォーマー公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="toyooka_fringe_street" data-save-name="豊岡演劇祭 フリンジプログラム公募（ストリート部門）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kac_partnership_program.html">
 <div class="t">KACパートナーシップ・プログラム（共催事業）</div>
 <div class="m">京都芸術センター ・ 京都府京都市中京区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年1月22日〜2月17日締切（2026年度分は募集終了）</span><span class="tag">共催事業（発表支援・会場提供）</span></div></a><a class="gitem" href="../koubo/fukuchiyama_koryu_kouen.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年1月22日〜2月17日締切（2026年度分は募集終了）</span><span class="tag">共催事業（発表支援・会場提供）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kac_partnership_program" data-save-name="KACパートナーシップ・プログラム（共催事業）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fukuchiyama_koryu_kouen.html">
 <div class="t">福知山市民交流公演事業 出演者・スタッフ募集（ダンス×ドラマ×ミュージック）</div>
 <div class="m">福知山市 ・ 京都府福知山市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">年1回、演目を変えて募集（令和7年度「赤鬼」は受付終了。次回時期は未発表）</span><span class="tag">市民参加型公演 出演者・スタッフ募集</span></div></a><a class="gitem" href="../koubo/dcc_kansai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">年1回、演目を変えて募集（令和7年度「赤鬼」は受付終了。次回時期は未発表）</span><span class="tag">市民参加型公演 出演者・スタッフ募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fukuchiyama_koryu_kouen" data-save-name="福知山市民交流公演事業 出演者・スタッフ募集（ダンス×ドラマ×ミュージック）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/dcc_kansai.html">
 <div class="t">DANCE CLUB CHAMPIONSHIP（DCC）関西地方大会</div>
 <div class="m">avex（DANCE CLUB CHAMPIONSHIP実行委員会） ・ 兵庫県神戸市（会場：神戸文化ホール大ホール）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第14回大会は2026年6月19日締切・終了（次回は2027年春頃と推測）</span><span class="tag">高校生ダンス部コンクール（地区大会）</span></div></a><a class="gitem" href="../koubo/gifu_engeki_season.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第14回大会は2026年6月19日締切・終了（次回は2027年春頃と推測）</span><span class="tag">高校生ダンス部コンクール（地区大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="dcc_kansai" data-save-name="DANCE CLUB CHAMPIONSHIP（DCC）関西地方大会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/gifu_engeki_season.html">
 <div class="t">ぎふ演劇シーズン（岐阜市民芸術祭 演劇の部）</div>
 <div class="m">岐阜市民芸術祭実行委員会事務局 ・ 岐阜県岐阜市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年4月27日締切（今年度分は募集終了）</span><span class="tag">地域演劇祭（市民芸術祭 演劇部門）</span></div></a><a class="gitem" href="../koubo/otodama_2026.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年4月27日締切（今年度分は募集終了）</span><span class="tag">地域演劇祭（市民芸術祭 演劇部門）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="gifu_engeki_season" data-save-name="ぎふ演劇シーズン（岐阜市民芸術祭 演劇の部）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/otodama_2026.html">
 <div class="t">音魂2026 参加者募集</div>
 <div class="m">金沢市民芸術村ミュージック工房アクションプラン ・ 石川県金沢市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年5月31日締切で受付終了。次回は2027年春頃募集と推測</span><span class="tag">アマチュア音楽ライブイベント出演者公募</span></div></a><a class="gitem" href="../koubo/midori_onstage_festival_2027.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年5月31日締切で受付終了。次回は2027年春頃募集と推測</span><span class="tag">アマチュア音楽ライブイベント出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="otodama_2026" data-save-name="音魂2026 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/midori_onstage_festival_2027.html">
 <div class="t">MIDORIオンステージ・フェスティバル2027 出演者募集</div>
 <div class="m">名古屋市緑区／緑文化小劇場 ・ 愛知県名古屋市緑区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年8月1日〜9月4日必着（調査時点ではまだ受付開始前）</span><span class="tag">区民文化祭 出演者募集</span></div></a><a class="gitem" href="../koubo/spac_engeki_academy.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年8月1日〜9月4日必着（調査時点ではまだ受付開始前）</span><span class="tag">区民文化祭 出演者募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="midori_onstage_festival_2027" data-save-name="MIDORIオンステージ・フェスティバル2027 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/spac_engeki_academy.html">
 <div class="t">SPAC演劇アカデミー 受講生募集</div>
 <div class="m">静岡県舞台芸術センター（SPAC） ・ 静岡県静岡市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年2〜3月頃募集。2026年度第6期生は6月29日入校済みで本年度募集は終了</span><span class="tag">人材育成事業（1年制・演劇塾形式の受講生公募）</span></div></a><a class="gitem" href="../koubo/shizuoka_koukou_dance_contest.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年2〜3月頃募集。2026年度第6期生は6月29日入校済みで本年度募集は終了</span><span class="tag">人材育成事業（1年制・演劇塾形式の受講生公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="spac_engeki_academy" data-save-name="SPAC演劇アカデミー 受講生募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/shizuoka_koukou_dance_contest.html">
 <div class="t">静岡県高校ダンス部コンテスト（テレビ静岡×ヤマモトショウ）</div>
 <div class="m">テレビ静岡・音楽プロデューサー ヤマモトショウ ・ 静岡県内（本大会会場は三島市民文化会館ゆうゆうホール）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2025年11月1日〜2026年1月11日で終了（本大会2026年2月14日開催済み）</span><span class="tag">動画審査型ダンスコンテスト（SNS投稿による公募）</span></div></a><a class="gitem" href="../koubo/kagoshima_yumebutai_shien.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2025年11月1日〜2026年1月11日で終了（本大会2026年2月14日開催済み）</span><span class="tag">動画審査型ダンスコンテスト（SNS投稿による公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="shizuoka_koukou_dance_contest" data-save-name="静岡県高校ダンス部コンテスト（テレビ静岡×ヤマモトショウ）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kagoshima_yumebutai_shien.html">
 <div class="t">かごしま夢舞台支援事業 公演団体募集（令和8年度）</div>
 <div class="m">公益財団法人鹿児島県文化振興財団（宝山ホール） ・ 鹿児島県鹿児島市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">締切済み（2026年4月26日必着）。公演期間は令和9年1〜3月</span><span class="tag">公演支援公募（会場費助成）</span></div></a><a class="gitem" href="../koubo/okinawa_kumiodori_kenshusei.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">締切済み（2026年4月26日必着）。公演期間は令和9年1〜3月</span><span class="tag">公演支援公募（会場費助成）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kagoshima_yumebutai_shien" data-save-name="かごしま夢舞台支援事業 公演団体募集（令和8年度）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/okinawa_kumiodori_kenshusei.html">
 <div class="t">国立劇場おきなわ 組踊研修生募集（第八期）</div>
 <div class="m">公益財団法人国立劇場おきなわ運営財団 ・ 沖縄県うるま市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第八期は2025年8月1日〜9月30日で受付終了。次回(第九期)の時期は未発表</span><span class="tag">研修生公募（後継者育成）</span></div></a><a class="gitem" href="../koubo/okinawa_actors_school_bbwaves.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第八期は2025年8月1日〜9月30日で受付終了。次回(第九期)の時期は未発表</span><span class="tag">研修生公募（後継者育成）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="okinawa_kumiodori_kenshusei" data-save-name="国立劇場おきなわ 組踊研修生募集（第八期）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/okinawa_actors_school_bbwaves.html">
 <div class="t">沖縄アクターズスクール B.B.WAVESオーディション</div>
 <div class="m">株式会社沖縄アクターズスクール ・ 沖縄県宜野湾市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第3回は2025年7〜8月で受付終了。第4回の告知は未確認</span><span class="tag">養成オーディション</span></div></a><a class="gitem" href="../koubo/gakuaru_festa_koukou_dance.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第3回は2025年7〜8月で受付終了。第4回の告知は未確認</span><span class="tag">養成オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="okinawa_actors_school_bbwaves" data-save-name="沖縄アクターズスクール B.B.WAVESオーディション" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/gakuaru_festa_koukou_dance.html">
 <div class="t">ガクアルFESTA 高校生ダンスコンテスト</div>
 <div class="m">ガクアル（沖縄進学ネット） ・ 沖縄県うるま市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年度分はエントリー期限6月12日で受付終了。次回は2027年春頃と推測</span><span class="tag">ダンスコンテスト</span></div></a><a class="gitem" href="../koubo/kumamoto_kengekijo_bukatsu_shien.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年度分はエントリー期限6月12日で受付終了。次回は2027年春頃と推測</span><span class="tag">ダンスコンテスト</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="gakuaru_festa_koukou_dance" data-save-name="ガクアルFESTA 高校生ダンスコンテスト" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kumamoto_kengekijo_bukatsu_shien.html">
 <div class="t">熊本県立劇場 部活動等支援事業（令和8年度）</div>
 <div class="m">公益財団法人熊本県立劇場 ・ 熊本県熊本市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">対象使用期間 令和8年4月1日〜9月30日分。予算上限到達のため募集終了</span><span class="tag">施設利用助成（利用団体支援）</span></div></a><a class="gitem" href="../koubo/kumamoto_kengekijo_bunka_shien.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">対象使用期間 令和8年4月1日〜9月30日分。予算上限到達のため募集終了</span><span class="tag">施設利用助成（利用団体支援）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kumamoto_kengekijo_bukatsu_shien" data-save-name="熊本県立劇場 部活動等支援事業（令和8年度）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kumamoto_kengekijo_bunka_shien.html">
 <div class="t">熊本県立劇場 文化活動支援事業（令和8年度）</div>
 <div class="m">公益財団法人熊本県立劇場 ・ 熊本県熊本市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年1月30日締切（募集終了）</span><span class="tag">公演助成（施設利用支援）</span></div></a><a class="gitem" href="../koubo/kengun_bunka_hall_geijutsu_dantai_josei.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年1月30日締切（募集終了）</span><span class="tag">公演助成（施設利用支援）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kumamoto_kengekijo_bunka_shien" data-save-name="熊本県立劇場 文化活動支援事業（令和8年度）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kengun_bunka_hall_geijutsu_dantai_josei.html">
 <div class="t">熊本市健軍文化ホール 芸術文化団体等助成事業</div>
 <div class="m">一般財団法人熊本市文化スポーツ財団 ・ 熊本県熊本市東区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和7年度実績は4月1日〜6月30日。令和8年度の正確な募集時期・締切は確認できず</span><span class="tag">施設利用助成（自主事業支援）</span></div></a><a class="gitem" href="../koubo/kumamoto_geijutsu_bunkasai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和7年度実績は4月1日〜6月30日。令和8年度の正確な募集時期・締切は確認できず</span><span class="tag">施設利用助成（自主事業支援）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kengun_bunka_hall_geijutsu_dantai_josei" data-save-name="熊本市健軍文化ホール 芸術文化団体等助成事業" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kumamoto_geijutsu_bunkasai.html">
 <div class="t">第68回熊本県芸術文化祭 参加事業募集</div>
 <div class="m">熊本県文化協会 ・ 熊本県内全域</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年7月15日締切（募集終了）</span><span class="tag">文化祭参加事業登録（公募型県民文化祭）</span></div></a><a class="gitem" href="../koubo/beppu_art_month_2026.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年7月15日締切（募集終了）</span><span class="tag">文化祭参加事業登録（公募型県民文化祭）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kumamoto_geijutsu_bunkasai" data-save-name="第68回熊本県芸術文化祭 参加事業募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/beppu_art_month_2026.html">
 <div class="t">ベップ・アート・マンス2026 プログラム募集</div>
 <div class="m">ベップ・アート・マンス事務局（別府市・NPO法人BEPPU PROJECT等） ・ 大分県別府市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年5月14日〜6月19日締切（募集終了）</span><span class="tag">市民文化祭プログラム公募</span></div></a><a class="gitem" href="../koubo/fukuoka_shimin_geijutsusai_sanka.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年5月14日〜6月19日締切（募集終了）</span><span class="tag">市民文化祭プログラム公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="beppu_art_month_2026" data-save-name="ベップ・アート・マンス2026 プログラム募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fukuoka_shimin_geijutsusai_sanka.html">
 <div class="t">福岡市民芸術祭 参加行事募集</div>
 <div class="m">公益財団法人福岡市文化芸術振興財団（FFAC）／福岡市 ・ 福岡県福岡市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年度分は令和7年12月1日〜令和8年6月30日必着（募集終了、開催期間は令和8年10月1日〜12月31日）</span><span class="tag">市民芸術祭・参加行事の公募</span></div></a><a class="gitem" href="../koubo/chuo_ku_dontaku_tai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年度分は令和7年12月1日〜令和8年6月30日必着（募集終了、開催期間は令和8年10月1日〜12月31日）</span><span class="tag">市民芸術祭・参加行事の公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fukuoka_shimin_geijutsusai_sanka" data-save-name="福岡市民芸術祭 参加行事募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/chuo_ku_dontaku_tai.html">
 <div class="t">中央区どんたく隊パレード参加者募集</div>
 <div class="m">福岡市中央区役所企画振興課 ・ 福岡県福岡市中央区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年3月中旬締切（2026年分は3/16必着で終了）</span><span class="tag">伝統芸能パレード・出演者募集（区民限定）</span></div></a><a class="gitem" href="../koubo/nishi_ku_seishonen_bunkasai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年3月中旬締切（2026年分は3/16必着で終了）</span><span class="tag">伝統芸能パレード・出演者募集（区民限定）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="chuo_ku_dontaku_tai" data-save-name="中央区どんたく隊パレード参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nishi_ku_seishonen_bunkasai.html">
 <div class="t">西区青少年文化祭 出演者募集</div>
 <div class="m">福岡市西区役所企画振興課 ・ 福岡県福岡市西区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">直近確認できた回(第29回)は2025年8月15日必着・11月開催。令和8年度(2026年)分の具体的な締切は確認できず</span><span class="tag">区民文化祭（青少年ステージ発表・出演者募集）</span></div></a><a class="gitem" href="../koubo/kasuga_bunkasai_geinou_happyoukai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">直近確認できた回(第29回)は2025年8月15日必着・11月開催。令和8年度(2026年)分の具体的な締切は確認できず</span><span class="tag">区民文化祭（青少年ステージ発表・出演者募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nishi_ku_seishonen_bunkasai" data-save-name="西区青少年文化祭 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kasuga_bunkasai_geinou_happyoukai.html">
 <div class="t">春日市文化祭「芸能発表会」出演団体募集</div>
 <div class="m">春日市（文化スポーツ課）／春日市ふれあい文化センター ・ 福岡県春日市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第53回(令和8年度)は11/7・8開催と確認できたが出演団体募集の締切は未確認（前回=第52回は5/7〜6/13必着）</span><span class="tag">市民文化祭（芸能発表会・出演団体募集）</span></div></a><a class="gitem" href="../koubo/sapporo_engeki_season.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第53回(令和8年度)は11/7・8開催と確認できたが出演団体募集の締切は未確認（前回=第52回は5/7〜6/13必着）</span><span class="tag">市民文化祭（芸能発表会・出演団体募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kasuga_bunkasai_geinou_happyoukai" data-save-name="春日市文化祭「芸能発表会」出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/sapporo_engeki_season.html">
 <div class="t">札幌演劇シーズン（エントリー制作品公募）</div>
 <div class="m">札幌演劇シーズン実行委員会 ・ 北海道札幌市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">直近の2027シーズン向けエントリー締切は2026年6月30日必着（募集終了）</span><span class="tag">地域演劇祭（公募制シーズンプログラム）</span></div></a><a class="gitem" href="../koubo/sapporo_shimin_gekijou_kikaku.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">直近の2027シーズン向けエントリー締切は2026年6月30日必着（募集終了）</span><span class="tag">地域演劇祭（公募制シーズンプログラム）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="sapporo_engeki_season" data-save-name="札幌演劇シーズン（エントリー制作品公募）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/sapporo_shimin_gekijou_kikaku.html">
 <div class="t">令和9年度 札幌市民劇場 公演企画募集</div>
 <div class="m">札幌市民芸術祭実行委員会事務局（札幌市教育文化会館内） ・ 北海道札幌市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">★受付開始予定（2026年9月1日〜9月24日必着）</span><span class="tag">公演企画公募（会場費助成）</span></div></a><a class="gitem" href="../koubo/scarts_kikaku_kobo_2026.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">★受付開始予定（2026年9月1日〜9月24日必着）</span><span class="tag">公演企画公募（会場費助成）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="sapporo_shimin_gekijou_kikaku" data-save-name="令和9年度 札幌市民劇場 公演企画募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/scarts_kikaku_kobo_2026.html">
 <div class="t">SCARTS企画公募 2026年度</div>
 <div class="m">公益財団法人札幌市芸術文化財団 札幌文化芸術交流センターSCARTS ・ 北海道札幌市中央区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年6月15日〜7月17日必着（募集終了）</span><span class="tag">企画公募（会場・備品提供）</span></div></a><a class="gitem" href="../koubo/tomakomai_minato_matsuri_stage.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年6月15日〜7月17日必着（募集終了）</span><span class="tag">企画公募（会場・備品提供）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="scarts_kikaku_kobo_2026" data-save-name="SCARTS企画公募 2026年度" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/tomakomai_minato_matsuri_stage.html">
 <div class="t">第71回とまこまい港まつり ステージ出演者募集</div>
 <div class="m">とまこまい港まつり実行委員会（苫小牧市） ・ 北海道苫小牧市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年5月22日必着（募集終了、祭り開催は2026年8月7〜9日）</span><span class="tag">祭りステージ出演者公募</span></div></a><a class="gitem" href="../koubo/sendai_hitachi_systems_hall_kobo_stage.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年5月22日必着（募集終了、祭り開催は2026年8月7〜9日）</span><span class="tag">祭りステージ出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="tomakomai_minato_matsuri_stage" data-save-name="第71回とまこまい港まつり ステージ出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/sendai_hitachi_systems_hall_kobo_stage.html">
 <div class="t">日立システムズホール仙台 パフォーマンスフェスティバル「公募出演者ステージ」</div>
 <div class="m">公益財団法人仙台市市民文化事業団（日立システムズホール仙台） ・ 宮城県仙台市青葉区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第6回(2026年11月28日開催分)は2026年7月17日必着で終了</span><span class="tag">文化施設の自主事業「公募出演者ステージ」</span></div></a><a class="gitem" href="../koubo/senkura_odekake_concert.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第6回(2026年11月28日開催分)は2026年7月17日必着で終了</span><span class="tag">文化施設の自主事業「公募出演者ステージ」</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="sendai_hitachi_systems_hall_kobo_stage" data-save-name="日立システムズホール仙台 パフォーマンスフェスティバル「公募出演者ステージ」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/senkura_odekake_concert.html">
 <div class="t">せんくらおでかけコンサート（仙台クラシックフェスティバル関連事業）</div>
 <div class="m">仙台市・公益財団法人仙台市市民文化事業団 ・ 宮城県仙台市及び周辺地域</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年度分は2026年6月26日必着で終了</span><span class="tag">音楽祭 市民参加コンサート出演者公募</span></div></a><a class="gitem" href="../koubo/milhas_piano_marathon.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年度分は2026年6月26日必着で終了</span><span class="tag">音楽祭 市民参加コンサート出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="senkura_odekake_concert" data-save-name="せんくらおでかけコンサート（仙台クラシックフェスティバル関連事業）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/milhas_piano_marathon.html">
 <div class="t">ミルハス ピアノマラソン 出演者募集</div>
 <div class="m">あきた芸術劇場ミルハス ・ 秋田県秋田市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年6月中旬〜7月下旬(第4回は2025年6月15日〜7月21日、同年8月開催)。2026年の次回開催は未発表</span><span class="tag">音楽イベント出演者公募</span></div></a><a class="gitem" href="../koubo/morioka_shimin_bunkasai.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年6月中旬〜7月下旬(第4回は2025年6月15日〜7月21日、同年8月開催)。2026年の次回開催は未発表</span><span class="tag">音楽イベント出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="milhas_piano_marathon" data-save-name="ミルハス ピアノマラソン 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/morioka_shimin_bunkasai.html">
 <div class="t">もりおか市民文化祭 出展・出演者募集</div>
 <div class="m">盛岡市（交流推進部文化国際課） ・ 岩手県盛岡市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年7月15日締切（募集終了）</span><span class="tag">市民文化祭 出展・出演者公募</span></div></a><a class="gitem" href="../koubo/para_art_ehime_stage.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">令和8年7月15日締切（募集終了）</span><span class="tag">市民文化祭 出展・出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="morioka_shimin_bunkasai" data-save-name="もりおか市民文化祭 出展・出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/para_art_ehime_stage.html">
 <div class="t">パラアートえひめ2026 ステージパフォーマンス募集</div>
 <div class="m">愛媛県（運営委託: 南海放送株式会社） ・ 愛媛県新居浜市（イオンモール新居浜）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年7月5日締切（募集終了）</span><span class="tag">ステージパフォーマンス出演団体募集</span></div></a><a class="gitem" href="../koubo/kenmin_bunkasai_hiroshima_shi.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年7月5日締切（募集終了）</span><span class="tag">ステージパフォーマンス出演団体募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="para_art_ehime_stage" data-save-name="パラアートえひめ2026 ステージパフォーマンス募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kenmin_bunkasai_hiroshima_shi.html">
 <div class="t">けんみん文化祭ひろしま・広島市の祭典 出場団体募集</div>
 <div class="m">けんみん文化祭ひろしま・広島市の祭典実行委員会 ・ 広島県広島市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第12回(2025年版)は2024年12月〜2025年2月で終了済み(本番2025年5月)。次回の広島市開催・募集時期は未確認</span><span class="tag">県民文化祭（市大会）出演団体公募</span></div></a><a class="gitem" href="../koubo/kochi_whats_up_inclusive_dance.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第12回(2025年版)は2024年12月〜2025年2月で終了済み(本番2025年5月)。次回の広島市開催・募集時期は未確認</span><span class="tag">県民文化祭（市大会）出演団体公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kenmin_bunkasai_hiroshima_shi" data-save-name="けんみん文化祭ひろしま・広島市の祭典 出場団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kochi_whats_up_inclusive_dance.html">
 <div class="t">インクルーシブダンスイベント「What's up!」</div>
 <div class="m">高知県観光振興スポーツ部スポーツ課 ・ 高知県高知市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年11〜12月頃募集・翌1月頃開催(直近は2026年1月18日にショーケース開催)。次回募集時期は未発表</span><span class="tag">インクルーシブダンスイベント（公募型ショーケース）</span></div></a><a class="gitem" href="../koubo/kagawa_bunka_geijutsusai_menme.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年11〜12月頃募集・翌1月頃開催(直近は2026年1月18日にショーケース開催)。次回募集時期は未発表</span><span class="tag">インクルーシブダンスイベント（公募型ショーケース）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kochi_whats_up_inclusive_dance" data-save-name="インクルーシブダンスイベント「What's up!」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kagawa_bunka_geijutsusai_menme.html">
 <div class="t">かがわ文化芸術祭 主催公演「めんめの発表会」</div>
 <div class="m">かがわ文化芸術祭実行委員会（香川県文化芸術振興財団） ・ 香川県高松市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年10月頃締切・12月開催(2025年度は締切10月17日、開催12月6日)。次回は2026年秋頃募集と推測</span><span class="tag">公募型舞台発表会</span></div></a><a class="gitem" href="../koubo/awaodori_muryou_engibujo_shutsuen.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年10月頃締切・12月開催(2025年度は締切10月17日、開催12月6日)。次回は2026年秋頃募集と推測</span><span class="tag">公募型舞台発表会</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kagawa_bunka_geijutsusai_menme" data-save-name="かがわ文化芸術祭 主催公演「めんめの発表会」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/awaodori_muryou_engibujo_shutsuen.html">
 <div class="t">阿波おどり 無料演舞場等 出演連申込</div>
 <div class="m">阿波おどり未来へつなぐ実行委員会 ・ 徳島県徳島市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年7月上旬(2026年は7月2日必着で受付終了)。次回は2027年6月頃と推測</span><span class="tag">祭り 出演団体公募（無料演舞場）</span></div></a><a class="gitem" href="../koubo/harenowa_shimin_kobo_program.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年7月上旬(2026年は7月2日必着で受付終了)。次回は2027年6月頃と推測</span><span class="tag">祭り 出演団体公募（無料演舞場）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="awaodori_muryou_engibujo_shutsuen" data-save-name="阿波おどり 無料演舞場等 出演連申込" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/harenowa_shimin_kobo_program.html">
 <div class="t">ハレノワ市民公募プログラム（中劇場・小劇場 無償提供）</div>
 <div class="m">岡山芸術創造劇場ハレノワ（岡山文化芸術創造） ・ 岡山県岡山市北区</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">確認できた直近の実施例は2024年度募集(4/1〜5/31)。2025年度以降の実施有無・時期は未確認</span><span class="tag">劇場利用機会の無償提供（市民協働プログラム）</span></div></a><a class="gitem" href="../koubo/takamatsu_bijutsukan_entrance_hall.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">確認できた直近の実施例は2024年度募集(4/1〜5/31)。2025年度以降の実施有無・時期は未確認</span><span class="tag">劇場利用機会の無償提供（市民協働プログラム）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="harenowa_shimin_kobo_program" data-save-name="ハレノワ市民公募プログラム（中劇場・小劇場 無償提供）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/takamatsu_bijutsukan_entrance_hall.html">
 <div class="t">高松市美術館 エントランスホール活用事業（公募）</div>
 <div class="m">高松市美術館 ・ 香川県高松市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年11〜1月頃に翌年度分を公募と推測（正確な次回募集時期は未確認）</span><span class="tag">公共施設 利用団体公募（無償スペース提供）</span></div></a><a class="gitem" href="../koubo/jiyuu_gekijou_sanka_boshu.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年11〜1月頃に翌年度分を公募と推測（正確な次回募集時期は未確認）</span><span class="tag">公共施設 利用団体公募（無償スペース提供）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="takamatsu_bijutsukan_entrance_hall" data-save-name="高松市美術館 エントランスホール活用事業（公募）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/jiyuu_gekijou_sanka_boshu.html">
 <div class="t">じゆう劇場 参加者募集（令和8年度）</div>
 <div class="m">劇団「じゆう劇場」（鳥の劇場） ・ 鳥取県鳥取市（鹿野町）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年度募集は2026年7月3日で締切済み</span><span class="tag">劇団参加者公募（インクルーシブ演劇）</span></div></a><a class="gitem" href="../koubo/tsunoshima_toudai_monogatari_audition.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年度募集は2026年7月3日で締切済み</span><span class="tag">劇団参加者公募（インクルーシブ演劇）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="jiyuu_gekijou_sanka_boshu" data-save-name="じゆう劇場 参加者募集（令和8年度）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/tsunoshima_toudai_monogatari_audition.html">
 <div class="t">市民劇「角島灯台物語」出演者オーディション（第3弾）</div>
 <div class="m">角島灯台会（脚本・制作協力: 劇団新波） ・ 山口県下関市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第3弾オーディションは2026年7月5日開催・受付終了。次回(第4弾等)の時期は未定</span><span class="tag">市民参加型演劇（オーディション）</span></div></a><a class="gitem" href="../koubo/koshigaya_shimin_bunkasai_stage.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第3弾オーディションは2026年7月5日開催・受付終了。次回(第4弾等)の時期は未定</span><span class="tag">市民参加型演劇（オーディション）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="tsunoshima_toudai_monogatari_audition" data-save-name="市民劇「角島灯台物語」出演者オーディション（第3弾）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/koshigaya_shimin_bunkasai_stage.html">
 <div class="t">越谷市民文化祭 出演団体募集（舞台部門）</div>
 <div class="m">越谷市（越谷市教育委員会生涯学習課） ・ 埼玉県越谷市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第57回は2026年6月8〜22日で締切済み（会期2026年11月20〜23日）</span><span class="tag">市民文化祭 出演団体募集</span></div></a><a class="gitem" href="../koubo/aurillac_street_theatre_off.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第57回は2026年6月8〜22日で締切済み（会期2026年11月20〜23日）</span><span class="tag">市民文化祭 出演団体募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="koshigaya_shimin_bunkasai_stage" data-save-name="越谷市民文化祭 出演団体募集（舞台部門）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/aurillac_street_theatre_off.html">
 <div class="t">オリヤック国際大道芸フェスティバル OFF部門「通りすがりの劇団」枠（Festival International de Théâtre de Rue d'Aurillac）</div>
 <div class="m">ÉCLAT（Centre national des arts de la rue et de l'espace public） ・ 海外（フランス・オリヤック）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年開催分(8/19〜22)は定員680団体到達のため新規登録を一時停止中。次回(2027年開催分)は例年2月下旬頃再開と推測</span><span class="tag">公募プログラム（大道芸フェスティバルOFF部門・自主参加枠、非選考制）</span></div></a><a class="gitem" href="../koubo/air_taipei_residency.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年開催分(8/19〜22)は定員680団体到達のため新規登録を一時停止中。次回(2027年開催分)は例年2月下旬頃再開と推測</span><span class="tag">公募プログラム（大道芸フェスティバルOFF部門・自主参加枠、非選考制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="aurillac_street_theatre_off" data-save-name="オリヤック国際大道芸フェスティバル OFF部門「通りすがりの劇団」枠（Festival International de Théâtre de Rue d'Aurillac）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/air_taipei_residency.html">
 <div class="t">AIR台北 アーティスト・イン・レジデンス（AIR Taipei）</div>
 <div class="m">台北市文化局／台北国際芸術村・宝蔵巌国際芸術村 ・ 海外（台湾・台北）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年3〜6月頃に公募(2027年枠は2026年6月30日締切と報じられ本調査時点で終了)</span><span class="tag">アーティスト・イン・レジデンス（滞在制作プログラム）</span></div></a><a class="gitem" href="../koubo/queen_elisabeth_competition.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">例年3〜6月頃に公募(2027年枠は2026年6月30日締切と報じられ本調査時点で終了)</span><span class="tag">アーティスト・イン・レジデンス（滞在制作プログラム）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="air_taipei_residency" data-save-name="AIR台北 アーティスト・イン・レジデンス（AIR Taipei）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/queen_elisabeth_competition.html">
 <div class="t">エリザベート王妃国際音楽コンクール（Queen Elisabeth Competition）</div>
 <div class="m">Queen Elisabeth Competition ASBL/VZW（ベルギー王室後援） ・ 海外（ベルギー・ブリュッセル）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">ヴァイオリン/ピアノ/チェロ/声楽が4年周期で持ち回り。直近チェロ2026は終了(本選結果2026年7月15日発表)。次回声楽2027の応募受付は2026年10月開始予定</span><span class="tag">国際音楽コンクール（世界三大コンクールの一つ）</span></div></a><a class="gitem" href="../koubo/operalia_voice_competition.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">ヴァイオリン/ピアノ/チェロ/声楽が4年周期で持ち回り。直近チェロ2026は終了(本選結果2026年7月15日発表)。次回声楽2027の応募受付は2026年10月開始予定</span><span class="tag">国際音楽コンクール（世界三大コンクールの一つ）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="queen_elisabeth_competition" data-save-name="エリザベート王妃国際音楽コンクール（Queen Elisabeth Competition）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/operalia_voice_competition.html">
 <div class="t">オペラリア世界オペラコンクール（Operalia, The World Opera Competition）</div>
 <div class="m">Operalia（プラシド・ドミンゴ創設。ロレックス協賛） ・ 海外（開催地は毎年変動／2026年は中国・上海）</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年大会の応募は5月12日締切・終了(本大会は2026年10月26日-11月1日)。次回2027年の日程・応募開始時期は未発表</span><span class="tag">国際音楽コンクール</span></div></a><a class="gitem" href="../koubo/neue_stimmen_voice_competition.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年大会の応募は5月12日締切・終了(本大会は2026年10月26日-11月1日)。次回2027年の日程・応募開始時期は未発表</span><span class="tag">国際音楽コンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="operalia_voice_competition" data-save-name="オペラリア世界オペラコンクール（Operalia, The World Opera Competition）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/neue_stimmen_voice_competition.html">
 <div class="t">ノイエ・シュティンメン国際声楽コンクール（NEUE STIMMEN International Singing Competition）</div>
 <div class="m">リズ・モーン財団（旧ベルテルスマン財団） ・ 海外（ドイツ／世界各地で予選オーディション実施、本選はドイツ国内）</div>
 <div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">2026年大会(第21回)の応募は2026年2月8日締切・終了。2年に1度開催、次回は2028年頃の見込み(未確認)</span><span class="tag">国際音楽コンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="neue_stimmen_voice_competition" data-save-name="ノイエ・シュティンメン国際声楽コンクール（NEUE STIMMEN International Singing Competition）" aria-pressed="false">☆</button></div>
 <p class="note"><a href="../koubo.html">← 全公募の一覧に戻る</a></p>
 </main>
 <footer><div class="foot-in">
 情報は2026-07-18に各公式サイト・募集要項で一次確認したものです（順次更新）。締切・条件は変動します。応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
 </div></footer>
 </body>
 </html>

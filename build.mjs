@@ -10,6 +10,7 @@ const SITE_NAME = '身体芸術・公募ものさし';                         /
 const BASE_URL = 'https://aratama-ship-it.github.io/art-koubo/';    // 公開後に確定
 const SISTER_URL = 'https://aratama-ship-it.github.io/stage-grants/'; // 助成ものさし
 const FORM_URL = 'https://forms.gle/sX3hTrCRdipxKsmCA';             // 情報訂正・お問い合わせ（当面 共通フォーム）
+const SAVED_KEY = 'monosashi-koubo-saved-v1';
 const koubos = JSON.parse(readFileSync(join(ROOT, 'data/koubo.data.json'), 'utf8'));
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -229,7 +230,7 @@ const SEARCH_CSS = `
 .search-help,.search-status{font-size:12px;color:var(--sub);margin:7px 0 0}
 .search-status{font-weight:600;color:var(--accent)}
 .search-empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:18px;margin:14px 0;color:var(--sub)}
-.search-group[hidden],.gitem[hidden],.search-empty[hidden]{display:none!important}`;
+.search-group[hidden],.gitem-wrap[hidden],.search-empty[hidden]{display:none!important}`;
 
 const HOME_CSS = `
 .home-hero{display:grid;grid-template-columns:minmax(0,1fr) 188px;grid-template-rows:auto auto auto;align-items:center;column-gap:24px;min-height:190px;padding:4px 4px 8px 0}
@@ -334,6 +335,7 @@ function layout({ title, desc, rel, body, active, extraCss = '' }) {
     ['index.html', 'ホーム', 'home'],
     ['koubo.html', '公募を探す', 'koubo'],
     ['calendar.html', '締切・募集状況', 'calendar'],
+    ['saved.html', 'あとで見る <span class="saved-count" aria-label="保存件数">0</span>', 'saved'],
     ['about.html', 'このサイトについて', 'about'],
   ].map(([href, label, key]) => `<a href="${rel}${href}"${key === active ? ' class="on"' : ''}>${label}</a>`).join('');
   const sisterNav = active === 'home'
@@ -348,7 +350,7 @@ function layout({ title, desc, rel, body, active, extraCss = '' }) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <style>
-:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;
+:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;--accent-soft:#eaeeff;--accent-line:#d7ddf6;
 --ok:#1a8f5a;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#c05621;--dl-bg:#fff4f0;
 --shadow:0 1px 3px rgba(20,20,40,.06),0 8px 24px rgba(20,20,40,.05)}
 *{box-sizing:border-box}
@@ -392,6 +394,32 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .gitem:hover{border-color:var(--accent);text-decoration:none}
 .gitem .t{font-weight:600;color:var(--ink)}
 .gitem .m{color:var(--sub);font-size:12.5px;margin-top:2px}
+.gitem-wrap{position:relative;margin:9px 0}
+.gitem-wrap .gitem{margin:0;padding-right:58px;min-height:62px}
+.save-toggle{min-width:44px;height:44px;border:1px solid var(--accent-line);border-radius:10px;background:#fff;color:var(--accent);font:inherit;font-weight:800;cursor:pointer;line-height:1}
+.save-toggle:hover{background:var(--accent-soft)}
+.save-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.save-toggle[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.save-toggle:disabled{opacity:.45;cursor:not-allowed}
+.save-card{position:absolute;top:8px;right:8px;z-index:1;font-size:21px}
+.save-inline{width:auto;padding:0 15px;margin:10px 0 2px;line-height:1.4}
+.saved-count{display:inline-grid;place-items:center;min-width:19px;height:19px;margin-left:3px;padding:0 5px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;vertical-align:middle}
+.nav a.on .saved-count{background:#fff}
+.saved-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.saved-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.saved-card h2{font-size:15px;margin:0 0 4px;line-height:1.55}
+.saved-card .saved-meta{font-size:12.5px;color:var(--sub);margin:0 0 10px}
+.saved-card .saved-fields{display:grid;grid-template-columns:78px 1fr;gap:5px 9px;margin:0 0 14px;font-size:13px}
+.saved-card .saved-fields dt{color:var(--sub)}
+.saved-card .saved-fields dd{margin:0}
+.saved-actions{display:flex;gap:8px;align-items:center;margin-top:auto}
+.saved-actions a{flex:1;text-align:center;padding:8px 10px;border-radius:9px;background:var(--accent-soft);font-size:13px;font-weight:700}
+.saved-actions .save-toggle{flex:0 0 44px;padding:0}
+.saved-tools{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:14px 0}
+.quiet-button{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--sub);font:inherit;padding:8px 13px;cursor:pointer}
+.quiet-button:hover{border-color:var(--accent);color:var(--accent)}
+.saved-empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:24px 18px;text-align:center;color:var(--sub)}
+@media(max-width:640px){.saved-grid{grid-template-columns:1fr}}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:11.5px;background:#f4f5fa;color:var(--sub);border-radius:6px;padding:3px 8px}
 .tag.dl{background:var(--dl-bg);color:var(--dl);font-weight:600}
@@ -447,12 +475,22 @@ ${extraCss}</style>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>720)close()})})();
 </script>
+<script>
+(()=>{const key=${JSON.stringify(SAVED_KEY)};let available=true;
+const read=()=>{try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value.map(String):[]}catch(error){available=false;return[]}};
+const write=(ids)=>{try{localStorage.setItem(key,JSON.stringify(Array.from(new Set(ids.map(String)))))}catch(error){available=false}sync()};
+const sync=()=>{const ids=read();document.querySelectorAll('.saved-count').forEach((node)=>{node.textContent=String(ids.length)});document.querySelectorAll('[data-save-id]').forEach((button)=>{const saved=ids.includes(String(button.dataset.saveId));const name=button.dataset.saveName||'この項目';button.disabled=!available;button.setAttribute('aria-pressed',String(saved));button.setAttribute('aria-label',saved?name+'をあとで見るから外す':name+'をあとで見るに追加');button.textContent=button.classList.contains('save-inline')?(saved?'★ 保存済み':'☆ あとで見る'):(saved?'★':'☆')})};
+const toggle=(id)=>{const ids=read();const value=String(id);write(ids.includes(value)?ids.filter((x)=>x!==value):[...ids,value]);window.dispatchEvent(new CustomEvent('monosashi:saved'))};
+document.addEventListener('click',(event)=>{const button=event.target.closest('[data-save-id]');if(!button||button.disabled)return;event.preventDefault();toggle(button.dataset.saveId)});
+window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.addEventListener('monosashi:saved',sync);window.MonosashiSaved={get:read,set:write,toggle,sync};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
+</script>
 <main>
 ${body}
 </main>
 <footer><div class="foot-in">
 情報は${VERIFIED}に各公式サイト・募集要項で一次確認したものです（順次更新）。締切・条件は変動します。応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="${rel}about.html">このサイトについて</a> ・ <a href="${rel}privacy.html">プライバシー</a> ・ <a href="${rel}disclaimer.html">免責事項・情報訂正</a> ・ <a href="${SISTER_URL}" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="${rel}about.html">このサイトについて</a> ・ <a href="${rel}saved.html">あとで見る</a> ・ <a href="${rel}privacy.html">プライバシー</a> ・ <a href="${rel}disclaimer.html">免責事項・情報訂正</a> ・ <a href="${SISTER_URL}" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
 </div></footer>
 </body>
 </html>`;
@@ -468,10 +506,11 @@ function statusTags(k) {
   return t.join('');
 }
 function gitem(k, rel, searchable = false) {
-  return `<a class="gitem"${searchable ? ` data-search="${esc(searchTextOf(k))}"` : ''} href="${rel}koubo/${k.id}.html">
+  return `<div class="gitem-wrap"${searchable ? ` data-search="${esc(searchTextOf(k))}"` : ''}><a class="gitem" href="${rel}koubo/${k.id}.html">
 <div class="t">${esc(k.name)}</div>
 <div class="m">${esc(k.organizer)} ・ ${esc(k.region)}</div>
-<div class="tags">${statusTags(k)}</div></a>`;
+<div class="tags">${statusTags(k)}</div></a>
+<button class="save-toggle save-card" type="button" data-save-id="${esc(k.id)}" data-save-name="${esc(k.name)}" aria-pressed="false">☆</button></div>`;
 }
 
 function searchForm({ action = 'koubo.html', live = false } = {}) {
@@ -604,7 +643,7 @@ var form=document.getElementById('koubo-search');
 var input=document.getElementById('koubo-q-live');
 var status=document.getElementById('koubo-search-status');
 var empty=document.getElementById('koubo-search-empty');
-var items=Array.prototype.slice.call(document.querySelectorAll('.search-group .gitem'));
+var items=Array.prototype.slice.call(document.querySelectorAll('.search-group .gitem-wrap'));
 var groups=Array.prototype.slice.call(document.querySelectorAll('.search-group'));
 function norm(s){return String(s||'').normalize('NFKC').toLowerCase().trim();}
 function apply(){
@@ -615,7 +654,7 @@ function apply(){
     var match=terms.every(function(term){return hay.indexOf(term)!==-1;});
     item.hidden=!match;if(match)shown++;
   });
-  groups.forEach(function(group){group.hidden=!group.querySelector('.gitem:not([hidden])');});
+  groups.forEach(function(group){group.hidden=!group.querySelector('.gitem-wrap:not([hidden])');});
   empty.hidden=shown!==0;
   status.textContent=terms.length ? shown+'件見つかりました' : '${koubos.length}件すべて表示しています';
 }
@@ -680,6 +719,7 @@ for (const k of koubos) {
 <h1>${esc(k.name)}</h1>
 <p class="lede">${esc(k.organizer)} ・ ${esc(k.region)}</p>
 <div class="tags">${statusTags(k)}</div>
+<button class="save-toggle save-inline" type="button" data-save-id="${esc(k.id)}" data-save-name="${esc(k.name)}" aria-pressed="false">☆ あとで見る</button>
 <div class="card">
 <div class="kv"><div class="k">お金の向き</div><div class="v"><span class="tag ${m.cls}">${m.label}</span> ${esc(k.moneyLabel)}</div></div>
 <div class="kv"><div class="k">締切・募集状況</div><div class="v">${esc(k.deadline)}</div></div>
@@ -693,6 +733,28 @@ ${grantBlock(k)}${tour ? `\n${tour}` : ''}
 ${related.length ? `<h2>${esc(bucketOf(k.region).label)}の他の公募</h2>${related.map((q) => gitem(q, '../')).join('')}` : ''}
 <div class="discl">掲載情報は募集要項の明示内容に基づく参考情報で、採択・出演を保証するものではありません。応募前に必ず公式の最新要項をご確認ください。締切・条件・金額は変動します。</div>`;
   write(`koubo/${k.id}.html`, layout({ title: `${esc(k.name)}｜${esc(k.organizer)}の公募｜${SITE_NAME}`, desc: `${esc(k.organizer)}「${esc(k.name)}」。${esc(k.region)}／${m.label}／${esc(k.type)}。締切・応募資格・出典を掲載。`, rel: '../', active: 'koubo', body, extraCss: tour ? TOUR_CSS : '' }));
+}
+
+// ---- あとで見る・比較 ----
+{
+  const savedData = JSON.stringify(koubos.map((k) => ({
+    id: String(k.id), name: k.name, organizer: k.organizer, region: k.region,
+    deadline: k.deadline, money: moneyOf(k).label, type: k.type,
+  }))).replace(/</g, '\\u003c');
+  const body = `<h1>あとで見る・比較</h1>
+<p class="lede">気になる公募を一時保存し、開催地・締切・お金の向き・種別を横に並べて比べられます。</p>
+<div class="discl">保存先はこの端末のブラウザ内だけです。内容は本サイトのサーバーへ送信されません。ブラウザのサイトデータを削除すると保存も消えます。</div>
+<div class="saved-tools"><p class="note" id="saved-summary" aria-live="polite">保存した公募を読み込んでいます。</p><button class="quiet-button" id="saved-clear" type="button">すべて外す</button></div>
+<div class="saved-empty" id="saved-empty" hidden>まだ保存した公募はありません。<br><a href="koubo.html">公募一覧</a>の☆を押すと、ここで比較できます。</div>
+<div class="saved-grid" id="saved-list"></div>
+<script type="application/json" id="saved-data">${savedData}</script>
+<script>
+(()=>{const records=JSON.parse(document.getElementById('saved-data').textContent);const byId=new Map(records.map((item)=>[String(item.id),item]));const list=document.getElementById('saved-list');const empty=document.getElementById('saved-empty');const summary=document.getElementById('saved-summary');const clear=document.getElementById('saved-clear');
+const escapeHtml=(value)=>String(value??'').replace(/[&<>\"]/g,(char)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[char]));
+function render(){const ids=window.MonosashiSaved.get();const items=ids.map((id)=>byId.get(String(id))).filter(Boolean);summary.textContent=items.length?items.length+'件を保存しています':'保存は0件です';empty.hidden=items.length!==0;clear.hidden=items.length===0;list.innerHTML=items.map((item)=>'<article class="saved-card"><h2><a href="koubo/'+escapeHtml(item.id)+'.html">'+escapeHtml(item.name)+'</a></h2><p class="saved-meta">'+escapeHtml(item.organizer)+' ・ '+escapeHtml(item.region)+'</p><dl class="saved-fields"><dt>締切</dt><dd>'+escapeHtml(item.deadline)+'</dd><dt>お金の向き</dt><dd>'+escapeHtml(item.money)+'</dd><dt>種別</dt><dd>'+escapeHtml(item.type)+'</dd></dl><div class="saved-actions"><a href="koubo/'+escapeHtml(item.id)+'.html">詳細を見る</a><button class="save-toggle" type="button" data-save-id="'+escapeHtml(item.id)+'" data-save-name="'+escapeHtml(item.name)+'" aria-pressed="true">★</button></div></article>').join('');window.MonosashiSaved.sync()}
+clear.addEventListener('click',()=>{window.MonosashiSaved.set([]);window.dispatchEvent(new CustomEvent('monosashi:saved'))});window.addEventListener('monosashi:saved',render);render()})();
+</script>`;
+  write('saved.html', layout({ title: `あとで見る・比較｜${SITE_NAME}`, desc: `気になる身体芸術の公募を端末内に保存し、開催地・締切・お金の向き・種別を比較できます。`, rel: '', active: 'saved', body }));
 }
 
 // ---- ポリシー ----
@@ -737,6 +799,8 @@ write('privacy.html', layout({
 <div class="card">
 <h2>アクセス解析・広告</h2>
 <p>本サイトは現時点で解析・広告を導入しておらず、Cookieによる追跡は行っていません。将来導入する際は、初回アクセス時に同意バナーを表示し、同意した場合にのみ読み込みます。</p>
+<h2>「あとで見る」の保存内容について</h2>
+<p>「あとで見る」で選んだ公募の識別情報は、お使いのブラウザのlocalStorageにのみ保存され、本サイトのサーバーや第三者には送信されません。ブラウザのサイトデータを削除すると保存内容も消去されます。</p>
 <h2>個人情報</h2>
 <p>お問い合わせ等でいただいた個人情報は、対応の目的以外に利用しません。第三者への提供は法令に基づく場合を除き行いません。</p>
 <p>お問い合わせ・訂正のご連絡は <a href="disclaimer.html">情報訂正の窓口</a> へ。</p>

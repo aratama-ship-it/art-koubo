@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aratama-ship-it.github.io/art-koubo/assets/og-card.png">
 <style>
-:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;
+:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;--accent-soft:#eaeeff;--accent-line:#d7ddf6;
 --ok:#1a8f5a;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#c05621;--dl-bg:#fff4f0;
 --shadow:0 1px 3px rgba(20,20,40,.06),0 8px 24px rgba(20,20,40,.05)}
 *{box-sizing:border-box}
@@ -65,6 +65,32 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .gitem:hover{border-color:var(--accent);text-decoration:none}
 .gitem .t{font-weight:600;color:var(--ink)}
 .gitem .m{color:var(--sub);font-size:12.5px;margin-top:2px}
+.gitem-wrap{position:relative;margin:9px 0}
+.gitem-wrap .gitem{margin:0;padding-right:58px;min-height:62px}
+.save-toggle{min-width:44px;height:44px;border:1px solid var(--accent-line);border-radius:10px;background:#fff;color:var(--accent);font:inherit;font-weight:800;cursor:pointer;line-height:1}
+.save-toggle:hover{background:var(--accent-soft)}
+.save-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.save-toggle[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.save-toggle:disabled{opacity:.45;cursor:not-allowed}
+.save-card{position:absolute;top:8px;right:8px;z-index:1;font-size:21px}
+.save-inline{width:auto;padding:0 15px;margin:10px 0 2px;line-height:1.4}
+.saved-count{display:inline-grid;place-items:center;min-width:19px;height:19px;margin-left:3px;padding:0 5px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;vertical-align:middle}
+.nav a.on .saved-count{background:#fff}
+.saved-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.saved-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.saved-card h2{font-size:15px;margin:0 0 4px;line-height:1.55}
+.saved-card .saved-meta{font-size:12.5px;color:var(--sub);margin:0 0 10px}
+.saved-card .saved-fields{display:grid;grid-template-columns:78px 1fr;gap:5px 9px;margin:0 0 14px;font-size:13px}
+.saved-card .saved-fields dt{color:var(--sub)}
+.saved-card .saved-fields dd{margin:0}
+.saved-actions{display:flex;gap:8px;align-items:center;margin-top:auto}
+.saved-actions a{flex:1;text-align:center;padding:8px 10px;border-radius:9px;background:var(--accent-soft);font-size:13px;font-weight:700}
+.saved-actions .save-toggle{flex:0 0 44px;padding:0}
+.saved-tools{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:14px 0}
+.quiet-button{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--sub);font:inherit;padding:8px 13px;cursor:pointer}
+.quiet-button:hover{border-color:var(--accent);color:var(--accent)}
+.saved-empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:24px 18px;text-align:center;color:var(--sub)}
+@media(max-width:640px){.saved-grid{grid-template-columns:1fr}}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:11.5px;background:#f4f5fa;color:var(--sub);border-radius:6px;padding:3px 8px}
 .tag.dl{background:var(--dl-bg);color:var(--dl);font-weight:600}
@@ -116,36 +142,51 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
+<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>720)close()})})();
+</script>
+<script>
+(()=>{const key="monosashi-koubo-saved-v1";let available=true;
+const read=()=>{try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value.map(String):[]}catch(error){available=false;return[]}};
+const write=(ids)=>{try{localStorage.setItem(key,JSON.stringify(Array.from(new Set(ids.map(String)))))}catch(error){available=false}sync()};
+const sync=()=>{const ids=read();document.querySelectorAll('.saved-count').forEach((node)=>{node.textContent=String(ids.length)});document.querySelectorAll('[data-save-id]').forEach((button)=>{const saved=ids.includes(String(button.dataset.saveId));const name=button.dataset.saveName||'この項目';button.disabled=!available;button.setAttribute('aria-pressed',String(saved));button.setAttribute('aria-label',saved?name+'をあとで見るから外す':name+'をあとで見るに追加');button.textContent=button.classList.contains('save-inline')?(saved?'★ 保存済み':'☆ あとで見る'):(saved?'★':'☆')})};
+const toggle=(id)=>{const ids=read();const value=String(id);write(ids.includes(value)?ids.filter((x)=>x!==value):[...ids,value]);window.dispatchEvent(new CustomEvent('monosashi:saved'))};
+document.addEventListener('click',(event)=>{const button=event.target.closest('[data-save-id]');if(!button||button.disabled)return;event.preventDefault();toggle(button.dataset.saveId)});
+window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.addEventListener('monosashi:saved',sync);window.MonosashiSaved={get:read,set:write,toggle,sync};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
 </script>
 <main>
 <h1>埼玉のアート公募（5件）</h1>
 <p class="lede">埼玉で応募できる舞台芸術の公募。受付中・締切が近い順で、締切・お金の向き・応募資格を掲載しています。</p>
 
 <h2>公募一覧</h2>
-<a class="gitem" href="../koubo/saitama_arts_theater_company_grande.html">
+<div class="gitem-wrap"><a class="gitem" href="../koubo/saitama_arts_theater_company_grande.html">
 <div class="t">彩の国さいたま芸術劇場「カンパニー・グランデ」メンバー募集</div>
 <div class="m">公益財団法人埼玉県芸術文化振興財団（彩の国さいたま芸術劇場） ・ 埼玉県さいたま市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第2期は2026年5月10日締切・終了（次回募集時期は未定）</span><span class="tag">劇場専属クリエイティブカンパニー・メンバー募集（選考制）</span></div></a><a class="gitem" href="../koubo/saitama_zenkoku_buyou_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第2期は2026年5月10日締切・終了（次回募集時期は未定）</span><span class="tag">劇場専属クリエイティブカンパニー・メンバー募集（選考制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="saitama_arts_theater_company_grande" data-save-name="彩の国さいたま芸術劇場「カンパニー・グランデ」メンバー募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/saitama_zenkoku_buyou_concours.html">
 <div class="t">埼玉全国舞踊コンクール</div>
 <div class="m">一般社団法人埼玉県舞踊協会 ・ 埼玉県さいたま市（埼玉会館）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年4月頃締切(第57回2025年は4月20日締切)。第58回の正確な締切は未確認</span><span class="tag">バレエ・ダンスコンクール</span></div></a><a class="gitem" href="../koubo/saitama_bungeisho_gikyoku.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年4月頃締切(第57回2025年は4月20日締切)。第58回の正確な締切は未確認</span><span class="tag">バレエ・ダンスコンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="saitama_zenkoku_buyou_concours" data-save-name="埼玉全国舞踊コンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/saitama_bungeisho_gikyoku.html">
 <div class="t">埼玉文芸賞（小説・戯曲部門）</div>
 <div class="m">埼玉県教育委員会（さいたま文学館） ・ 埼玉県さいたま市</div>
-<div class="tags"><span class="tag m-reward">報酬・賞金あり</span><span class="tag">第57回は2025年9月2日〜11月30日で締切済み。第58回は未発表</span><span class="tag">文学賞（戯曲・シナリオ部門）</span></div></a><a class="gitem" href="../koubo/koshigaya_shimin_bunkasai_stage.html">
+<div class="tags"><span class="tag m-reward">報酬・賞金あり</span><span class="tag">第57回は2025年9月2日〜11月30日で締切済み。第58回は未発表</span><span class="tag">文学賞（戯曲・シナリオ部門）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="saitama_bungeisho_gikyoku" data-save-name="埼玉文芸賞（小説・戯曲部門）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/koshigaya_shimin_bunkasai_stage.html">
 <div class="t">越谷市民文化祭 出演団体募集（舞台部門）</div>
 <div class="m">越谷市（越谷市教育委員会生涯学習課） ・ 埼玉県越谷市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第57回は2026年6月8〜22日で締切済み（会期2026年11月20〜23日）</span><span class="tag">市民文化祭 出演団体募集</span></div></a><a class="gitem" href="../koubo/kawagoe_bunka_festa_2026.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第57回は2026年6月8〜22日で締切済み（会期2026年11月20〜23日）</span><span class="tag">市民文化祭 出演団体募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="koshigaya_shimin_bunkasai_stage" data-save-name="越谷市民文化祭 出演団体募集（舞台部門）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kawagoe_bunka_festa_2026.html">
 <div class="t">かわごえ文化フェスタ2026（旧川越市総合文化祭）舞台出演団体募集</div>
 <div class="m">川越市（文化芸術振興課） ・ 埼玉県川越市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年2月頃締切・終了（本番は2026年6月13〜14日開催済み）</span><span class="tag">市民文化祭 舞台出演団体募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kawagoe_bunka_festa_2026" data-save-name="かわごえ文化フェスタ2026（旧川越市総合文化祭）舞台出演団体募集" aria-pressed="false">☆</button></div>
 <p class="note"><a href="../koubo.html">← 全地域の一覧に戻る</a></p>
 </main>
 <footer><div class="foot-in">
 情報は2026-07-18に各公式サイト・募集要項で一次確認したものです（順次更新）。締切・条件は変動します。応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
 </div></footer>
 </body>
 </html>

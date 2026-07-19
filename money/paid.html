@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aratama-ship-it.github.io/art-koubo/assets/og-card.png">
 <style>
-:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;
+:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;--accent-soft:#eaeeff;--accent-line:#d7ddf6;
 --ok:#1a8f5a;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#c05621;--dl-bg:#fff4f0;
 --shadow:0 1px 3px rgba(20,20,40,.06),0 8px 24px rgba(20,20,40,.05)}
 *{box-sizing:border-box}
@@ -65,6 +65,32 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .gitem:hover{border-color:var(--accent);text-decoration:none}
 .gitem .t{font-weight:600;color:var(--ink)}
 .gitem .m{color:var(--sub);font-size:12.5px;margin-top:2px}
+.gitem-wrap{position:relative;margin:9px 0}
+.gitem-wrap .gitem{margin:0;padding-right:58px;min-height:62px}
+.save-toggle{min-width:44px;height:44px;border:1px solid var(--accent-line);border-radius:10px;background:#fff;color:var(--accent);font:inherit;font-weight:800;cursor:pointer;line-height:1}
+.save-toggle:hover{background:var(--accent-soft)}
+.save-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.save-toggle[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.save-toggle:disabled{opacity:.45;cursor:not-allowed}
+.save-card{position:absolute;top:8px;right:8px;z-index:1;font-size:21px}
+.save-inline{width:auto;padding:0 15px;margin:10px 0 2px;line-height:1.4}
+.saved-count{display:inline-grid;place-items:center;min-width:19px;height:19px;margin-left:3px;padding:0 5px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;vertical-align:middle}
+.nav a.on .saved-count{background:#fff}
+.saved-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.saved-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.saved-card h2{font-size:15px;margin:0 0 4px;line-height:1.55}
+.saved-card .saved-meta{font-size:12.5px;color:var(--sub);margin:0 0 10px}
+.saved-card .saved-fields{display:grid;grid-template-columns:78px 1fr;gap:5px 9px;margin:0 0 14px;font-size:13px}
+.saved-card .saved-fields dt{color:var(--sub)}
+.saved-card .saved-fields dd{margin:0}
+.saved-actions{display:flex;gap:8px;align-items:center;margin-top:auto}
+.saved-actions a{flex:1;text-align:center;padding:8px 10px;border-radius:9px;background:var(--accent-soft);font-size:13px;font-weight:700}
+.saved-actions .save-toggle{flex:0 0 44px;padding:0}
+.saved-tools{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:14px 0}
+.quiet-button{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--sub);font:inherit;padding:8px 13px;cursor:pointer}
+.quiet-button:hover{border-color:var(--accent);color:var(--accent)}
+.saved-empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:24px 18px;text-align:center;color:var(--sub)}
+@media(max-width:640px){.saved-grid{grid-template-columns:1fr}}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:11.5px;background:#f4f5fa;color:var(--sub);border-radius:6px;padding:3px 8px}
 .tag.dl{background:var(--dl-bg);color:var(--dl);font-weight:600}
@@ -116,412 +142,553 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
+<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>720)close()})})();
+</script>
+<script>
+(()=>{const key="monosashi-koubo-saved-v1";let available=true;
+const read=()=>{try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value.map(String):[]}catch(error){available=false;return[]}};
+const write=(ids)=>{try{localStorage.setItem(key,JSON.stringify(Array.from(new Set(ids.map(String)))))}catch(error){available=false}sync()};
+const sync=()=>{const ids=read();document.querySelectorAll('.saved-count').forEach((node)=>{node.textContent=String(ids.length)});document.querySelectorAll('[data-save-id]').forEach((button)=>{const saved=ids.includes(String(button.dataset.saveId));const name=button.dataset.saveName||'この項目';button.disabled=!available;button.setAttribute('aria-pressed',String(saved));button.setAttribute('aria-label',saved?name+'をあとで見るから外す':name+'をあとで見るに追加');button.textContent=button.classList.contains('save-inline')?(saved?'★ 保存済み':'☆ あとで見る'):(saved?'★':'☆')})};
+const toggle=(id)=>{const ids=read();const value=String(id);write(ids.includes(value)?ids.filter((x)=>x!==value):[...ids,value]);window.dispatchEvent(new CustomEvent('monosashi:saved'))};
+document.addEventListener('click',(event)=>{const button=event.target.closest('[data-save-id]');if(!button||button.disabled)return;event.preventDefault();toggle(button.dataset.saveId)});
+window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.addEventListener('monosashi:saved',sync);window.MonosashiSaved={get:read,set:write,toggle,sync};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
 </script>
 <main>
 <h1>参加費ありの公募（131件）</h1>
 <p class="lede">出演・出展に参加費がかかる公募。</p>
-<a class="gitem" href="../koubo/matsuri_tsukuba_dance_festival.html">
+<div class="gitem-wrap"><a class="gitem" href="../koubo/matsuri_tsukuba_dance_festival.html">
 <div class="t">まつりつくば2026 スポーツパーク「ダンスフェスティバル」出演チーム募集</div>
 <div class="m">NPO法人Dance Association Seeds（まつりつくば実行委員会） ・ 茨城県つくば市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月19日18:00、追加募集締切）</span><span class="tag">地域フェスティバル 出演者公募</span></div></a><a class="gitem" href="../koubo/session21_yobigoe.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月19日18:00、追加募集締切）</span><span class="tag">地域フェスティバル 出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="matsuri_tsukuba_dance_festival" data-save-name="まつりつくば2026 スポーツパーク「ダンスフェスティバル」出演チーム募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/session21_yobigoe.html">
 <div class="t">シアター21フェス「呼声」</div>
 <div class="m">神楽坂セッションハウス ・ 東京都新宿区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（例: vol.141は2026/7/27締切）</span><span class="tag">ショーケース（単独/共同公演）</span></div></a><a class="gitem" href="../koubo/kitakyushu_furitsuke_juku_2026.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（例: vol.141は2026/7/27締切）</span><span class="tag">ショーケース（単独/共同公演）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="session21_yobigoe" data-save-name="シアター21フェス「呼声」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kitakyushu_furitsuke_juku_2026.html">
 <div class="t">北九州振付塾2026</div>
 <div class="m">NPO法人ジャパン・コンテンポラリーダンス・ネットワーク（JCDN）、北九州芸術劇場 ・ 福岡県北九州市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月30日締切）</span><span class="tag">振付家育成プログラム</span></div></a><a class="gitem" href="../koubo/kamagaya_shimin_bunkasai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月30日締切）</span><span class="tag">振付家育成プログラム</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kitakyushu_furitsuke_juku_2026" data-save-name="北九州振付塾2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kamagaya_shimin_bunkasai.html">
 <div class="t">かまがや市民文化祭 芸能発表会・市民音楽祭 出演者募集</div>
 <div class="m">鎌ケ谷市（鎌ケ谷市民文化祭実行委員会） ・ 千葉県鎌ケ谷市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（芸能発表会は7月30日必着、市民音楽祭は7月31日必着）</span><span class="tag">市民文化祭 出演者・スタッフ公募</span></div></a><a class="gitem" href="../koubo/atsuta_kumin_geinou_onstage.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（芸能発表会は7月30日必着、市民音楽祭は7月31日必着）</span><span class="tag">市民文化祭 出演者・スタッフ公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kamagaya_shimin_bunkasai" data-save-name="かまがや市民文化祭 芸能発表会・市民音楽祭 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/atsuta_kumin_geinou_onstage.html">
 <div class="t">令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集</div>
 <div class="m">名古屋市熱田区役所（地域力推進課） ・ 愛知県名古屋市熱田区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜7月31日必着）</span><span class="tag">区民まつり 出演者募集</span></div></a><a class="gitem" href="../koubo/nagasaki_shimin_ongakusai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜7月31日必着）</span><span class="tag">区民まつり 出演者募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="atsuta_kumin_geinou_onstage" data-save-name="令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nagasaki_shimin_ongakusai.html">
 <div class="t">第74回長崎市民音楽祭 個人参加（混声合唱団）</div>
 <div class="m">長崎市・長崎市音楽振興会（長崎市民音楽祭実行委員会） ・ 長崎県長崎市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月31日必着、団体出演枠は締切済み）</span><span class="tag">市民音楽祭 出演者公募（個人・団体）</span></div></a><a class="gitem" href="../koubo/wjf_juggling_championships.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月31日必着、団体出演枠は締切済み）</span><span class="tag">市民音楽祭 出演者公募（個人・団体）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nagasaki_shimin_ongakusai" data-save-name="第74回長崎市民音楽祭 個人参加（混声合唱団）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/wjf_juggling_championships.html">
 <div class="t">ワールド・ジャグリング・フェデレーション選手権（World Juggling Federation Championships, WJF）</div>
 <div class="m">World Juggling Federation（WJF、米国） ・ 海外（アメリカ／2026年はワシントン州シアトル）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（WJF23は2026年12月14〜20日シアトル開催。フルコンベンションパッケージの受付は7月31日まで）</span><span class="tag">ジャグリング世界選手権（競技会）</span></div></a><a class="gitem" href="../koubo/zakoenji_otona_ws.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（WJF23は2026年12月14〜20日シアトル開催。フルコンベンションパッケージの受付は7月31日まで）</span><span class="tag">ジャグリング世界選手権（競技会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="wjf_juggling_championships" data-save-name="ワールド・ジャグリング・フェデレーション選手権（World Juggling Federation Championships, WJF）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/zakoenji_otona_ws.html">
 <div class="t">座・高円寺「おとなのための演劇ワークショップ2026」受講者募集</div>
 <div class="m">座・高円寺（杉並区立杉並芸術会館） ・ 東京都杉並区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月12日必着）</span><span class="tag">育成（演劇ワークショップ・発表会あり）</span></div></a><a class="gitem" href="../koubo/ukyoku_fureai_bunka_festival.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月12日必着）</span><span class="tag">育成（演劇ワークショップ・発表会あり）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="zakoenji_otona_ws" data-save-name="座・高円寺「おとなのための演劇ワークショップ2026」受講者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ukyoku_fureai_bunka_festival.html">
 <div class="t">右京区民ふれあい文化フェスティバル2026 出演団体募集</div>
 <div class="m">右京区民ふれあい事業実行委員会・京都市右京区役所 ・ 京都府京都市右京区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（令和8年7月17日〜8月12日必着）</span><span class="tag">区民文化祭 出演団体募集</span></div></a><a class="gitem" href="../koubo/onomichi_ongaku_geinousai_2026.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（令和8年7月17日〜8月12日必着）</span><span class="tag">区民文化祭 出演団体募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ukyoku_fureai_bunka_festival" data-save-name="右京区民ふれあい文化フェスティバル2026 出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/onomichi_ongaku_geinousai_2026.html">
 <div class="t">尾道市民音楽芸能祭2026 出演団体募集</div>
 <div class="m">尾道市文化協会（尾道市文化振興課内） ・ 広島県尾道市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月14日必着）</span><span class="tag">市民文化祭 出演団体公募</span></div></a><a class="gitem" href="../koubo/biwako_youbu_moriyama.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月14日必着）</span><span class="tag">市民文化祭 出演団体公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="onomichi_ongaku_geinousai_2026" data-save-name="尾道市民音楽芸能祭2026 出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/biwako_youbu_moriyama.html">
 <div class="t">びわ湖・洋舞コンクール in もりやま（第10回）</div>
 <div class="m">びわ湖・洋舞コンクール事務局 ・ 滋賀県守山市（会場：守山市民ホール大ホール）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月20日必着）</span><span class="tag">舞踊コンクール（バレエ・コンテンポラリー）</span></div></a><a class="gitem" href="../koubo/yamanashi_kenbunsai_roudoku.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月20日必着）</span><span class="tag">舞踊コンクール（バレエ・コンテンポラリー）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="biwako_youbu_moriyama" data-save-name="びわ湖・洋舞コンクール in もりやま（第10回）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yamanashi_kenbunsai_roudoku.html">
 <div class="t">第25回やまなし県民文化祭 朗読フェスティバル 出演者募集</div>
 <div class="m">やまなし県民文化祭実行委員会（山梨県） ・ 山梨県甲府市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜8月20日必着）</span><span class="tag">県民文化祭 部門フェスティバル 出演者公募</span></div></a><a class="gitem" href="../koubo/akita_seishonen_music_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜8月20日必着）</span><span class="tag">県民文化祭 部門フェスティバル 出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yamanashi_kenbunsai_roudoku" data-save-name="第25回やまなし県民文化祭 朗読フェスティバル 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/akita_seishonen_music_concours.html">
 <div class="t">秋田県青少年音楽コンクール（第30回）</div>
 <div class="m">秋田県（観光文化スポーツ部文化振興課） ・ 秋田県秋田市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（ピアノ部門2026年8月21日、弦楽器・声楽・管打楽器部門2026年9月25日）</span><span class="tag">音楽コンクール</span></div></a><a class="gitem" href="../koubo/kagoshima_kyogen_taiken.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（ピアノ部門2026年8月21日、弦楽器・声楽・管打楽器部門2026年9月25日）</span><span class="tag">音楽コンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="akita_seishonen_music_concours" data-save-name="秋田県青少年音楽コンクール（第30回）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kagoshima_kyogen_taiken.html">
 <div class="t">狂言体験講座 受講者募集（開館60周年記念）</div>
 <div class="m">公益財団法人鹿児島県文化振興財団（宝山ホール） ・ 鹿児島県鹿児島市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年6月27日〜8月28日必着、定員に達し次第終了）</span><span class="tag">伝統芸能体験講座（受講者募集）</span></div></a><a class="gitem" href="../koubo/mie_bunkakaikan_gikyoku_ws_naito.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年6月27日〜8月28日必着、定員に達し次第終了）</span><span class="tag">伝統芸能体験講座（受講者募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kagoshima_kyogen_taiken" data-save-name="狂言体験講座 受講者募集（開館60周年記念）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/mie_bunkakaikan_gikyoku_ws_naito.html">
 <div class="t">「他人」三重公演関連企画 創作演劇ワークショップ（講師: 内藤裕敬）</div>
 <div class="m">三重県文化会館（地域創造・文化庁助成） ・ 三重県津市（三重県文化会館）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月30日）</span><span class="tag">演劇ワークショップ（参加者募集・抽選制）</span></div></a><a class="gitem" href="../koubo/apoc_apofes.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月30日）</span><span class="tag">演劇ワークショップ（参加者募集・抽選制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="mie_bunkakaikan_gikyoku_ws_naito" data-save-name="「他人」三重公演関連企画 創作演劇ワークショップ（講師: 内藤裕敬）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/apoc_apofes.html">
 <div class="t">APOCシアター「APOフェス」（一人芝居フェスティバル）</div>
 <div class="m">APOCシアター ・ 東京都世田谷区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月31日、APOFES2027は2027年1〜2月開催）</span><span class="tag">フェス（参加者公募）</span></div></a><a class="gitem" href="../koubo/izumo_shinshun_concert.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月31日、APOFES2027は2027年1〜2月開催）</span><span class="tag">フェス（参加者公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="apoc_apofes" data-save-name="APOCシアター「APOフェス」（一人芝居フェスティバル）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/izumo_shinshun_concert.html">
 <div class="t">第25回いずも新春コンサート 出演者募集</div>
 <div class="m">公益財団法人出雲市芸術文化振興財団・出雲市 ・ 島根県出雲市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年9月15日必着）</span><span class="tag">音楽コンサート出演者公募</span></div></a><a class="gitem" href="../koubo/session_house_dzone.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年9月15日必着）</span><span class="tag">音楽コンサート出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="izumo_shinshun_concert" data-save-name="第25回いずも新春コンサート 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/session_house_dzone.html">
 <div class="t">神楽坂セッションハウス Dzone2027 ダンス作品募集</div>
 <div class="m">セッションハウス企画室 ・ 東京都</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月13日〜10月4日）</span><span class="tag">劇場の共同創作サポート企画</span></div></a><a class="gitem" href="../koubo/akita_zenkoku_buyousai_akicon.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月13日〜10月4日）</span><span class="tag">劇場の共同創作サポート企画</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="session_house_dzone" data-save-name="神楽坂セッションハウス Dzone2027 ダンス作品募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/akita_zenkoku_buyousai_akicon.html">
 <div class="t">あきた全国舞踊祭 モダンダンスコンクール（あきこん）</div>
 <div class="m">秋田県芸術舞踊協会 ・ 秋田県秋田市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★次回募集（2026年10月1日〜10月11日、インターネット申込）</span><span class="tag">ダンスコンクール（自由応募）</span></div></a><a class="gitem" href="../koubo/theatergreen_sprout_support.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★次回募集（2026年10月1日〜10月11日、インターネット申込）</span><span class="tag">ダンスコンクール（自由応募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="akita_zenkoku_buyousai_akicon" data-save-name="あきた全国舞踊祭 モダンダンスコンクール（あきこん）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/theatergreen_sprout_support.html">
 <div class="t">シアターグリーン 若手劇団支援企画「Sprout Support」</div>
 <div class="m">シアターグリーン（BASE THEATER） ・ 東京都豊島区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年12月27日まで、各月2団体・枠埋まり次第終了）</span><span class="tag">若手劇団支援（利用料割引）</span></div></a><a class="gitem" href="../koubo/fuchu_bunkasai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年12月27日まで、各月2団体・枠埋まり次第終了）</span><span class="tag">若手劇団支援（利用料割引）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="theatergreen_sprout_support" data-save-name="シアターグリーン 若手劇団支援企画「Sprout Support」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fuchu_bunkasai.html">
 <div class="t">府中市民芸術文化祭 参加者募集</div>
 <div class="m">府中市（各文化団体連盟が種目別に実施） ・ 東京都府中市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: 種目により異なる（第62回は8/14〜10/23頃）</span><span class="tag">発表・参加団体の公募（市民文化祭）</span></div></a><a class="gitem" href="../koubo/oji_startdash.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: 種目により異なる（第62回は8/14〜10/23頃）</span><span class="tag">発表・参加団体の公募（市民文化祭）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fuchu_bunkasai" data-save-name="府中市民芸術文化祭 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/oji_startdash.html">
 <div class="t">インディペンデントシアターOji（旧・王子小劇場）スタートダッシュ割引</div>
 <div class="m">インディペンデントシアターOji ・ 東京都北区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★通年受付（年間約10枠、随時審査）</span><span class="tag">若手団体支援（利用料割引）</span></div></a><a class="gitem" href="../koubo/raft_mochikomi.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★通年受付（年間約10枠、随時審査）</span><span class="tag">若手団体支援（利用料割引）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="oji_startdash" data-save-name="インディペンデントシアターOji（旧・王子小劇場）スタートダッシュ割引" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/raft_mochikomi.html">
 <div class="t">RAFT（NPO法人らふと）持ち込み企画・自主企画</div>
 <div class="m">NPO法人らふと（RAFT） ・ 東京都中野区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時受付</span><span class="tag">持ち込み企画（随時公募）</span></div></a><a class="gitem" href="../koubo/wing_saien_hakurankai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時受付</span><span class="tag">持ち込み企画（随時公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="raft_mochikomi" data-save-name="RAFT（NPO法人らふと）持ち込み企画・自主企画" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/wing_saien_hakurankai.html">
 <div class="t">ウイング再演大博覧會 公募枠</div>
 <div class="m">ウイングフィールド株式会社 ・ 大阪府大阪市中央区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: 2026年5月〜10月の公演期間対象、枠(最大4団体)が埋まり次第締切</span><span class="tag">貸館企画（再演作品）公募枠</span></div></a><a class="gitem" href="../koubo/e9_kyoto_riyoudantai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: 2026年5月〜10月の公演期間対象、枠(最大4団体)が埋まり次第締切</span><span class="tag">貸館企画（再演作品）公募枠</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="wing_saien_hakurankai" data-save-name="ウイング再演大博覧會 公募枠" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/e9_kyoto_riyoudantai.html">
 <div class="t">THEATRE E9 KYOTO 劇場利用団体・単日/時間貸利用団体募集</div>
 <div class="m">一般社団法人アーツシード京都（ARTS SEED KYOTO） ・ 京都府京都市南区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（年4〜5回に分けて募集。2026年6月25日告知の2026年度追加募集）</span><span class="tag">劇場利用団体募集（貸館）</span></div></a><a class="gitem" href="../koubo/nba_nagoya_ballet.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（年4〜5回に分けて募集。2026年6月25日告知の2026年度追加募集）</span><span class="tag">劇場利用団体募集（貸館）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="e9_kyoto_riyoudantai" data-save-name="THEATRE E9 KYOTO 劇場利用団体・単日/時間貸利用団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nba_nagoya_ballet.html">
 <div class="t">NBA名古屋バレエコンクール</div>
 <div class="m">NBAバレエ団 ・ 愛知県名古屋市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中とみられる（開催2026年9月12〜13日。エントリー期間5/11〜8/5との二次情報あり）</span><span class="tag">バレエコンクール（地域大会）</span></div></a><a class="gitem" href="../koubo/prix_de_kanazawa.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中とみられる（開催2026年9月12〜13日。エントリー期間5/11〜8/5との二次情報あり）</span><span class="tag">バレエコンクール（地域大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nba_nagoya_ballet" data-save-name="NBA名古屋バレエコンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/prix_de_kanazawa.html">
 <div class="t">全国バレエコンクール プリ・ド・カナザワ（第10回）</div>
 <div class="m">北國新聞社 ・ 石川県金沢市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中とみられる（開催2026年9月20〜21日、Googleフォームでエントリー中。正確な締切日は未確認）</span><span class="tag">バレエコンクール（独自開催）</span></div></a><a class="gitem" href="../koubo/miyazaki_supace_engeki_jikan.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中とみられる（開催2026年9月20〜21日、Googleフォームでエントリー中。正確な締切日は未確認）</span><span class="tag">バレエコンクール（独自開催）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="prix_de_kanazawa" data-save-name="全国バレエコンクール プリ・ド・カナザワ（第10回）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/miyazaki_supace_engeki_jikan.html">
 <div class="t">SuPace～舞台にひかれる人が集まる月いち演劇じかん～</div>
 <div class="m">公益財団法人宮崎県立芸術劇場 ・ 宮崎県宮崎市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時参加可（月1回開催、直近は2026年8月15日）</span><span class="tag">市民参加型ワークショップ（継続開催）</span></div></a><a class="gitem" href="../koubo/enkatsu_2026_kitakyushu.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時参加可（月1回開催、直近は2026年8月15日）</span><span class="tag">市民参加型ワークショップ（継続開催）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="miyazaki_supace_engeki_jikan" data-save-name="SuPace～舞台にひかれる人が集まる月いち演劇じかん～" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/enkatsu_2026_kitakyushu.html">
 <div class="t">演カツ!!2026 参加団体・個人募集（創造工房・稽古場提供）</div>
 <div class="m">公益財団法人北九州市芸術文化振興財団（北九州芸術劇場） ・ 福岡県北九州市小倉北区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（利用期間2026年6月1日〜2027年1月31日、使用希望日の3週間前までに要申込）</span><span class="tag">稽古場・創造工房の提供（利用団体募集）</span></div></a><a class="gitem" href="../koubo/pom_plaza_hall_riyoudantai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（利用期間2026年6月1日〜2027年1月31日、使用希望日の3週間前までに要申込）</span><span class="tag">稽古場・創造工房の提供（利用団体募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="enkatsu_2026_kitakyushu" data-save-name="演カツ!!2026 参加団体・個人募集（創造工房・稽古場提供）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/pom_plaza_hall_riyoudantai.html">
 <div class="t">ぽんプラザホール 利用団体募集（貸館・抽選）</div>
 <div class="m">福岡舞台芸術施設運営共同事業体（福岡市祇園音楽・演劇練習場） ・ 福岡県福岡市博多区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★通年ローリング（利用月の約6か月前に抽選申請受付。例: 2026年5月分は2025年11月1〜10日受付）</span><span class="tag">劇場利用団体募集（貸館・抽選）</span></div></a><a class="gitem" href="../koubo/d_shock_tohoku.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★通年ローリング（利用月の約6か月前に抽選申請受付。例: 2026年5月分は2025年11月1〜10日受付）</span><span class="tag">劇場利用団体募集（貸館・抽選）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="pom_plaza_hall_riyoudantai" data-save-name="ぽんプラザホール 利用団体募集（貸館・抽選）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/d_shock_tohoku.html">
 <div class="t">D-SHOCK 東北予選</div>
 <div class="m">株式会社Chord Prise ・ 宮城県仙台市（全国7都市巡回）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（第11回東北予選は2027年1月17日開催予定、オンラインは本番2週間前まで）</span><span class="tag">全国ストリートダンスコンテスト（地方予選）</span></div></a><a class="gitem" href="../koubo/iwate_geijutsusai_seigaku.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（第11回東北予選は2027年1月17日開催予定、オンラインは本番2週間前まで）</span><span class="tag">全国ストリートダンスコンテスト（地方予選）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="d_shock_tohoku" data-save-name="D-SHOCK 東北予選" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/iwate_geijutsusai_seigaku.html">
 <div class="t">岩手芸術祭 音楽部門 声楽部門演奏会</div>
 <div class="m">岩手芸術祭実行委員会（岩手県文化振興事業団内） ・ 岩手県盛岡市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★募集中（第79回、正確な締切日は要確認。例年8月末締切・11月頃演奏会）</span><span class="tag">音楽会（声楽）出演者公募</span></div></a><a class="gitem" href="../koubo/koriyama_shimin_orchestra.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★募集中（第79回、正確な締切日は要確認。例年8月末締切・11月頃演奏会）</span><span class="tag">音楽会（声楽）出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="iwate_geijutsusai_seigaku" data-save-name="岩手芸術祭 音楽部門 声楽部門演奏会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/koriyama_shimin_orchestra.html">
 <div class="t">郡山市民オーケストラ 団員募集</div>
 <div class="m">郡山市民オーケストラ ・ 福島県郡山市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（パートの状況により入団待ちの場合あり、特定の締切なし）</span><span class="tag">常設団体の団員募集（オーケストラ）</span></div></a><a class="gitem" href="../koubo/yonago_koukaidou_minna_no_stage.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（パートの状況により入団待ちの場合あり、特定の締切なし）</span><span class="tag">常設団体の団員募集（オーケストラ）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="koriyama_shimin_orchestra" data-save-name="郡山市民オーケストラ 団員募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yonago_koukaidou_minna_no_stage.html">
 <div class="t">公会堂みんなのステージ（利用者・出演者募集）</div>
 <div class="m">一般財団法人米子市文化財団 米子市公会堂 ・ 鳥取県米子市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（利用希望日の7日前までに申込、先着順）</span><span class="tag">公共ホール発表機会（常時公募）</span></div></a><a class="gitem" href="../koubo/attaka_kochi_odorikotai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（利用希望日の7日前までに申込、先着順）</span><span class="tag">公共ホール発表機会（常時公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yonago_koukaidou_minna_no_stage" data-save-name="公会堂みんなのステージ（利用者・出演者募集）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/attaka_kochi_odorikotai.html">
 <div class="t">あったか高知踊り子隊</div>
 <div class="m">高知市旅館ホテル協同組合 ・ 高知県高知市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★2026年8月10・11日開催（事前予約可、当日受付は各日30名限定）</span><span class="tag">祭り 個人参加（県外居住者向け）</span></div></a><a class="gitem" href="../koubo/mie_junior_orchestra.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★2026年8月10・11日開催（事前予約可、当日受付は各日30名限定）</span><span class="tag">祭り 個人参加（県外居住者向け）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="attaka_kochi_odorikotai" data-save-name="あったか高知踊り子隊" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/mie_junior_orchestra.html">
 <div class="t">三重ジュニア管弦楽団 合奏コース 団員募集</div>
 <div class="m">三重県文化会館（三重ジュニア管弦楽団事務局） ・ 三重県津市（三重県総合文化センター）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（通年）</span><span class="tag">ジュニアオーケストラ団員募集</span></div></a><a class="gitem" href="../koubo/matsusaka_daiku_gasshoudan.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（通年）</span><span class="tag">ジュニアオーケストラ団員募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="mie_junior_orchestra" data-save-name="三重ジュニア管弦楽団 合奏コース 団員募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/matsusaka_daiku_gasshoudan.html">
 <div class="t">第12回松阪の第九 合唱団員募集</div>
 <div class="m">松阪の第九実行委員会（クラギ文化ホール） ・ 三重県松阪市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年6月15日〜定員になり次第締切）</span><span class="tag">市民合唱団員募集（第九演奏会）</span></div></a><a class="gitem" href="../koubo/edinburgh_fringe_registration.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年6月15日〜定員になり次第締切）</span><span class="tag">市民合唱団員募集（第九演奏会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="matsusaka_daiku_gasshoudan" data-save-name="第12回松阪の第九 合唱団員募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/edinburgh_fringe_registration.html">
 <div class="t">エディンバラ・フェスティバル・フリンジ 出演登録（Edinburgh Festival Fringe）</div>
 <div class="m">Edinburgh Festival Fringe Society ・ 海外（イギリス・エディンバラ）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（早期割引・印刷プログラム掲載は例年3〜4月締切だがウェブ掲載のみの登録は開催直前まで随時受付）</span><span class="tag">公募プログラム（オープンアクセス型演劇祭・出演者登録制）</span></div></a><a class="gitem" href="../koubo/fringe_world_perth_registration.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（早期割引・印刷プログラム掲載は例年3〜4月締切だがウェブ掲載のみの登録は開催直前まで随時受付）</span><span class="tag">公募プログラム（オープンアクセス型演劇祭・出演者登録制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="edinburgh_fringe_registration" data-save-name="エディンバラ・フェスティバル・フリンジ 出演登録（Edinburgh Festival Fringe）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fringe_world_perth_registration.html">
 <div class="t">フリンジ・ワールド（パース）出演者登録（FRINGE WORLD Perth）</div>
 <div class="m">ARTRAGE（西オーストラリア州の非営利芸術団体） ・ 海外（オーストラリア・パース）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2027年開催、2027/1/20〜2/14分の登録を受付中。厳格な最終締切は無く開催直前まで随時登録可能）</span><span class="tag">公募プログラム（オープンアクセス型演劇祭・出演者登録制）</span></div></a><a class="gitem" href="../koubo/ejc_juggling_convention.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2027年開催、2027/1/20〜2/14分の登録を受付中。厳格な最終締切は無く開催直前まで随時登録可能）</span><span class="tag">公募プログラム（オープンアクセス型演劇祭・出演者登録制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fringe_world_perth_registration" data-save-name="フリンジ・ワールド（パース）出演者登録（FRINGE WORLD Perth）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ejc_juggling_convention.html">
 <div class="t">ヨーロピアン・ジャグリング・コンベンション（European Juggling Convention, EJC）</div>
 <div class="m">European Juggling Association（EJA）＋開催年ごとの現地実行委員会 ・ 海外（開催地は毎年欧州各国で変動／2026年はスロベニア・プトゥイ）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年大会は8月1〜9日開催、本調査時点でチケット販売中）</span><span class="tag">国際ジャグリングコンベンション（大規模集会）</span></div></a><a class="gitem" href="../koubo/yagp.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年大会は8月1〜9日開催、本調査時点でチケット販売中）</span><span class="tag">国際ジャグリングコンベンション（大規模集会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ejc_juggling_convention" data-save-name="ヨーロピアン・ジャグリング・コンベンション（European Juggling Convention, EJC）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yagp.html">
 <div class="t">ユース・アメリカ・グランプリ（Youth America Grand Prix, YAGP）</div>
 <div class="m">Youth America Grand Prix ・ 海外（アメリカ・ニューヨーク＝決勝／世界各都市で地区予選、東京含む）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2027年シーズンの地区予選登録は都市ごとに順次開始）</span><span class="tag">国際ユースバレエコンクール（地区予選制・奨学金プログラム）</span></div></a><a class="gitem" href="../koubo/green_festa.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2027年シーズンの地区予選登録は都市ごとに順次開始）</span><span class="tag">国際ユースバレエコンクール（地区予選制・奨学金プログラム）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yagp" data-save-name="ユース・アメリカ・グランプリ（Youth America Grand Prix, YAGP）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/green_festa.html">
 <div class="t">グリーンフェスタ（GREEN FESTA）参加団体募集</div>
 <div class="m">シアターグリーン ・ 東京都豊島区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年冬〜春開催、参加団体募集は前年秋頃（現在は募集期間外の見込み）</span><span class="tag">貸館型演劇祭</span></div></a><a class="gitem" href="../koubo/shinagawa_dream_stage.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年冬〜春開催、参加団体募集は前年秋頃（現在は募集期間外の見込み）</span><span class="tag">貸館型演劇祭</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="green_festa" data-save-name="グリーンフェスタ（GREEN FESTA）参加団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/shinagawa_dream_stage.html">
 <div class="t">品川区民芸術祭「ドリームステージ」区民出演者募集</div>
 <div class="m">公益財団法人品川文化振興事業団 ・ 東京都品川区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年春〜初夏募集（2026年度は6/15締切・終了）</span><span class="tag">区民参加公演（出演者募集）</span></div></a><a class="gitem" href="../koubo/koto_nutcracker_audition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年春〜初夏募集（2026年度は6/15締切・終了）</span><span class="tag">区民参加公演（出演者募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="shinagawa_dream_stage" data-save-name="品川区民芸術祭「ドリームステージ」区民出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/koto_nutcracker_audition.html">
 <div class="t">「くるみ割り人形」出演者オーディション（区民参加バレエ）</div>
 <div class="m">東京シティ・バレエ団／ティアラ『くるみ』の会（江東区文化コミュニティ財団） ・ 東京都江東区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年6月頃（第40回は6/26締切・終了）</span><span class="tag">区民参加バレエ・出演者オーディション</span></div></a><a class="gitem" href="../koubo/bunkyo_shimin_engeki.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年6月頃（第40回は6/26締切・終了）</span><span class="tag">区民参加バレエ・出演者オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="koto_nutcracker_audition" data-save-name="「くるみ割り人形」出演者オーディション（区民参加バレエ）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/bunkyo_shimin_engeki.html">
 <div class="t">文京区民参加演劇公演 参加者募集</div>
 <div class="m">公益財団法人文京アカデミー（文京区事業） ・ 東京都文京区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年9月中旬締切（前回9/17・終了、次回2026年9月頃見込み）</span><span class="tag">区民参加演劇公演・参加者募集</span></div></a><a class="gitem" href="../koubo/higashimurayama_bunkasai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年9月中旬締切（前回9/17・終了、次回2026年9月頃見込み）</span><span class="tag">区民参加演劇公演・参加者募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="bunkyo_shimin_engeki" data-save-name="文京区民参加演劇公演 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/higashimurayama_bunkasai.html">
 <div class="t">東村山市民文化祭 ホール部門 参加団体募集</div>
 <div class="m">東村山市（社会教育課）／東村山市文化協会 ・ 東京都東村山市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年6月中旬（第51回6/16締切・終了）</span><span class="tag">発表・参加団体の公募（市民文化祭）</span></div></a><a class="gitem" href="../koubo/honda_theater_riyoudantai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年6月中旬（第51回6/16締切・終了）</span><span class="tag">発表・参加団体の公募（市民文化祭）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="higashimurayama_bunkasai" data-save-name="東村山市民文化祭 ホール部門 参加団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/honda_theater_riyoudantai.html">
 <div class="t">本多劇場 劇場使用団体募集</div>
 <div class="m">本多劇場グループ ・ 東京都世田谷区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">前回は2025年8月末選考結果連絡・終了（次回未確認）</span><span class="tag">利用団体募集（選考制）</span></div></a><a class="gitem" href="../koubo/shinjuku_theatertops.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">前回は2025年8月末選考結果連絡・終了（次回未確認）</span><span class="tag">利用団体募集（選考制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="honda_theater_riyoudantai" data-save-name="本多劇場 劇場使用団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/shinjuku_theatertops.html">
 <div class="t">新宿シアタートップス 利用団体募集</div>
 <div class="m">本多劇場グループ ・ 東京都新宿区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">過去確認分は2022年6〜7月応募・終了（次回未確認）</span><span class="tag">利用団体募集（選考制）</span></div></a><a class="gitem" href="../koubo/creative_space_2026.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">過去確認分は2022年6〜7月応募・終了（次回未確認）</span><span class="tag">利用団体募集（選考制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="shinjuku_theatertops" data-save-name="新宿シアタートップス 利用団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/creative_space_2026.html">
 <div class="t">Creative space 2026（宇フォーラム美術館提携 振付家募集）</div>
 <div class="m">一般社団法人現代舞踊協会 ・ 東京都国立市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年7月15日締切・終了（次回目安2027年春頃）</span><span class="tag">公募（振付家上演枠）</span></div></a><a class="gitem" href="../koubo/tokyo_shinbun_buyou_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年7月15日締切・終了（次回目安2027年春頃）</span><span class="tag">公募（振付家上演枠）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="creative_space_2026" data-save-name="Creative space 2026（宇フォーラム美術館提携 振付家募集）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/tokyo_shinbun_buyou_concours.html">
 <div class="t">全国舞踊コンクール（現代舞踊部門）</div>
 <div class="m">東京新聞（中日新聞東京本社） ・ 東京都目黒区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年1月31日締切・終了（次回2026年12月頃見込み）</span><span class="tag">コンクール（公募コンペ）</span></div></a><a class="gitem" href="../koubo/nntt_engeki_kenshujo.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年1月31日締切・終了（次回2026年12月頃見込み）</span><span class="tag">コンクール（公募コンペ）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="tokyo_shinbun_buyou_concours" data-save-name="全国舞踊コンクール（現代舞踊部門）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nntt_engeki_kenshujo.html">
 <div class="t">新国立劇場演劇研修所 研修生募集</div>
 <div class="m">新国立劇場（日本芸術文化振興会） ・ 東京都渋谷区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年11月出願受付・12月締切（第22期は2025年12月2日締切・終了）</span><span class="tag">育成（養成所・オーディション型）</span></div></a><a class="gitem" href="../koubo/bungakuza_kenkyujo.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年11月出願受付・12月締切（第22期は2025年12月2日締切・終了）</span><span class="tag">育成（養成所・オーディション型）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nntt_engeki_kenshujo" data-save-name="新国立劇場演劇研修所 研修生募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/bungakuza_kenkyujo.html">
 <div class="t">文学座附属演劇研究所 本科生募集</div>
 <div class="m">文学座 ・ 東京都新宿区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年秋募集（第66期は2025年12月26日締切・終了）</span><span class="tag">育成（養成所）</span></div></a><a class="gitem" href="../koubo/haiyuza_kenkyujo.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年秋募集（第66期は2025年12月26日締切・終了）</span><span class="tag">育成（養成所）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="bungakuza_kenkyujo" data-save-name="文学座附属演劇研究所 本科生募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/haiyuza_kenkyujo.html">
 <div class="t">劇団俳優座 演劇研究所 研究生募集</div>
 <div class="m">劇団俳優座 ・ 東京都港区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年秋〜春に複数日程（2026年度分は2025年10月6日締切・終了）</span><span class="tag">育成（養成所）</span></div></a><a class="gitem" href="../koubo/setagaya_chiiki_monogatari.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年秋〜春に複数日程（2026年度分は2025年10月6日締切・終了）</span><span class="tag">育成（養成所）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="haiyuza_kenkyujo" data-save-name="劇団俳優座 演劇研究所 研究生募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/setagaya_chiiki_monogatari.html">
 <div class="t">世田谷パブリックシアター『地域の物語2026』ワークショップ</div>
 <div class="m">世田谷パブリックシアター ・ 東京都世田谷区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2025年12月17日締切・終了（次回2026年末頃見込み）</span><span class="tag">育成（WS）／市民参加型創作</span></div></a><a class="gitem" href="../koubo/osaka_performer_license.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2025年12月17日締切・終了（次回2026年末頃見込み）</span><span class="tag">育成（WS）／市民参加型創作</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="setagaya_chiiki_monogatari" data-save-name="世田谷パブリックシアター『地域の物語2026』ワークショップ" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/osaka_performer_license.html">
 <div class="t">大阪パフォーマーライセンス（OPL）認定審査会</div>
 <div class="m">大阪パフォーマーライセンス実行委員会 ・ 大阪府大阪市（審査会場は大阪城ATC等）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年は一次(書類)1/28、二次(公開実演)2/11で終了。次回時期は情報源により食い違いあり</span><span class="tag">ストリートパフォーマーライセンス認定審査</span></div></a><a class="gitem" href="../koubo/hyogo_piccolo_school.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年は一次(書類)1/28、二次(公開実演)2/11で終了。次回時期は情報源により食い違いあり</span><span class="tag">ストリートパフォーマーライセンス認定審査</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="osaka_performer_license" data-save-name="大阪パフォーマーライセンス（OPL）認定審査会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/hyogo_piccolo_school.html">
 <div class="t">ピッコロ演劇学校＆ピッコロ舞台技術学校 生徒募集</div>
 <div class="m">兵庫県立尼崎青少年創造劇場 ピッコロシアター ・ 兵庫県尼崎市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">令和8年度生は前期3/18・後期4/2・追加4/16締切で終了済み</span><span class="tag">養成学校 生徒募集</span></div></a><a class="gitem" href="../koubo/kobe_youbu_competition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">令和8年度生は前期3/18・後期4/2・追加4/16締切で終了済み</span><span class="tag">養成学校 生徒募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="hyogo_piccolo_school" data-save-name="ピッコロ演劇学校＆ピッコロ舞台技術学校 生徒募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kobe_youbu_competition.html">
 <div class="t">こうべ全国洋舞コンクール</div>
 <div class="m">こうべ全国洋舞コンクール実行委員会（兵庫県洋舞家協会主催、神戸新聞社共催） ・ 兵庫県神戸市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年(第39回)はエントリー1/23〜2/26で終了済み。開催は2026年5/3〜5</span><span class="tag">ダンスコンクール</span></div></a><a class="gitem" href="../koubo/kyoto_gakusei_engekisai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年(第39回)はエントリー1/23〜2/26で終了済み。開催は2026年5/3〜5</span><span class="tag">ダンスコンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kobe_youbu_competition" data-save-name="こうべ全国洋舞コンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kyoto_gakusei_engekisai.html">
 <div class="t">京都学生演劇祭</div>
 <div class="m">京都学生演劇祭実行委員会（学生主体運営） ・ 京都府京都市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年2月頃に参加団体募集（2025年度実績）。次回は2027年2月頃と推測</span><span class="tag">学生演劇祭</span></div></a><a class="gitem" href="../koubo/uji_bunka_geijutsusai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年2月頃に参加団体募集（2025年度実績）。次回は2027年2月頃と推測</span><span class="tag">学生演劇祭</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kyoto_gakusei_engekisai" data-save-name="京都学生演劇祭" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/uji_bunka_geijutsusai.html">
 <div class="t">宇治市民文化芸術祭 舞台の部 出演者募集</div>
 <div class="m">宇治市芸術文化協会 ・ 京都府宇治市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年6月頃締切、10月開催（令和7年度は10月25・26日開催）。令和8年度の正確な日程は未確認</span><span class="tag">市民文化祭 舞台部門 出演者募集</span></div></a><a class="gitem" href="../koubo/nagoya_gakusei_engekisai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年6月頃締切、10月開催（令和7年度は10月25・26日開催）。令和8年度の正確な日程は未確認</span><span class="tag">市民文化祭 舞台部門 出演者募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="uji_bunka_geijutsusai" data-save-name="宇治市民文化芸術祭 舞台の部 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nagoya_gakusei_engekisai.html">
 <div class="t">名古屋学生演劇祭（第15回）参加団体募集</div>
 <div class="m">名古屋学生演劇祭実行委員会（共催:株式会社うりんこ） ・ 愛知県名古屋市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年4月上旬〜5月上旬募集。第15回本番は2026年9月5〜7日（うりんこ劇場）</span><span class="tag">学生演劇祭</span></div></a><a class="gitem" href="../koubo/ryutopia_apricot_audition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年4月上旬〜5月上旬募集。第15回本番は2026年9月5〜7日（うりんこ劇場）</span><span class="tag">学生演劇祭</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nagoya_gakusei_engekisai" data-save-name="名古屋学生演劇祭（第15回）参加団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ryutopia_apricot_audition.html">
 <div class="t">りゅーとぴあジュニア劇団APRICOT 入団オーディション</div>
 <div class="m">公益財団法人新潟市芸術文化振興財団（りゅーとぴあ） ・ 新潟県新潟市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">年2回（春季・秋季）実施。次回時期は公式サイトで要確認</span><span class="tag">ジュニア劇団員オーディション（継続所属型）</span></div></a><a class="gitem" href="../koubo/hokuriku_dance_battle_championship.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">年2回（春季・秋季）実施。次回時期は公式サイトで要確認</span><span class="tag">ジュニア劇団員オーディション（継続所属型）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ryutopia_apricot_audition" data-save-name="りゅーとぴあジュニア劇団APRICOT 入団オーディション" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/hokuriku_dance_battle_championship.html">
 <div class="t">北陸ダンスバトル チャンピオンシップ2026</div>
 <div class="m">北陸中日新聞、石川テレビ放送 ・ 石川県金沢市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー期間2026年5月8日〜6月5日で受付終了（部門により定員到達）。開催は2026年7月19日</span><span class="tag">ストリートダンスバトル大会</span></div></a><a class="gitem" href="../koubo/koshi_no_ruby_artist_bank.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー期間2026年5月8日〜6月5日で受付終了（部門により定員到達）。開催は2026年7月19日</span><span class="tag">ストリートダンスバトル大会</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="hokuriku_dance_battle_championship" data-save-name="北陸ダンスバトル チャンピオンシップ2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/koshi_no_ruby_artist_bank.html">
 <div class="t">越のルビーアーティストバンク登録オーディション</div>
 <div class="m">公益財団法人福井県文化振興事業団（福井県立音楽堂 ハーモニーホールふくい） ・ 福井県福井市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">直近確認分は2025年1月締切・2月オーディション実施（受付終了）。2026年度の実施有無・時期は未確認</span><span class="tag">プロ音楽家人材バンク登録オーディション</span></div></a><a class="gitem" href="../koubo/dairakudakan_camp_2026.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">直近確認分は2025年1月締切・2月オーディション実施（受付終了）。2026年度の実施有無・時期は未確認</span><span class="tag">プロ音楽家人材バンク登録オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="koshi_no_ruby_artist_bank" data-save-name="越のルビーアーティストバンク登録オーディション" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/dairakudakan_camp_2026.html">
 <div class="t">大駱駝艦 特別体験舞踏合宿2026</div>
 <div class="m">大駱駝艦・天賦典式（キャメルアーツ株式会社） ・ 長野県北安曇郡白馬村</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月27日受付開始、定員に達し次第締切（2026年度分は募集終了）</span><span class="tag">体験合宿・ワークショップ（最終日は野外公演出演つき）</span></div></a><a class="gitem" href="../koubo/nagano_shimin_engekisai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月27日受付開始、定員に達し次第締切（2026年度分は募集終了）</span><span class="tag">体験合宿・ワークショップ（最終日は野外公演出演つき）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="dairakudakan_camp_2026" data-save-name="大駱駝艦 特別体験舞踏合宿2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nagano_shimin_engekisai.html">
 <div class="t">第36回長野市民演劇祭 出演団体募集（一般公演／小中学生公演／高校公演）</div>
 <div class="m">長野市民演劇祭実行委員会・長野市 ・ 長野県長野市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年5月27日締切（募集終了）</span><span class="tag">市民演劇祭 出演団体公募（3部門制）</span></div></a><a class="gitem" href="../koubo/cjb_nagoya_ballet.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年5月27日締切（募集終了）</span><span class="tag">市民演劇祭 出演団体公募（3部門制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nagano_shimin_engekisai" data-save-name="第36回長野市民演劇祭 出演団体募集（一般公演／小中学生公演／高校公演）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/cjb_nagoya_ballet.html">
 <div class="t">全国バレエコンクール in Nagoya（第36回）</div>
 <div class="m">CJB中部日本バレエ団 ・ 愛知県名古屋市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー(1次受付)は2026年4月15日〜6月30日で受付終了。開催は2026年8月14〜16日</span><span class="tag">バレエコンクール（独自開催）</span></div></a><a class="gitem" href="../koubo/dance_drill_tokai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー(1次受付)は2026年4月15日〜6月30日で受付終了。開催は2026年8月14〜16日</span><span class="tag">バレエコンクール（独自開催）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="cjb_nagoya_ballet" data-save-name="全国バレエコンクール in Nagoya（第36回）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/dance_drill_tokai.html">
 <div class="t">全国高等学校ダンスドリル選手権大会 東海大会</div>
 <div class="m">MISS DANCE DRILL TEAM INTERNATIONAL JAPAN（MDDT Japan） ・ 愛知県名古屋市（対象: 愛知・岐阜・静岡・三重・福井）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年6月15日開催で終了。次回は2027年6月頃と推測</span><span class="tag">学生ダンス競技会（地区大会）</span></div></a><a class="gitem" href="../koubo/dance_drill_koshinetsu.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年6月15日開催で終了。次回は2027年6月頃と推測</span><span class="tag">学生ダンス競技会（地区大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="dance_drill_tokai" data-save-name="全国高等学校ダンスドリル選手権大会 東海大会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/dance_drill_koshinetsu.html">
 <div class="t">全国高等学校ダンスドリル選手権大会 甲信越大会</div>
 <div class="m">MISS DANCE DRILL TEAM INTERNATIONAL JAPAN（MDDT Japan） ・ 長野県長野市（対象: 山梨・長野・新潟・富山・石川）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年6月14日開催で終了。次回は2027年6月頃と推測</span><span class="tag">学生ダンス競技会（地区大会）</span></div></a><a class="gitem" href="../koubo/team_dance_chubu.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年6月14日開催で終了。次回は2027年6月頃と推測</span><span class="tag">学生ダンス競技会（地区大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="dance_drill_koshinetsu" data-save-name="全国高等学校ダンスドリル選手権大会 甲信越大会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/team_dance_chubu.html">
 <div class="t">全日本高等学校チームダンス選手権大会 中部大会</div>
 <div class="m">一般社団法人ストリートダンス協会・産経新聞社・フジテレビジョン ・ 愛知県安城市（対象: 愛知・岐阜・静岡・三重）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年7月19日開催。学校単位でのエントリーは締切済みとみられる。次回は2027年7月頃と推測</span><span class="tag">学生ダンス競技会（地区大会）</span></div></a><a class="gitem" href="../koubo/chubu_gakusei_juggling.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年7月19日開催。学校単位でのエントリーは締切済みとみられる。次回は2027年7月頃と推測</span><span class="tag">学生ダンス競技会（地区大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="team_dance_chubu" data-save-name="全日本高等学校チームダンス選手権大会 中部大会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/chubu_gakusei_juggling.html">
 <div class="t">中部学生ジャグリング大会（第12回）</div>
 <div class="m">中部学生ジャグリング大会実行委員会 ・ 愛知県名古屋市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第12回(2026年3月28日開催)は終了済み。次回(第13回)は2027年3月頃と推測</span><span class="tag">ジャグリング大会</span></div></a><a class="gitem" href="../koubo/dance_creator_okaya.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第12回(2026年3月28日開催)は終了済み。次回(第13回)は2027年3月頃と推測</span><span class="tag">ジャグリング大会</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="chubu_gakusei_juggling" data-save-name="中部学生ジャグリング大会（第12回）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/dance_creator_okaya.html">
 <div class="t">DANCE CREATOR（ダンクリ）</div>
 <div class="m">ストリートダンスコンテスト DANCE CREATOR実行委員会 ・ 長野県岡谷市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー受付は2026年9月12日20:00〜10月11日23:59を予定。開催は2026年11月14日（調査時点では受付開始前）</span><span class="tag">ストリートダンスコンテスト</span></div></a><a class="gitem" href="../koubo/gekitotsu_workshop_hamamatsu.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー受付は2026年9月12日20:00〜10月11日23:59を予定。開催は2026年11月14日（調査時点では受付開始前）</span><span class="tag">ストリートダンスコンテスト</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="dance_creator_okaya" data-save-name="DANCE CREATOR（ダンクリ）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/gekitotsu_workshop_hamamatsu.html">
 <div class="t">劇突 演劇ワークショップ in 浜松</div>
 <div class="m">浜松市文化振興財団（主管: 静岡県西部演劇連絡会） ・ 静岡県浜松市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年2月22日開催分は終了。次回開催時期は未確認</span><span class="tag">演劇ワークショップ（複数演出家によるリレー形式、公募型参加者募集）</span></div></a><a class="gitem" href="../koubo/loudhill_keikaku.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年2月22日開催分は終了。次回開催時期は未確認</span><span class="tag">演劇ワークショップ（複数演出家によるリレー形式、公募型参加者募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="gekitotsu_workshop_hamamatsu" data-save-name="劇突 演劇ワークショップ in 浜松" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/loudhill_keikaku.html">
 <div class="t">ラウドヒル計画（市民参加型舞台制作プロジェクト）</div>
 <div class="m">静岡市文化振興財団（静岡市民文化会館） ・ 静岡県静岡市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">現在、新規参加者の募集は行っていない（公式サイトで明記）。次回募集時期は未定</span><span class="tag">市民参加型舞台制作プロジェクト（書類選考制の出演者公募）</span></div></a><a class="gitem" href="../koubo/ryukyu_kotenengeikou_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">現在、新規参加者の募集は行っていない（公式サイトで明記）。次回募集時期は未定</span><span class="tag">市民参加型舞台制作プロジェクト（書類選考制の出演者公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="loudhill_keikaku" data-save-name="ラウドヒル計画（市民参加型舞台制作プロジェクト）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ryukyu_kotenengeikou_concours.html">
 <div class="t">第60回 琉球古典芸能コンクール・第15回八重山古典芸能コンクール</div>
 <div class="m">琉球新報社 ・ 沖縄県那覇市（中部・北部支社でも受付）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年度分は受験申込5月7〜11日で受付終了。次回(第61回)は2027年春頃と推測</span><span class="tag">実演コンクール（段位認定型）</span></div></a><a class="gitem" href="../koubo/okinawa_times_dentou_geinou_senkoukai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年度分は受験申込5月7〜11日で受付終了。次回(第61回)は2027年春頃と推測</span><span class="tag">実演コンクール（段位認定型）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ryukyu_kotenengeikou_concours" data-save-name="第60回 琉球古典芸能コンクール・第15回八重山古典芸能コンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/okinawa_times_dentou_geinou_senkoukai.html">
 <div class="t">2026年度 沖縄タイムス伝統芸能選考会</div>
 <div class="m">沖縄タイムス社 ・ 沖縄県那覇市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月2〜4日消印有効で受付終了。次回は2027年4月頃と推測</span><span class="tag">実演選考会（段位認定型）</span></div></a><a class="gitem" href="../koubo/ryukyukoku_min-you_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月2〜4日消印有効で受付終了。次回は2027年4月頃と推測</span><span class="tag">実演選考会（段位認定型）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="okinawa_times_dentou_geinou_senkoukai" data-save-name="2026年度 沖縄タイムス伝統芸能選考会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ryukyukoku_min-you_concours.html">
 <div class="t">琉球國民謡協会 民謡コンクール</div>
 <div class="m">琉球國民謡協会 ・ 沖縄県内（南部・中部・北部・浦添市部の支部制）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年度分は6月14日締切で受付終了。次回応募は2027年6月頃と推測</span><span class="tag">実演コンクール（段位認定型）</span></div></a><a class="gitem" href="../koubo/nagasaki_chiji_hai_dance_contest.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年度分は6月14日締切で受付終了。次回応募は2027年6月頃と推測</span><span class="tag">実演コンクール（段位認定型）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ryukyukoku_min-you_concours" data-save-name="琉球國民謡協会 民謡コンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nagasaki_chiji_hai_dance_contest.html">
 <div class="t">長崎県知事杯ダンスコンテスト＆高校生ダンス部選手権</div>
 <div class="m">長崎県、NAGASAKI DANCE MEETING ・ 長崎県長崎市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">令和7年度分は2025年8月17日で締切済み</span><span class="tag">ダンスコンテスト（毎年開催）</span></div></a><a class="gitem" href="../koubo/nagasaki_peace_bunkasai_dance.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">令和7年度分は2025年8月17日で締切済み</span><span class="tag">ダンスコンテスト（毎年開催）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nagasaki_chiji_hai_dance_contest" data-save-name="長崎県知事杯ダンスコンテスト＆高校生ダンス部選手権" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nagasaki_peace_bunkasai_dance.html">
 <div class="t">ながさきピース文化祭2025「みんな集まれ！ダンス＆ダンス」出演者募集</div>
 <div class="m">長崎県（ながさきピース文化祭2025実行委員会） ・ 長崎県長崎市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2025年6月15日で締切済み（開催済み: 2025年9月21日）</span><span class="tag">文化祭ダンスステージ出演者公募</span></div></a><a class="gitem" href="../koubo/kumamoto_shinjin_ensokai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2025年6月15日で締切済み（開催済み: 2025年9月21日）</span><span class="tag">文化祭ダンスステージ出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nagasaki_peace_bunkasai_dance" data-save-name="ながさきピース文化祭2025「みんな集まれ！ダンス＆ダンス」出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kumamoto_shinjin_ensokai.html">
 <div class="t">第64回熊本県新人演奏会</div>
 <div class="m">熊本県文化協会 ・ 熊本県熊本市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">令和8年6月17日〜7月8日締切（募集終了）</span><span class="tag">音楽オーディション（新人紹介演奏会）</span></div></a><a class="gitem" href="../koubo/oita_shinjin_ensouka_audition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">令和8年6月17日〜7月8日締切（募集終了）</span><span class="tag">音楽オーディション（新人紹介演奏会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kumamoto_shinjin_ensokai" data-save-name="第64回熊本県新人演奏会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/oita_shinjin_ensouka_audition.html">
 <div class="t">新進演奏家育成プロジェクト リサイタル・シリーズ OITAオーディション</div>
 <div class="m">公益社団法人日本演奏連盟 ・ 大分県大分市（九州出身・在住者が対象の広域オーディション）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">令和8年5月28日締切（募集終了、オーディションは7月9日開催済み）</span><span class="tag">音楽オーディション（全国規模・地区開催）</span></div></a><a class="gitem" href="../koubo/miyazaki_intl_ballet_competition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">令和8年5月28日締切（募集終了、オーディションは7月9日開催済み）</span><span class="tag">音楽オーディション（全国規模・地区開催）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="oita_shinjin_ensouka_audition" data-save-name="新進演奏家育成プロジェクト リサイタル・シリーズ OITAオーディション" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/miyazaki_intl_ballet_competition.html">
 <div class="t">宮崎国際バレエコンペティション</div>
 <div class="m">一般社団法人宮崎国際バレエコンペティション、宮崎市民文化ホール ・ 宮崎県宮崎市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年秋募集・翌年1月開催（2026年大会エントリーは2025年9〜11月で終了）</span><span class="tag">ダンスコンクール</span></div></a><a class="gitem" href="../koubo/kitakyushu_choho_hai_street_dance.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年秋募集・翌年1月開催（2026年大会エントリーは2025年9〜11月で終了）</span><span class="tag">ダンスコンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="miyazaki_intl_ballet_competition" data-save-name="宮崎国際バレエコンペティション" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kitakyushu_choho_hai_street_dance.html">
 <div class="t">北九州市長杯ストリートダンスコンテスト2026</div>
 <div class="m">こくらDream実行委員会（北九州市小倉北区役所コミュニティ支援課） ・ 福岡県北九州市小倉北区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー方法・締切は未発表（決まり次第公式サイトに掲載。開催日は2026年9月6日）</span><span class="tag">ダンスコンテスト（公募）</span></div></a><a class="gitem" href="../koubo/fleur_fukuoka_ballet_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー方法・締切は未発表（決まり次第公式サイトに掲載。開催日は2026年9月6日）</span><span class="tag">ダンスコンテスト（公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kitakyushu_choho_hai_street_dance" data-save-name="北九州市長杯ストリートダンスコンテスト2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fleur_fukuoka_ballet_concours.html">
 <div class="t">ふくおか全国バレエコンクール（フルール全国バレエコンクール）</div>
 <div class="m">フルール全国バレエコンクール事務局 ・ 福岡県福岡市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年春〜初夏開催（2026年分は6/28開催で終了。次回は2027年春頃の見込み）</span><span class="tag">バレエコンクール（地域大会）</span></div></a><a class="gitem" href="../koubo/hakata_machiya_dontaku_tai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年春〜初夏開催（2026年分は6/28開催で終了。次回は2027年春頃の見込み）</span><span class="tag">バレエコンクール（地域大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fleur_fukuoka_ballet_concours" data-save-name="ふくおか全国バレエコンクール（フルール全国バレエコンクール）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/hakata_machiya_dontaku_tai.html">
 <div class="t">博多町家ふるさと館どんたく隊 参加者募集</div>
 <div class="m">博多町家ふるさと館 ・ 福岡県福岡市博多区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年2月頃受付開始・先着定員制（2026年分は2/1受付開始、定員100名で終了）</span><span class="tag">伝統芸能パレード・出演者募集</span></div></a><a class="gitem" href="../koubo/theater_zoo_teikei_koen.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年2月頃受付開始・先着定員制（2026年分は2/1受付開始、定員100名で終了）</span><span class="tag">伝統芸能パレード・出演者募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="hakata_machiya_dontaku_tai" data-save-name="博多町家ふるさと館どんたく隊 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/theater_zoo_teikei_koen.html">
 <div class="t">扇谷記念スタジオ・シアターZOO 提携公演／はじめてZOO 2026年度</div>
 <div class="m">公益財団法人北海道演劇財団 ・ 北海道札幌市中央区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2025年11月7日必着（2026年度分）。次回は例年10〜11月頃と推測</span><span class="tag">劇場提携公演枠公募（利用団体募集）</span></div></a><a class="gitem" href="../koubo/yosakoi_soran_matsuri.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2025年11月7日必着（2026年度分）。次回は例年10〜11月頃と推測</span><span class="tag">劇場提携公演枠公募（利用団体募集）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="theater_zoo_teikei_koen" data-save-name="扇谷記念スタジオ・シアターZOO 提携公演／はじめてZOO 2026年度" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yosakoi_soran_matsuri.html">
 <div class="t">YOSAKOIソーラン祭り 一般チーム参加募集</div>
 <div class="m">YOSAKOIソーラン祭り組織委員会 ・ 北海道札幌市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第35回(2026年)は2025年12月7日〜2026年2月28日で締切済み</span><span class="tag">祭り出演チーム公募</span></div></a><a class="gitem" href="../koubo/dance_competition_sendai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第35回(2026年)は2025年12月7日〜2026年2月28日で締切済み</span><span class="tag">祭り出演チーム公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yosakoi_soran_matsuri" data-save-name="YOSAKOIソーラン祭り 一般チーム参加募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/dance_competition_sendai.html">
 <div class="t">ダンスコンペティション仙台</div>
 <div class="m">宮城県洋舞団体連合会・DCS実行委員会 ・ 宮城県仙台市青葉区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会はエントリー期間2025年11月14〜24日で終了(開催は2026年2月22-23日)</span><span class="tag">ダンスコンクール</span></div></a><a class="gitem" href="../koubo/jozenji_street_jazz_festival.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会はエントリー期間2025年11月14〜24日で終了(開催は2026年2月22-23日)</span><span class="tag">ダンスコンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="dance_competition_sendai" data-save-name="ダンスコンペティション仙台" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/jozenji_street_jazz_festival.html">
 <div class="t">定禅寺ストリートジャズフェスティバル 出演者(バンド)募集</div>
 <div class="m">定禅寺ストリートジャズフェスティバル実行委員会 ・ 宮城県仙台市青葉区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分(9/12-13)は2026年4月3日〜5月7日で終了</span><span class="tag">音楽祭 出演バンド公募</span></div></a><a class="gitem" href="../koubo/tohoku_dance_festival.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分(9/12-13)は2026年4月3日〜5月7日で終了</span><span class="tag">音楽祭 出演バンド公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="jozenji_street_jazz_festival" data-save-name="定禅寺ストリートジャズフェスティバル 出演者(バンド)募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/tohoku_dance_festival.html">
 <div class="t">東北ダンスフェスティバル</div>
 <div class="m">東北ダンスフェスティバル実行委員会 ・ 宮城県仙台市青葉区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分は2026年1月1日〜2月28日(枠が埋まり次第終了)で終了済み</span><span class="tag">ダンスフェスティバル 出演者公募</span></div></a><a class="gitem" href="../koubo/miyagi_geikyo_music_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分は2026年1月1日〜2月28日(枠が埋まり次第終了)で終了済み</span><span class="tag">ダンスフェスティバル 出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="tohoku_dance_festival" data-save-name="東北ダンスフェスティバル" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/miyagi_geikyo_music_concours.html">
 <div class="t">宮城県芸術協会音楽コンクール</div>
 <div class="m">公益社団法人宮城県芸術協会 ・ 宮城県仙台市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第46回(2026年開催分)は部門ごとに異なり終了済み(ピアノ2025/12/5、ヴァイオリン2026/1/8等)</span><span class="tag">音楽コンクール</span></div></a><a class="gitem" href="../koubo/kadare_dance_festival_2026.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第46回(2026年開催分)は部門ごとに異なり終了済み(ピアノ2025/12/5、ヴァイオリン2026/1/8等)</span><span class="tag">音楽コンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="miyagi_geikyo_music_concours" data-save-name="宮城県芸術協会音楽コンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kadare_dance_festival_2026.html">
 <div class="t">KADARE DANCE FESTIVAL 2026 ストリートダンスコンテスト</div>
 <div class="m">由利本荘市文化交流館カダーレ ・ 秋田県由利本荘市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月20日〜5月31日（受付終了）</span><span class="tag">ダンスコンテスト（自由応募）</span></div></a><a class="gitem" href="../koubo/frontline_tohoku.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月20日〜5月31日（受付終了）</span><span class="tag">ダンスコンテスト（自由応募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kadare_dance_festival_2026" data-save-name="KADARE DANCE FESTIVAL 2026 ストリートダンスコンテスト" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/frontline_tohoku.html">
 <div class="t">FRONTLINE東北大会（ストリートダンスコンテスト）</div>
 <div class="m">FUNKY STADIUM（主管）／FRONTLINE運営事務局 ・ 青森県弘前市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年度大会は2026年7月11日開催で終了済み</span><span class="tag">ストリートダンスコンテスト（全国大会の地方大会）</span></div></a><a class="gitem" href="../koubo/hakodate_dynamite_summer_fes_dance.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年度大会は2026年7月11日開催で終了済み</span><span class="tag">ストリートダンスコンテスト（全国大会の地方大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="frontline_tohoku" data-save-name="FRONTLINE東北大会（ストリートダンスコンテスト）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/hakodate_dynamite_summer_fes_dance.html">
 <div class="t">函館ダイナマイトサマーフェス ダンスコンテスト（U-12・U-25部門）</div>
 <div class="m">DYNAMITE-STYLE TRIBUTE実行委員会 ・ 北海道函館市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会は7月18〜20日開催、ダンスコンテストは7月19日実施。募集は終了済み</span><span class="tag">ダンスコンテスト（地域夏祭り内のプログラム）</span></div></a><a class="gitem" href="../koubo/vocal_ensemble_contest_fukushima.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会は7月18〜20日開催、ダンスコンテストは7月19日実施。募集は終了済み</span><span class="tag">ダンスコンテスト（地域夏祭り内のプログラム）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="hakodate_dynamite_summer_fes_dance" data-save-name="函館ダイナマイトサマーフェス ダンスコンテスト（U-12・U-25部門）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/vocal_ensemble_contest_fukushima.html">
 <div class="t">声楽アンサンブルコンテスト全国大会（一般部門ほか）</div>
 <div class="m">声楽アンサンブルコンテスト全国大会実行委員会（福島県文化振興課内） ・ 福島県福島市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">公募審査は例年12月上旬〜1月上旬受付(第19回実績: 2025/12/8〜2026/1/9)。次回(第20回)は2026年12月頃受付開始見込み</span><span class="tag">全国大会（合唱・声楽アンサンブルコンクール）</span></div></a><a class="gitem" href="../koubo/soma_nagareyama_zenkoku_taikai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">公募審査は例年12月上旬〜1月上旬受付(第19回実績: 2025/12/8〜2026/1/9)。次回(第20回)は2026年12月頃受付開始見込み</span><span class="tag">全国大会（合唱・声楽アンサンブルコンクール）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="vocal_ensemble_contest_fukushima" data-save-name="声楽アンサンブルコンテスト全国大会（一般部門ほか）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/soma_nagareyama_zenkoku_taikai.html">
 <div class="t">第34回 相馬流れ山全国大会</div>
 <div class="m">一般社団法人 南相馬観光協会 ・ 福島県南相馬市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月30日締切（募集終了、大会本番は2026年6月14日開催済み）</span><span class="tag">民謡全国大会（コンクール）</span></div></a><a class="gitem" href="../koubo/matsuyama_shimin_musical_audition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月30日締切（募集終了、大会本番は2026年6月14日開催済み）</span><span class="tag">民謡全国大会（コンクール）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="soma_nagareyama_zenkoku_taikai" data-save-name="第34回 相馬流れ山全国大会" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/matsuyama_shimin_musical_audition.html">
 <div class="t">市民ミュージカル出演者オーディション</div>
 <div class="m">松山市総合コミュニティセンター（松山市文化・スポーツ振興財団） ・ 愛媛県松山市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第31回は2026年4月1〜26日（締切済み）。例年1〜4月頃に翌年募集開始</span><span class="tag">出演者オーディション（市民参加型ミュージカル）</span></div></a><a class="gitem" href="../koubo/meets_shikoku_mini_kouen.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第31回は2026年4月1〜26日（締切済み）。例年1〜4月頃に翌年募集開始</span><span class="tag">出演者オーディション（市民参加型ミュージカル）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="matsuyama_shimin_musical_audition" data-save-name="市民ミュージカル出演者オーディション" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/meets_shikoku_mini_kouen.html">
 <div class="t">みーつきかく（演劇・歌・ダンスのミニ公演 出演者募集）</div>
 <div class="m">meets4koku（みーつしこく） ・ 愛媛県松山市・伊予市など県内各所</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">確認できた最新回は第16弾(2025年2月開催、締切済み)。以降の開催有無は未確認</span><span class="tag">市民参加型ミニ公演の出演者募集</span></div></a><a class="gitem" href="../koubo/chugoku_block_gekiou_ketteisen.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">確認できた最新回は第16弾(2025年2月開催、締切済み)。以降の開催有無は未確認</span><span class="tag">市民参加型ミニ公演の出演者募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="meets_shikoku_mini_kouen" data-save-name="みーつきかく（演劇・歌・ダンスのミニ公演 出演者募集）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/chugoku_block_gekiou_ketteisen.html">
 <div class="t">中国ブロック劇王決定戦（第12回）</div>
 <div class="m">広島演劇協会・日本劇作家協会中国支部（共催: 広島市文化財団アステールプラザ） ・ 広島県広島市中区（対象は中国地方全域）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第12回の募集は2026年3月1日〜4月30日で終了済み。大会本戦は2026年9月13日開催</span><span class="tag">戯曲・短編上演コンペティション（劇王決定戦形式）</span></div></a><a class="gitem" href="../koubo/jbc_kagawa.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第12回の募集は2026年3月1日〜4月30日で終了済み。大会本戦は2026年9月13日開催</span><span class="tag">戯曲・短編上演コンペティション（劇王決定戦形式）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="chugoku_block_gekiou_ketteisen" data-save-name="中国ブロック劇王決定戦（第12回）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/jbc_kagawa.html">
 <div class="t">Japan Ballet Competition 香川（JBC香川）</div>
 <div class="m">Japan Ballet Competition実行委員会 ・ 香川県高松市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分は4月29日開催・締切3月29日で終了。次回は2027年春頃と推測</span><span class="tag">バレエコンクール（全国規模コンクールの地方開催）</span></div></a><a class="gitem" href="../koubo/namue_takamatsu.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分は4月29日開催・締切3月29日で終了。次回は2027年春頃と推測</span><span class="tag">バレエコンクール（全国規模コンクールの地方開催）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="jbc_kagawa" data-save-name="Japan Ballet Competition 香川（JBC香川）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/namue_takamatsu.html">
 <div class="t">第82回 NAMUEバレエコンクール 高松（全国バレエコンクール）</div>
 <div class="m">NAMUE（全国バレエコンクール運営事務局） ・ 香川県高松市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年7月29日開催、エントリー締切2026年7月6日で終了</span><span class="tag">バレエコンクール（全国規模コンクールの地方開催）</span></div></a><a class="gitem" href="../koubo/matsue_plover_music_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年7月29日開催、エントリー締切2026年7月6日で終了</span><span class="tag">バレエコンクール（全国規模コンクールの地方開催）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="namue_takamatsu" data-save-name="第82回 NAMUEバレエコンクール 高松（全国バレエコンクール）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/matsue_plover_music_concours.html">
 <div class="t">松江プラバ音楽コンクール 参加者募集</div>
 <div class="m">さんびる文化センタープラバホール ・ 島根県松江市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年11月頃(第23回は2025年11月21日締切・2025年12月開催済み)。第24回の募集は未確認</span><span class="tag">音楽コンクール</span></div></a><a class="gitem" href="../koubo/yosakoi_matsuri_kochi_sanka_team.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年11月頃(第23回は2025年11月21日締切・2025年12月開催済み)。第24回の募集は未確認</span><span class="tag">音楽コンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="matsue_plover_music_concours" data-save-name="松江プラバ音楽コンクール 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yosakoi_matsuri_kochi_sanka_team.html">
 <div class="t">よさこい祭り 参加チーム募集</div>
 <div class="m">よさこい祭振興会（高知商工会議所内） ・ 高知県高知市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年4月下旬〜5月下旬(2026年=第73回は4/22〜5/22で受付終了)。次回は2027年4月頃と推測</span><span class="tag">祭り 参加チーム公募（競演・表彰あり）</span></div></a><a class="gitem" href="../koubo/akibare_harmonia_shutsuensha.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年4月下旬〜5月下旬(2026年=第73回は4/22〜5/22で受付終了)。次回は2027年4月頃と推測</span><span class="tag">祭り 参加チーム公募（競演・表彰あり）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yosakoi_matsuri_kochi_sanka_team" data-save-name="よさこい祭り 参加チーム募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/akibare_harmonia_shutsuensha.html">
 <div class="t">共生社会の実現に向けた舞台芸術創造事業「秋晴れハルモニア」出演者募集</div>
 <div class="m">公益財団法人高知市文化振興事業団 ・ 高知県高知市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年6月30日必着（終了済み）。次回募集時期は未確定</span><span class="tag">市民参加型演劇 出演者公募（インクルーシブ演劇）</span></div></a><a class="gitem" href="../koubo/musical_academy_okayama.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年6月30日必着（終了済み）。次回募集時期は未確定</span><span class="tag">市民参加型演劇 出演者公募（インクルーシブ演劇）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="akibare_harmonia_shutsuensha" data-save-name="共生社会の実現に向けた舞台芸術創造事業「秋晴れハルモニア」出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/musical_academy_okayama.html">
 <div class="t">MUSICAL ACADEMY（岡山発ミュージカル人材育成オーディション）</div>
 <div class="m">公益財団法人岡山文化芸術創造（岡山芸術創造劇場ハレノワ） ・ 岡山県岡山市北区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年7月4日23:59（受付終了）</span><span class="tag">市民参加型ミュージカル育成プログラム（3年間）</span></div></a><a class="gitem" href="../koubo/sanuki_takamatsu_matsuri_souodori.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年7月4日23:59（受付終了）</span><span class="tag">市民参加型ミュージカル育成プログラム（3年間）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="musical_academy_okayama" data-save-name="MUSICAL ACADEMY（岡山発ミュージカル人材育成オーディション）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/sanuki_takamatsu_matsuri_souodori.html">
 <div class="t">さぬき高松まつり総おどり 参加連（チーム）募集</div>
 <div class="m">高松市（さぬき高松まつり実行委員会） ・ 香川県高松市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第59回(2026年度)は2026年5月1〜22日締切・終了</span><span class="tag">祭り 総おどり参加団体（連）の公募</span></div></a><a class="gitem" href="../koubo/yamaguchi_intl_dance_competition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第59回(2026年度)は2026年5月1〜22日締切・終了</span><span class="tag">祭り 総おどり参加団体（連）の公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="sanuki_takamatsu_matsuri_souodori" data-save-name="さぬき高松まつり総おどり 参加連（チーム）募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yamaguchi_intl_dance_competition.html">
 <div class="t">山口国際ダンスコンペティション</div>
 <div class="m">山口国際ダンスコンペティション実行委員会 ・ 山口県山口市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー期間は例年1月上旬〜5月上旬(第6回=2026年は1/10〜5/10で締切済み、本大会は6/26-28開催済み)</span><span class="tag">バレエ・ダンスコンクール</span></div></a><a class="gitem" href="../koubo/kure_renga_street_dance_contest.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">エントリー期間は例年1月上旬〜5月上旬(第6回=2026年は1/10〜5/10で締切済み、本大会は6/26-28開催済み)</span><span class="tag">バレエ・ダンスコンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="yamaguchi_intl_dance_competition" data-save-name="山口国際ダンスコンペティション" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kure_renga_street_dance_contest.html">
 <div class="t">くれレンガストリートダンスコンテスト</div>
 <div class="m">くれフレンドシップパートナーズ（呉本通商店街振興組合など9団体） ・ 広島県呉市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月29日開催分は終了（明確な締切日の公表は未確認）</span><span class="tag">ストリートダンスコンテスト</span></div></a><a class="gitem" href="../koubo/dance_tube_tottori.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年4月29日開催分は終了（明確な締切日の公表は未確認）</span><span class="tag">ストリートダンスコンテスト</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kure_renga_street_dance_contest" data-save-name="くれレンガストリートダンスコンテスト" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/dance_tube_tottori.html">
 <div class="t">ダンスTUBE</div>
 <div class="m">鳥取ストリートダンス連盟（鳥取HAKKA） ・ 鳥取県東伯郡湯梨浜町</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年10月開催（2026年は10月18日予定）</span><span class="tag">ストリートダンスコンテスト</span></div></a><a class="gitem" href="../koubo/mito_geijutsusai_ballet_festival.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年10月開催（2026年は10月18日予定）</span><span class="tag">ストリートダンスコンテスト</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="dance_tube_tottori" data-save-name="ダンスTUBE" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/mito_geijutsusai_ballet_festival.html">
 <div class="t">水戸市芸術祭 バレエフェスティバル 参加団体募集</div>
 <div class="m">水戸市芸術祭実行委員会（水戸市市民協働部文化交流課内） ・ 茨城県水戸市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年開催の数か月前（第57回は募集終了）</span><span class="tag">市民芸術祭 出演団体募集（芸能部門）</span></div></a><a class="gitem" href="../koubo/takasaki_dance_festival.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年開催の数か月前（第57回は募集終了）</span><span class="tag">市民芸術祭 出演団体募集（芸能部門）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="mito_geijutsusai_ballet_festival" data-save-name="水戸市芸術祭 バレエフェスティバル 参加団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/takasaki_dance_festival.html">
 <div class="t">タカサキダンスフェスティバル コンテストステージ／タカサキステージ 出場エントリー</div>
 <div class="m">高崎市（総務部文化課） ・ 群馬県高崎市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年12月頃(2026年大会は2月22日開催、エントリーは終了済み)</span><span class="tag">ダンスコンテスト・発表イベント 出演者公募</span></div></a><a class="gitem" href="../koubo/saitama_arts_theater_company_grande.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年12月頃(2026年大会は2月22日開催、エントリーは終了済み)</span><span class="tag">ダンスコンテスト・発表イベント 出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="takasaki_dance_festival" data-save-name="タカサキダンスフェスティバル コンテストステージ／タカサキステージ 出場エントリー" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/saitama_arts_theater_company_grande.html">
 <div class="t">彩の国さいたま芸術劇場「カンパニー・グランデ」メンバー募集</div>
 <div class="m">公益財団法人埼玉県芸術文化振興財団（彩の国さいたま芸術劇場） ・ 埼玉県さいたま市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第2期は2026年5月10日締切・終了（次回募集時期は未定）</span><span class="tag">劇場専属クリエイティブカンパニー・メンバー募集（選考制）</span></div></a><a class="gitem" href="../koubo/saitama_zenkoku_buyou_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第2期は2026年5月10日締切・終了（次回募集時期は未定）</span><span class="tag">劇場専属クリエイティブカンパニー・メンバー募集（選考制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="saitama_arts_theater_company_grande" data-save-name="彩の国さいたま芸術劇場「カンパニー・グランデ」メンバー募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/saitama_zenkoku_buyou_concours.html">
 <div class="t">埼玉全国舞踊コンクール</div>
 <div class="m">一般社団法人埼玉県舞踊協会 ・ 埼玉県さいたま市（埼玉会館）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年4月頃締切(第57回2025年は4月20日締切)。第58回の正確な締切は未確認</span><span class="tag">バレエ・ダンスコンクール</span></div></a><a class="gitem" href="../koubo/kawagoe_bunka_festa_2026.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年4月頃締切(第57回2025年は4月20日締切)。第58回の正確な締切は未確認</span><span class="tag">バレエ・ダンスコンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="saitama_zenkoku_buyou_concours" data-save-name="埼玉全国舞踊コンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kawagoe_bunka_festa_2026.html">
 <div class="t">かわごえ文化フェスタ2026（旧川越市総合文化祭）舞台出演団体募集</div>
 <div class="m">川越市（文化芸術振興課） ・ 埼玉県川越市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年2月頃締切・終了（本番は2026年6月13〜14日開催済み）</span><span class="tag">市民文化祭 舞台出演団体募集</span></div></a><a class="gitem" href="../koubo/ichikawa_shimin_musical.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年2月頃締切・終了（本番は2026年6月13〜14日開催済み）</span><span class="tag">市民文化祭 舞台出演団体募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kawagoe_bunka_festa_2026" data-save-name="かわごえ文化フェスタ2026（旧川越市総合文化祭）舞台出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ichikawa_shimin_musical.html">
 <div class="t">いちかわ市民ミュージカル 出演者募集</div>
 <div class="m">いちかわ市民ミュージカル実行委員会 ・ 千葉県市川市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第12回(2026年10月4日公演)は募集済みとみられ稽古期間中と推測。次回(第13回)は例年3〜5月頃の見込み</span><span class="tag">市民参加型ミュージカル出演者募集（オーディション）</span></div></a><a class="gitem" href="../koubo/mie_ongaku_concours.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第12回(2026年10月4日公演)は募集済みとみられ稽古期間中と推測。次回(第13回)は例年3〜5月頃の見込み</span><span class="tag">市民参加型ミュージカル出演者募集（オーディション）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ichikawa_shimin_musical" data-save-name="いちかわ市民ミュージカル 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/mie_ongaku_concours.html">
 <div class="t">第31回みえ音楽コンクール</div>
 <div class="m">みえ音楽コンクール運営委員会・三重県文化会館（岡田文化財団助成） ・ 三重県津市（三重県文化会館）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">本選(ピアノ・声楽・フルート・弦楽)は2026年8月1〜23日必着（確認時点ではまだ受付前）</span><span class="tag">音楽コンクール（公募制）</span></div></a><a class="gitem" href="../koubo/gikyoku_academia_mie.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">本選(ピアノ・声楽・フルート・弦楽)は2026年8月1〜23日必着（確認時点ではまだ受付前）</span><span class="tag">音楽コンクール（公募制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="mie_ongaku_concours" data-save-name="第31回みえ音楽コンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/gikyoku_academia_mie.html">
 <div class="t">戯曲アカデミア（入門コース／マスターコース）</div>
 <div class="m">三重県文化会館 ・ 三重県津市（三重県文化会館）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">確認時点で募集なし。過去実績: 入門コースは例年8月頃、マスターコースは9月頃に募集</span><span class="tag">戯曲創作講座（選考制・成果発表あり）</span></div></a><a class="gitem" href="../koubo/ise_shimin_geinousai.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">確認時点で募集なし。過去実績: 入門コースは例年8月頃、マスターコースは9月頃に募集</span><span class="tag">戯曲創作講座（選考制・成果発表あり）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="gikyoku_academia_mie" data-save-name="戯曲アカデミア（入門コース／マスターコース）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ise_shimin_geinousai.html">
 <div class="t">第69回伊勢市民芸能祭 出演団体募集</div>
 <div class="m">伊勢市文化政策課・伊勢市文化協会 ・ 三重県伊勢市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年5月11日〜6月12日（募集終了）</span><span class="tag">市民芸能発表会（出演団体公募）</span></div></a><a class="gitem" href="../koubo/nabari_shimin_bunka_onstage_2026.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年5月11日〜6月12日（募集終了）</span><span class="tag">市民芸能発表会（出演団体公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ise_shimin_geinousai" data-save-name="第69回伊勢市民芸能祭 出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nabari_shimin_bunka_onstage_2026.html">
 <div class="t">市民文化オンステージ2026 参加者募集</div>
 <div class="m">公益財団法人伊賀市文化都市協会（エナジーウィズホール） ・ 三重県名張市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年6月3〜14日（募集終了）</span><span class="tag">市民文化発表会（出演者公募）</span></div></a><a class="gitem" href="../koubo/avignon_off_registration.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年6月3〜14日（募集終了）</span><span class="tag">市民文化発表会（出演者公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nabari_shimin_bunka_onstage_2026" data-save-name="市民文化オンステージ2026 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/avignon_off_registration.html">
 <div class="t">アヴィニョン演劇祭OFF部門 参加登録（Festival OFF Avignon）</div>
 <div class="m">Avignon Festival &amp; Compagnies（AF&amp;C） ・ 海外（フランス・アヴィニョン）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">登録受付は例年3月上旬〜4月中旬(2026年は3/3〜4/15で終了)。次回(2027年開催分)は2027年3月頃開始と推測</span><span class="tag">公募プログラム（劇場提携型オープン演劇祭・OFF部門）</span></div></a><a class="gitem" href="../koubo/adelaide_fringe_registration.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">登録受付は例年3月上旬〜4月中旬(2026年は3/3〜4/15で終了)。次回(2027年開催分)は2027年3月頃開始と推測</span><span class="tag">公募プログラム（劇場提携型オープン演劇祭・OFF部門）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="avignon_off_registration" data-save-name="アヴィニョン演劇祭OFF部門 参加登録（Festival OFF Avignon）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/adelaide_fringe_registration.html">
 <div class="t">アデレード・フリンジ 出演者登録（Adelaide Fringe）</div>
 <div class="m">Adelaide Fringe ・ 海外（オーストラリア・アデレード）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">出演登録は例年8月開始(2026年開催分は終了)。次回(2027年開催、2027/2/19〜3/21)分は2026年8月頃開始予定</span><span class="tag">公募プログラム（オープンアクセス型演劇祭・出演者登録制）</span></div></a><a class="gitem" href="../koubo/hollywood_fringe_registration.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">出演登録は例年8月開始(2026年開催分は終了)。次回(2027年開催、2027/2/19〜3/21)分は2026年8月頃開始予定</span><span class="tag">公募プログラム（オープンアクセス型演劇祭・出演者登録制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="adelaide_fringe_registration" data-save-name="アデレード・フリンジ 出演者登録（Adelaide Fringe）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/hollywood_fringe_registration.html">
 <div class="t">ハリウッド・フリンジ・フェスティバル 出演者登録（Hollywood Fringe Festival）</div>
 <div class="m">Hollywood Fringe Festival運営事務局 ・ 海外（アメリカ・ロサンゼルス）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分(6/11〜28)の登録は2/1〜4/15で終了。次回(2027年分)は例年2月頃開始と推測</span><span class="tag">公募プログラム（オープンアクセス型演劇祭・出演者登録制）</span></div></a><a class="gitem" href="../koubo/bjc_juggling_convention.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分(6/11〜28)の登録は2/1〜4/15で終了。次回(2027年分)は例年2月頃開始と推測</span><span class="tag">公募プログラム（オープンアクセス型演劇祭・出演者登録制）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="hollywood_fringe_registration" data-save-name="ハリウッド・フリンジ・フェスティバル 出演者登録（Hollywood Fringe Festival）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/bjc_juggling_convention.html">
 <div class="t">ブリティッシュ・ジャグリング・コンベンション（British Juggling Convention, BJC）</div>
 <div class="m">British Juggling Convention実行委員会（英国） ・ 海外（イギリス／2026年はイングランド北西部ペンワーサム）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会(第35回)は4月3〜9日開催で終了。次回(第36回)の日程は未発表</span><span class="tag">国際ジャグリングコンベンション（英国最大級・海外参加者も多数）</span></div></a><a class="gitem" href="../koubo/melbourne_fringe_registration.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会(第35回)は4月3〜9日開催で終了。次回(第36回)の日程は未発表</span><span class="tag">国際ジャグリングコンベンション（英国最大級・海外参加者も多数）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="bjc_juggling_convention" data-save-name="ブリティッシュ・ジャグリング・コンベンション（British Juggling Convention, BJC）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/melbourne_fringe_registration.html">
 <div class="t">メルボルン・フリンジ・フェスティバル（Melbourne Fringe Festival）</div>
 <div class="m">Melbourne Fringe ・ 海外（オーストラリア・メルボルン）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分の登録は4月16日〜5月22日で終了。例年4月中旬〜5月下旬が翌年登録期間の目安</span><span class="tag">登録制フェスティバル（オープンアクセス型フリンジ）</span></div></a><a class="gitem" href="../koubo/nz_fringe_wellington.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年開催分の登録は4月16日〜5月22日で終了。例年4月中旬〜5月下旬が翌年登録期間の目安</span><span class="tag">登録制フェスティバル（オープンアクセス型フリンジ）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="melbourne_fringe_registration" data-save-name="メルボルン・フリンジ・フェスティバル（Melbourne Fringe Festival）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nz_fringe_wellington.html">
 <div class="t">ニュージーランド・フリンジ・フェスティバル（NZ Fringe / Wellington Fringe）</div>
 <div class="m">Fringe Festival (Wellington) Trust ・ 海外（ニュージーランド・ウェリントン）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2027年フェスティバル(2027年2/12〜3/6開催予定)向け登録の受付開始日・締切日は確認できず</span><span class="tag">登録制フェスティバル（オープンアクセス型フリンジ）</span></div></a><a class="gitem" href="../koubo/prix_de_lausanne.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2027年フェスティバル(2027年2/12〜3/6開催予定)向け登録の受付開始日・締切日は確認できず</span><span class="tag">登録制フェスティバル（オープンアクセス型フリンジ）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nz_fringe_wellington" data-save-name="ニュージーランド・フリンジ・フェスティバル（NZ Fringe / Wellington Fringe）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/prix_de_lausanne.html">
 <div class="t">ローザンヌ国際バレエコンクール（Prix de Lausanne）</div>
 <div class="m">Fondation Prix de Lausanne ・ 海外（スイス・ローザンヌ）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">毎年1〜2月開催。登録受付は前年9月(2027年大会は2026年9月1〜30日、ビデオ提出は10月10日まで)</span><span class="tag">国際バレエコンクール（奨学金・研修契約選抜、個人応募）</span></div></a><a class="gitem" href="../koubo/helsinki_ibc.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">毎年1〜2月開催。登録受付は前年9月(2027年大会は2026年9月1〜30日、ビデオ提出は10月10日まで)</span><span class="tag">国際バレエコンクール（奨学金・研修契約選抜、個人応募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="prix_de_lausanne" data-save-name="ローザンヌ国際バレエコンクール（Prix de Lausanne）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/helsinki_ibc.html">
 <div class="t">ヘルシンキ国際バレエコンクール（Helsinki International Ballet Competition, HIBC）</div>
 <div class="m">The Helsinki International Ballet Competition ・ 海外（フィンランド・ヘルシンキ）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2年に1度開催。2026年大会の応募受付は2025年11月〜2026年1月で終了済み。次回開催時期は未発表</span><span class="tag">国際バレエコンクール（IFBC加盟の主要大会）</span></div></a><a class="gitem" href="../koubo/fonteyn_rad.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2年に1度開催。2026年大会の応募受付は2025年11月〜2026年1月で終了済み。次回開催時期は未発表</span><span class="tag">国際バレエコンクール（IFBC加盟の主要大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="helsinki_ibc" data-save-name="ヘルシンキ国際バレエコンクール（Helsinki International Ballet Competition, HIBC）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fonteyn_rad.html">
 <div class="t">マーゴ・フォンテイン国際バレエコンクール（The Margot Fonteyn International Ballet Competition）</div>
 <div class="m">Royal Academy of Dance（RAD、英国） ・ 海外（イギリス・ロンドン＝2026年大会開催地、例年開催国が変わる）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">年1回開催。2026年大会は応募が6月1日で締切済み、大会本番は10月31日〜11月8日</span><span class="tag">国際バレエコンクール（RADシラバス生限定・開催地が毎年移動）</span></div></a><a class="gitem" href="../koubo/world_ballet_competition_orlando.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">年1回開催。2026年大会は応募が6月1日で締切済み、大会本番は10月31日〜11月8日</span><span class="tag">国際バレエコンクール（RADシラバス生限定・開催地が毎年移動）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fonteyn_rad" data-save-name="マーゴ・フォンテイン国際バレエコンクール（The Margot Fonteyn International Ballet Competition）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/world_ballet_competition_orlando.html">
 <div class="t">ワールド・バレエ・コンペティション（World Ballet Competition, WBC）</div>
 <div class="m">Central Florida Ballet ・ 海外（アメリカ・フロリダ州オーランド）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">年1回開催。2026年大会(第19回)は応募締切・本番ともに終了済み。2027年大会は6月開催予定</span><span class="tag">国際バレエコンクール（2007年創設、拡大中の大会）</span></div></a><a class="gitem" href="../koubo/ard_munich_competition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">年1回開催。2026年大会(第19回)は応募締切・本番ともに終了済み。2027年大会は6月開催予定</span><span class="tag">国際バレエコンクール（2007年創設、拡大中の大会）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="world_ballet_competition_orlando" data-save-name="ワールド・バレエ・コンペティション（World Ballet Competition, WBC）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ard_munich_competition.html">
 <div class="t">ARD国際音楽コンクール（ARD International Music Competition／通称ミュンヘン国際音楽コンクール）</div>
 <div class="m">バイエルン放送（Bayerischer Rundfunk）／ARD ・ 海外（ドイツ・ミュンヘン）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会(オルガン/ファゴット/打楽器/弦楽四重奏)は応募終了。2027年大会(フルート/声楽/ピアノ三重奏/ヴァイオリン)の応募開始時期は未発表</span><span class="tag">国際音楽コンクール</span></div></a><a class="gitem" href="../koubo/cmim_montreal_competition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会(オルガン/ファゴット/打楽器/弦楽四重奏)は応募終了。2027年大会(フルート/声楽/ピアノ三重奏/ヴァイオリン)の応募開始時期は未発表</span><span class="tag">国際音楽コンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ard_munich_competition" data-save-name="ARD国際音楽コンクール（ARD International Music Competition／通称ミュンヘン国際音楽コンクール）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/cmim_montreal_competition.html">
 <div class="t">モントリオール国際音楽コンクール（Concours musical international de Montréal, CMIM）</div>
 <div class="m">Concours musical international de Montréal ・ 海外（カナダ・モントリオール）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年はヴァイオリン部門(応募終了)。次のピアノ2027部門は応募受付が2026年9月3日開始・10月31日締切予定</span><span class="tag">国際音楽コンクール</span></div></a><a class="gitem" href="../koubo/long_thibaud_crespin_competition.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年はヴァイオリン部門(応募終了)。次のピアノ2027部門は応募受付が2026年9月3日開始・10月31日締切予定</span><span class="tag">国際音楽コンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="cmim_montreal_competition" data-save-name="モントリオール国際音楽コンクール（Concours musical international de Montréal, CMIM）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/long_thibaud_crespin_competition.html">
 <div class="t">ロン=ティボー国際コンクール（Concours Long-Thibaud-Crespin）</div>
 <div class="m">Fondation Long-Thibaud（フランス・パリ） ・ 海外（フランス・パリ）</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">2026年大会(ヴァイオリン部門)の応募は7月1日締切・終了。本選は2026年11月10-14日開催予定</span><span class="tag">国際音楽コンクール</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="long_thibaud_crespin_competition" data-save-name="ロン=ティボー国際コンクール（Concours Long-Thibaud-Crespin）" aria-pressed="false">☆</button></div>
 <p class="note"><a href="../koubo.html">← 全公募の一覧に戻る</a></p>
 </main>
 <footer><div class="foot-in">
 情報は2026-07-18に各公式サイト・募集要項で一次確認したものです（順次更新）。締切・条件は変動します。応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
 </div></footer>
 </body>
 </html>

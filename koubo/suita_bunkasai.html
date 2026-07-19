@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aratama-ship-it.github.io/art-koubo/assets/og-card.png">
 <style>
-:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;
+:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;--accent-soft:#eaeeff;--accent-line:#d7ddf6;
 --ok:#1a8f5a;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#c05621;--dl-bg:#fff4f0;
 --shadow:0 1px 3px rgba(20,20,40,.06),0 8px 24px rgba(20,20,40,.05)}
 *{box-sizing:border-box}
@@ -65,6 +65,32 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .gitem:hover{border-color:var(--accent);text-decoration:none}
 .gitem .t{font-weight:600;color:var(--ink)}
 .gitem .m{color:var(--sub);font-size:12.5px;margin-top:2px}
+.gitem-wrap{position:relative;margin:9px 0}
+.gitem-wrap .gitem{margin:0;padding-right:58px;min-height:62px}
+.save-toggle{min-width:44px;height:44px;border:1px solid var(--accent-line);border-radius:10px;background:#fff;color:var(--accent);font:inherit;font-weight:800;cursor:pointer;line-height:1}
+.save-toggle:hover{background:var(--accent-soft)}
+.save-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.save-toggle[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.save-toggle:disabled{opacity:.45;cursor:not-allowed}
+.save-card{position:absolute;top:8px;right:8px;z-index:1;font-size:21px}
+.save-inline{width:auto;padding:0 15px;margin:10px 0 2px;line-height:1.4}
+.saved-count{display:inline-grid;place-items:center;min-width:19px;height:19px;margin-left:3px;padding:0 5px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;vertical-align:middle}
+.nav a.on .saved-count{background:#fff}
+.saved-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.saved-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.saved-card h2{font-size:15px;margin:0 0 4px;line-height:1.55}
+.saved-card .saved-meta{font-size:12.5px;color:var(--sub);margin:0 0 10px}
+.saved-card .saved-fields{display:grid;grid-template-columns:78px 1fr;gap:5px 9px;margin:0 0 14px;font-size:13px}
+.saved-card .saved-fields dt{color:var(--sub)}
+.saved-card .saved-fields dd{margin:0}
+.saved-actions{display:flex;gap:8px;align-items:center;margin-top:auto}
+.saved-actions a{flex:1;text-align:center;padding:8px 10px;border-radius:9px;background:var(--accent-soft);font-size:13px;font-weight:700}
+.saved-actions .save-toggle{flex:0 0 44px;padding:0}
+.saved-tools{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:14px 0}
+.quiet-button{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--sub);font:inherit;padding:8px 13px;cursor:pointer}
+.quiet-button:hover{border-color:var(--accent);color:var(--accent)}
+.saved-empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:24px 18px;text-align:center;color:var(--sub)}
+@media(max-width:640px){.saved-grid{grid-template-columns:1fr}}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:11.5px;background:#f4f5fa;color:var(--sub);border-radius:6px;padding:3px 8px}
 .tag.dl{background:var(--dl-bg);color:var(--dl);font-weight:600}
@@ -116,15 +142,26 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
+<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>720)close()})})();
+</script>
+<script>
+(()=>{const key="monosashi-koubo-saved-v1";let available=true;
+const read=()=>{try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value.map(String):[]}catch(error){available=false;return[]}};
+const write=(ids)=>{try{localStorage.setItem(key,JSON.stringify(Array.from(new Set(ids.map(String)))))}catch(error){available=false}sync()};
+const sync=()=>{const ids=read();document.querySelectorAll('.saved-count').forEach((node)=>{node.textContent=String(ids.length)});document.querySelectorAll('[data-save-id]').forEach((button)=>{const saved=ids.includes(String(button.dataset.saveId));const name=button.dataset.saveName||'この項目';button.disabled=!available;button.setAttribute('aria-pressed',String(saved));button.setAttribute('aria-label',saved?name+'をあとで見るから外す':name+'をあとで見るに追加');button.textContent=button.classList.contains('save-inline')?(saved?'★ 保存済み':'☆ あとで見る'):(saved?'★':'☆')})};
+const toggle=(id)=>{const ids=read();const value=String(id);write(ids.includes(value)?ids.filter((x)=>x!==value):[...ids,value]);window.dispatchEvent(new CustomEvent('monosashi:saved'))};
+document.addEventListener('click',(event)=>{const button=event.target.closest('[data-save-id]');if(!button||button.disabled)return;event.preventDefault();toggle(button.dataset.saveId)});
+window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.addEventListener('monosashi:saved',sync);window.MonosashiSaved={get:read,set:write,toggle,sync};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
 </script>
 <main>
 <p class="note"><a href="../koubo.html">公募一覧</a> ／ <a href="../regions/osaka.html">大阪</a> ／ <a href="../money/unknown.html">費用は要確認</a></p>
 <h1>吹田市民文化祭 芸術芸能フェスティバル 出演者募集</h1>
 <p class="lede">公益財団法人吹田市文化振興事業団（メイシアター） ・ 大阪府吹田市</p>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">募集期間の詳細は未確認</span><span class="tag">市民文化祭 芸術芸能フェスティバル 出演者募集</span></div>
+<button class="save-toggle save-inline" type="button" data-save-id="suita_bunkasai" data-save-name="吹田市民文化祭 芸術芸能フェスティバル 出演者募集" aria-pressed="false">☆ あとで見る</button>
 <div class="card">
 <div class="kv"><div class="k">お金の向き</div><div class="v"><span class="tag m-unknown">費用は要確認</span> 参加費の有無は未確認</div></div>
 <div class="kv"><div class="k">締切・募集状況</div><div class="v">募集期間の詳細は未確認</div></div>
@@ -156,27 +193,32 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 <div class="gtags"><span class="tag dl">受付中</span><span class="tag">全国／日欧</span><span class="tag glabel">全国</span></div></a></div>
 <p style="margin:12px 0 0"><a class="cta sister" href="https://aratama-ship-it.github.io/stage-grants/regions/osaka.html" target="_blank" rel="noopener">大阪で使える助成金をすべて見る（助成ものさし）→</a></p>
 </div>
-<h2>大阪の他の公募</h2><a class="gitem" href="../koubo/oms_gikyoku.html">
+<h2>大阪の他の公募</h2><div class="gitem-wrap"><a class="gitem" href="../koubo/oms_gikyoku.html">
 <div class="t">OMS戯曲賞</div>
 <div class="m">大阪ガスネットワーク（Daigasグループ） ・ 大阪府</div>
-<div class="tags"><span class="tag m-reward">報酬・賞金あり</span><span class="tag">例年4月頃（第33回は4/10締切・終了）</span><span class="tag">戯曲賞（地域限定・公募）</span></div></a><a class="gitem" href="../koubo/wing_saien_hakurankai.html">
+<div class="tags"><span class="tag m-reward">報酬・賞金あり</span><span class="tag">例年4月頃（第33回は4/10締切・終了）</span><span class="tag">戯曲賞（地域限定・公募）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="oms_gikyoku" data-save-name="OMS戯曲賞" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/wing_saien_hakurankai.html">
 <div class="t">ウイング再演大博覧會 公募枠</div>
 <div class="m">ウイングフィールド株式会社 ・ 大阪府大阪市中央区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: 2026年5月〜10月の公演期間対象、枠(最大4団体)が埋まり次第締切</span><span class="tag">貸館企画（再演作品）公募枠</span></div></a><a class="gitem" href="../koubo/ogimachi_cube_lineup.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: 2026年5月〜10月の公演期間対象、枠(最大4団体)が埋まり次第締切</span><span class="tag">貸館企画（再演作品）公募枠</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="wing_saien_hakurankai" data-save-name="ウイング再演大博覧會 公募枠" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ogimachi_cube_lineup.html">
 <div class="t">扇町ミュージアムキューブ ラインナップ（提携事業）</div>
 <div class="m">扇町ミュージアムキューブ（運営：株式会社シアターワークショップ） ・ 大阪府大阪市北区</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">4期は2026年6月30日締切済み。次期(5期)は未発表</span><span class="tag">貸館提携公演企画公募</span></div></a><a class="gitem" href="../koubo/ogimachi_cube_u30.html">
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">4期は2026年6月30日締切済み。次期(5期)は未発表</span><span class="tag">貸館提携公演企画公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ogimachi_cube_lineup" data-save-name="扇町ミュージアムキューブ ラインナップ（提携事業）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ogimachi_cube_u30.html">
 <div class="t">扇町ミュージアムキューブ U-30応援企画</div>
 <div class="m">扇町ミュージアムキューブ ・ 大阪府大阪市北区</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">2026年6月30日締切済み。次回未発表</span><span class="tag">若手支援企画公募</span></div></a><a class="gitem" href="../koubo/osaka_engekisai.html">
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">2026年6月30日締切済み。次回未発表</span><span class="tag">若手支援企画公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ogimachi_cube_u30" data-save-name="扇町ミュージアムキューブ U-30応援企画" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/osaka_engekisai.html">
 <div class="t">大阪演劇祭（大阪国際文化芸術プロジェクト）</div>
 <div class="m">大阪府・大阪市（大阪国際文化芸術プロジェクト実行委員会） ・ 大阪府大阪市北区</div>
 <div class="tags"><span class="tag m-reward">報酬・賞金あり</span><span class="tag">2026年度は2025年8月29日〜10月5日で終了。例年8月末〜10月上旬頃</span><span class="tag">演劇祭 参加団体公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="osaka_engekisai" data-save-name="大阪演劇祭（大阪国際文化芸術プロジェクト）" aria-pressed="false">☆</button></div>
 <div class="discl">掲載情報は募集要項の明示内容に基づく参考情報で、採択・出演を保証するものではありません。応募前に必ず公式の最新要項をご確認ください。締切・条件・金額は変動します。</div>
 </main>
 <footer><div class="foot-in">
 情報は2026-07-18に各公式サイト・募集要項で一次確認したものです（順次更新）。締切・条件は変動します。応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
 </div></footer>
 </body>
 </html>

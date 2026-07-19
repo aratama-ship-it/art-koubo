@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aratama-ship-it.github.io/art-koubo/assets/og-card.png">
 <style>
-:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;
+:root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;--accent-soft:#eaeeff;--accent-line:#d7ddf6;
 --ok:#1a8f5a;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#c05621;--dl-bg:#fff4f0;
 --shadow:0 1px 3px rgba(20,20,40,.06),0 8px 24px rgba(20,20,40,.05)}
 *{box-sizing:border-box}
@@ -65,6 +65,32 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .gitem:hover{border-color:var(--accent);text-decoration:none}
 .gitem .t{font-weight:600;color:var(--ink)}
 .gitem .m{color:var(--sub);font-size:12.5px;margin-top:2px}
+.gitem-wrap{position:relative;margin:9px 0}
+.gitem-wrap .gitem{margin:0;padding-right:58px;min-height:62px}
+.save-toggle{min-width:44px;height:44px;border:1px solid var(--accent-line);border-radius:10px;background:#fff;color:var(--accent);font:inherit;font-weight:800;cursor:pointer;line-height:1}
+.save-toggle:hover{background:var(--accent-soft)}
+.save-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.save-toggle[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.save-toggle:disabled{opacity:.45;cursor:not-allowed}
+.save-card{position:absolute;top:8px;right:8px;z-index:1;font-size:21px}
+.save-inline{width:auto;padding:0 15px;margin:10px 0 2px;line-height:1.4}
+.saved-count{display:inline-grid;place-items:center;min-width:19px;height:19px;margin-left:3px;padding:0 5px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;vertical-align:middle}
+.nav a.on .saved-count{background:#fff}
+.saved-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.saved-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.saved-card h2{font-size:15px;margin:0 0 4px;line-height:1.55}
+.saved-card .saved-meta{font-size:12.5px;color:var(--sub);margin:0 0 10px}
+.saved-card .saved-fields{display:grid;grid-template-columns:78px 1fr;gap:5px 9px;margin:0 0 14px;font-size:13px}
+.saved-card .saved-fields dt{color:var(--sub)}
+.saved-card .saved-fields dd{margin:0}
+.saved-actions{display:flex;gap:8px;align-items:center;margin-top:auto}
+.saved-actions a{flex:1;text-align:center;padding:8px 10px;border-radius:9px;background:var(--accent-soft);font-size:13px;font-weight:700}
+.saved-actions .save-toggle{flex:0 0 44px;padding:0}
+.saved-tools{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:14px 0}
+.quiet-button{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--sub);font:inherit;padding:8px 13px;cursor:pointer}
+.quiet-button:hover{border-color:var(--accent);color:var(--accent)}
+.saved-empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:24px 18px;text-align:center;color:var(--sub)}
+@media(max-width:640px){.saved-grid{grid-template-columns:1fr}}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:11.5px;background:#f4f5fa;color:var(--sub);border-radius:6px;padding:3px 8px}
 .tag.dl{background:var(--dl-bg);color:var(--dl);font-weight:600}
@@ -126,15 +152,26 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 .tcard .m{color:var(--sub);font-size:12px;margin-top:3px}</style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
+<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a><a class="sister" href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">助成金は「助成ものさし」へ →</a></div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>720)close()})})();
+</script>
+<script>
+(()=>{const key="monosashi-koubo-saved-v1";let available=true;
+const read=()=>{try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value.map(String):[]}catch(error){available=false;return[]}};
+const write=(ids)=>{try{localStorage.setItem(key,JSON.stringify(Array.from(new Set(ids.map(String)))))}catch(error){available=false}sync()};
+const sync=()=>{const ids=read();document.querySelectorAll('.saved-count').forEach((node)=>{node.textContent=String(ids.length)});document.querySelectorAll('[data-save-id]').forEach((button)=>{const saved=ids.includes(String(button.dataset.saveId));const name=button.dataset.saveName||'この項目';button.disabled=!available;button.setAttribute('aria-pressed',String(saved));button.setAttribute('aria-label',saved?name+'をあとで見るから外す':name+'をあとで見るに追加');button.textContent=button.classList.contains('save-inline')?(saved?'★ 保存済み':'☆ あとで見る'):(saved?'★':'☆')})};
+const toggle=(id)=>{const ids=read();const value=String(id);write(ids.includes(value)?ids.filter((x)=>x!==value):[...ids,value]);window.dispatchEvent(new CustomEvent('monosashi:saved'))};
+document.addEventListener('click',(event)=>{const button=event.target.closest('[data-save-id]');if(!button||button.disabled)return;event.preventDefault();toggle(button.dataset.saveId)});
+window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.addEventListener('monosashi:saved',sync);window.MonosashiSaved={get:read,set:write,toggle,sync};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
 </script>
 <main>
 <p class="note"><a href="../koubo.html">公募一覧</a> ／ <a href="../regions/hiroshima.html">広島</a> ／ <a href="../money/paid.html">参加費あり</a></p>
 <h1>中国ブロック劇王決定戦（第12回）</h1>
 <p class="lede">広島演劇協会・日本劇作家協会中国支部（共催: 広島市文化財団アステールプラザ） ・ 広島県広島市中区（対象は中国地方全域）</p>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">第12回の募集は2026年3月1日〜4月30日で終了済み。大会本戦は2026年9月13日開催</span><span class="tag">戯曲・短編上演コンペティション（劇王決定戦形式）</span></div>
+<button class="save-toggle save-inline" type="button" data-save-id="chugoku_block_gekiou_ketteisen" data-save-name="中国ブロック劇王決定戦（第12回）" aria-pressed="false">☆ あとで見る</button>
 <div class="card">
 <div class="kv"><div class="k">お金の向き</div><div class="v"><span class="tag m-paid">参加費あり</span> 参加費一団体5,000円、加えてチケット販売ノルマ10枚(1,500円×10枚)を主催者側に納める必要あり。優勝者には手作りの「大しゃもじ」が贈呈される(金銭以外の賞品)</div></div>
 <div class="kv"><div class="k">締切・募集状況</div><div class="v">第12回の募集は2026年3月1日〜4月30日で終了済み。大会本戦は2026年9月13日開催</div></div>
@@ -188,27 +225,32 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 <div class="m">兵庫県豊岡市</div>
 <div class="tags"><span class="tag">共通: 演劇</span><span class="tag m-reward">報酬・賞金あり</span></div></a></div>
 </section>
-<h2>広島の他の公募</h2><a class="gitem" href="../koubo/engeki_inryoku_hiroshima.html">
+<h2>広島の他の公募</h2><div class="gitem-wrap"><a class="gitem" href="../koubo/engeki_inryoku_hiroshima.html">
 <div class="t">演劇引力廣島 プロデュース公演 キャスト・スタッフ募集</div>
 <div class="m">公益財団法人広島市文化財団 アステールプラザ ・ 広島県広島市中区</div>
-<div class="tags"><span class="tag m-reward">報酬・賞金あり</span><span class="tag">例年5〜6月頃(第23回は2026年6月10日必着で終了)。次回(第24回)は2027年春〜初夏頃と推測</span><span class="tag">劇場主催プロデュース公演・出演者/スタッフ公募オーディション</span></div></a><a class="gitem" href="../koubo/fukuyama_daidogei_2026.html">
+<div class="tags"><span class="tag m-reward">報酬・賞金あり</span><span class="tag">例年5〜6月頃(第23回は2026年6月10日必着で終了)。次回(第24回)は2027年春〜初夏頃と推測</span><span class="tag">劇場主催プロデュース公演・出演者/スタッフ公募オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="engeki_inryoku_hiroshima" data-save-name="演劇引力廣島 プロデュース公演 キャスト・スタッフ募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fukuyama_daidogei_2026.html">
 <div class="t">ふくやま大道芸2026 出演者募集</div>
 <div class="m">ふくやま大道芸実行委員会（福山市商店街振興組合連合会） ・ 広島県福山市</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">2026年版の募集は1月1日〜1月25日で終了済み(2026年5月開催、59組出演)。次回(2027年版)は2026年12月末〜2027年1月頃と推測</span><span class="tag">大道芸フェスティバル 出演者公募</span></div></a><a class="gitem" href="../koubo/onomichi_ongaku_geinousai_2026.html">
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">2026年版の募集は1月1日〜1月25日で終了済み(2026年5月開催、59組出演)。次回(2027年版)は2026年12月末〜2027年1月頃と推測</span><span class="tag">大道芸フェスティバル 出演者公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fukuyama_daidogei_2026" data-save-name="ふくやま大道芸2026 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/onomichi_ongaku_geinousai_2026.html">
 <div class="t">尾道市民音楽芸能祭2026 出演団体募集</div>
 <div class="m">尾道市文化協会（尾道市文化振興課内） ・ 広島県尾道市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月14日必着）</span><span class="tag">市民文化祭 出演団体公募</span></div></a><a class="gitem" href="../koubo/kenmin_bunkasai_hiroshima_shi.html">
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月14日必着）</span><span class="tag">市民文化祭 出演団体公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="onomichi_ongaku_geinousai_2026" data-save-name="尾道市民音楽芸能祭2026 出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kenmin_bunkasai_hiroshima_shi.html">
 <div class="t">けんみん文化祭ひろしま・広島市の祭典 出場団体募集</div>
 <div class="m">けんみん文化祭ひろしま・広島市の祭典実行委員会 ・ 広島県広島市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第12回(2025年版)は2024年12月〜2025年2月で終了済み(本番2025年5月)。次回の広島市開催・募集時期は未確認</span><span class="tag">県民文化祭（市大会）出演団体公募</span></div></a><a class="gitem" href="../koubo/hiroshima_dance_competition_2.html">
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag">第12回(2025年版)は2024年12月〜2025年2月で終了済み(本番2025年5月)。次回の広島市開催・募集時期は未確認</span><span class="tag">県民文化祭（市大会）出演団体公募</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kenmin_bunkasai_hiroshima_shi" data-save-name="けんみん文化祭ひろしま・広島市の祭典 出場団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/hiroshima_dance_competition_2.html">
 <div class="t">第2回ひろしまダンスコンペティション（ひろしま国際平和文化祭）</div>
 <div class="m">ひろしま国際平和文化祭実行委員会 ・ 広島県広島市</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">第2回の募集は2026年3月1日〜5月15日で終了済み。本戦・表彰式は2026年9月6日開催</span><span class="tag">ダンスコンペティション（フェスティバル併設）</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="hiroshima_dance_competition_2" data-save-name="第2回ひろしまダンスコンペティション（ひろしま国際平和文化祭）" aria-pressed="false">☆</button></div>
 <div class="discl">掲載情報は募集要項の明示内容に基づく参考情報で、採択・出演を保証するものではありません。応募前に必ず公式の最新要項をご確認ください。締切・条件・金額は変動します。</div>
 </main>
 <footer><div class="foot-in">
 情報は2026-07-18に各公式サイト・募集要項で一次確認したものです（順次更新）。締切・条件は変動します。応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
 </div></footer>
 </body>
 </html>
