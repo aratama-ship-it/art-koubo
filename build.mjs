@@ -424,19 +424,19 @@ ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}
   const deadlinePane = `
 <p class="note" style="margin:2px 0 12px">締切・募集状況から探す。締切済みも「次回募集の目安」として掲載しています。</p>
 <div class="regionbar">
-<a class="pref" href="calendar.html" style="font-size:14px;padding:9px 16px">いま受付中（${openKoubos.length}件）</a>
+<a class="pref" href="calendar.html" style="font-size:14px;padding:9px 16px">受付中（${openKoubos.length}件）</a>
 <a class="pref" href="calendar.html" style="font-size:14px;padding:9px 16px">締切済み・次回待ち（${closedN}件）</a>
 </div>
 <p><a class="cta" href="calendar.html">締切・募集状況の一覧を見る →</a></p>`;
   const body = `
 <div class="home-hero">
-<h1>あなたが応募できるアートの公募を、お金の向きつきで。</h1>
+<h1>あなたの身体表現を届けられる場所を、探しましょう。</h1>
 <p class="lede home-lede">演劇祭・レジデンス・戯曲賞・コンペなど、舞台芸術の出演・出展・滞在制作の公募を「参加費がかかる／無償／報酬・賞金が出る」まで一目で。${koubos.length}件を収録（無料）。</p>
 <div class="home-mascot"><img src="assets/mascot-body-art.png" width="512" height="512" alt="踊るものさしのキャラクター" fetchpriority="high" decoding="async"></div>
 </div>
 <div class="stat">
 <div><div class="n">${koubos.length}</div><div class="l">収録公募</div></div>
-<div><div class="n">${openKoubos.length}</div><div class="l">いま受付中</div></div>
+<div><div class="n">${openKoubos.length}</div><div class="l">受付中</div></div>
 <div><div class="n">${koubos.filter((k) => k.money === 'reward').length}</div><div class="l">報酬・賞金あり</div></div>
 </div>
 <p><a class="cta sister" href="${SISTER_URL}" target="_blank" rel="noopener">公募に通ったら、使える助成金を「助成ものさし」で探す →</a></p>
@@ -516,8 +516,8 @@ apply();
 {
   const closed = koubos.filter((k) => !k.dlOpen);
   const body = `<h1>締切・募集状況</h1>
-<p class="lede">「いま受付中」と「締切済み・次回募集の目安」を一覧。多くの公募は春〜初夏締切→秋〜翌冬本番のサイクルです。</p>
-<h2>いま受付中（${openKoubos.length}）</h2>
+<p class="lede">「受付中」と「締切済み・次回募集の目安」を一覧。多くの公募は春〜初夏締切→秋〜翌冬本番のサイクルです。</p>
+<h2>受付中（${openKoubos.length}）</h2>
 ${openKoubos.map((k) => gitem(k, '')).join('') || '<p class="note">現在受付中の公募はありません。</p>'}
 <h2>締切済み・次回募集待ち（${closed.length}）</h2>
 ${closed.map((k) => gitem(k, '')).join('')}`;
@@ -530,7 +530,7 @@ for (const b of BUCKETS) {
   const open = list.filter((k) => k.dlOpen);
   const body = `<h1>${b.label}のアート公募（${list.length}件）</h1>
 <p class="lede">${b.label}で応募できる舞台芸術の公募。締切・お金の向き・応募資格つき。</p>
-${open.length ? `<h2>いま受付中（${open.length}）</h2>${open.map((k) => gitem(k, '../')).join('')}` : ''}
+${open.length ? `<h2>受付中（${open.length}）</h2>${open.map((k) => gitem(k, '../')).join('')}` : ''}
 <h2>公募一覧</h2>
 ${list.map((k) => gitem(k, '../')).join('')}
 <p class="note"><a href="../koubo.html">← 全地域の一覧に戻る</a></p>`;
