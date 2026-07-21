@@ -551,6 +551,11 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .gcard .a{color:#147a4a;font-size:12px;font-weight:600;margin-top:3px}
 .gtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
 .tag.glabel{background:#e6f5ee;color:#1a8f5a;font-weight:600}
+@media(max-width:640px){
+  .grantbox{padding:15px 14px}
+  .grantbox .grow{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;overflow:visible;padding:2px 0 4px}
+  .grantbox .gcard{width:100%;min-width:0;flex:none}
+}
 .kv{margin:10px 0}.kv .k{font-size:12px;color:var(--sub)}.kv .v{font-size:15px}
 ul.cond{margin:8px 0 0;padding-left:0;list-style:none}
 ul.cond li{padding:7px 0;border-top:1px dashed var(--line);font-size:14px}
