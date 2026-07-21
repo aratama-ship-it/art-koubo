@@ -54,7 +54,9 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .lede{color:var(--sub);margin:0 0 6px}
 .source-notice{display:grid;grid-template-columns:132px minmax(0,1fr);gap:7px 16px;align-items:start;margin:0 0 18px;padding:12px 14px;border:1px solid var(--accent-line);border-left:4px solid var(--accent);border-radius:11px;background:var(--accent-soft);color:var(--sub);font-size:13px;line-height:1.65}
 .source-notice strong{color:var(--accent);font-size:13px;letter-spacing:.04em}
-@media(max-width:640px){.source-notice{grid-template-columns:1fr;gap:2px;padding:11px 12px}}
+.beta-notice{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:baseline;margin:0 0 18px;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;background:var(--card);color:var(--sub);font-size:13px;line-height:1.65}
+.beta-notice__label{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.1em}.beta-notice p{margin:0}.beta-notice a{color:var(--accent);font-weight:800;text-decoration-thickness:1.5px;text-underline-offset:2px}
+@media(max-width:640px){.source-notice{grid-template-columns:1fr;gap:2px;padding:11px 12px}.beta-notice{grid-template-columns:1fr;gap:1px;padding:10px 12px}}
 .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin:12px 0}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;display:block}
@@ -159,6 +161,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 <main>
 <aside class="source-notice" aria-label="掲載情報について"><strong>掲載情報について</strong><span>掲載情報は、主催者等の一次情報をもとに収集・整理しています。更新のタイミングにより、最新の情報と異なる場合があります。詳細・最新情報は、必ず各公式サイトでご確認ください。</span></aside>
+<aside class="beta-notice" aria-label="ベータ版について"><span class="beta-notice__label">BETA</span><p><strong>このウェブサイトは現在ベータ版です。</strong> ご要望・ご意見、掲載情報の訂正などがありましたら、<a href="https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform" target="_blank" rel="noopener">フォーム</a>よりご連絡いただけると幸いです。</p></aside>
 <p class="note"><a href="../koubo.html">公募一覧</a> ／ <a href="../regions/tokyo.html">東京</a> ／ <a href="../money/paid.html">参加費あり</a></p>
 <h1>新国立劇場演劇研修所 研修生募集</h1>
 <p class="lede">新国立劇場（日本芸術文化振興会） ・ 東京都渋谷区</p>

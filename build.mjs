@@ -9,7 +9,7 @@ const VERIFIED = '2026-07-18';
 const SITE_NAME = '身体芸術・公募ものさし';                         // 姉妹＝助成ものさし
 const BASE_URL = 'https://aratama-ship-it.github.io/art-koubo/';    // 公開後に確定
 const SISTER_URL = 'https://aratama-ship-it.github.io/stage-grants/'; // 助成ものさし
-const FORM_URL = 'https://forms.gle/sX3hTrCRdipxKsmCA';             // 情報訂正・お問い合わせ（当面 共通フォーム）
+const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform'; // ご意見・情報訂正 共通フォーム
 const SAVED_KEY = 'monosashi-koubo-saved-v1';
 const koubos = JSON.parse(readFileSync(join(ROOT, 'data/koubo.data.json'), 'utf8'));
 
@@ -430,7 +430,9 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .lede{color:var(--sub);margin:0 0 6px}
 .source-notice{display:grid;grid-template-columns:132px minmax(0,1fr);gap:7px 16px;align-items:start;margin:0 0 18px;padding:12px 14px;border:1px solid var(--accent-line);border-left:4px solid var(--accent);border-radius:11px;background:var(--accent-soft);color:var(--sub);font-size:13px;line-height:1.65}
 .source-notice strong{color:var(--accent);font-size:13px;letter-spacing:.04em}
-@media(max-width:640px){.source-notice{grid-template-columns:1fr;gap:2px;padding:11px 12px}}
+.beta-notice{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:baseline;margin:0 0 18px;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;background:var(--card);color:var(--sub);font-size:13px;line-height:1.65}
+.beta-notice__label{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.1em}.beta-notice p{margin:0}.beta-notice a{color:var(--accent);font-weight:800;text-decoration-thickness:1.5px;text-underline-offset:2px}
+@media(max-width:640px){.source-notice{grid-template-columns:1fr;gap:2px;padding:11px 12px}.beta-notice{grid-template-columns:1fr;gap:1px;padding:10px 12px}}
 .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin:12px 0}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;display:block}
@@ -535,6 +537,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 <main>
 <aside class="source-notice" aria-label="掲載情報について"><strong>掲載情報について</strong><span>掲載情報は、主催者等の一次情報をもとに収集・整理しています。更新のタイミングにより、最新の情報と異なる場合があります。詳細・最新情報は、必ず各公式サイトでご確認ください。</span></aside>
+<aside class="beta-notice" aria-label="ベータ版について"><span class="beta-notice__label">BETA</span><p><strong>このウェブサイトは現在ベータ版です。</strong> ご要望・ご意見、掲載情報の訂正などがありましたら、<a href="${FORM_URL}" target="_blank" rel="noopener">フォーム</a>よりご連絡いただけると幸いです。</p></aside>
 ${body}
 </main>
 <footer><div class="foot-in">
@@ -896,8 +899,8 @@ write('disclaimer.html', layout({
 <h2>免責</h2>
 <p>本サイトの掲載情報は、募集要項の明示内容に基づく参考情報です。採択・出演・受賞を保証するものではありません。応募の最終判断は必ず各主催の最新の募集要項でご確認ください。締切・金額・条件は変動します。「お金の向き」は主催が明示していない場合「費用は要確認」としています。</p>
 <h2>情報訂正の窓口</h2>
-<p>掲載内容の誤り・古い情報、新しい公募のご連絡は、下記フォームからお寄せください（当面は姉妹サイトと共通の窓口です）。確認のうえ速やかに修正します。匿名で送信できます。</p>
-<p><a class="cta" href="${FORM_URL}" target="_blank" rel="noopener">情報訂正・お問い合わせフォームを開く →</a></p>
+<p>掲載内容の誤り・古い情報、新しい公募のご連絡のほか、ご要望・ご意見も下記フォームからお寄せください（姉妹サイトと共通の窓口です）。確認のうえ速やかに修正します。匿名で送信できます。</p>
+<p><a class="cta" href="${FORM_URL}" target="_blank" rel="noopener">ご意見・情報訂正フォームを開く →</a></p>
 <h2>更新履歴</h2>
 <ul><li>${VERIFIED}: 舞台芸術の公募${koubos.length}件でプロトタイプ公開（助成ものさしの姉妹サイト）。</li></ul>
 </div>`,
