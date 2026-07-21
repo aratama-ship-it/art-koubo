@@ -54,6 +54,9 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 main{max-width:900px;margin:0 auto;padding:18px 14px 60px}
 h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .lede{color:var(--sub);margin:0 0 6px}
+.source-notice{display:grid;grid-template-columns:132px minmax(0,1fr);gap:7px 16px;align-items:start;margin:0 0 18px;padding:12px 14px;border:1px solid var(--accent-line);border-left:4px solid var(--accent);border-radius:11px;background:var(--accent-soft);color:var(--sub);font-size:13px;line-height:1.65}
+.source-notice strong{color:var(--accent);font-size:13px;letter-spacing:.04em}
+@media(max-width:640px){.source-notice{grid-template-columns:1fr;gap:2px;padding:11px 12px}}
 .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin:12px 0}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;display:block}
@@ -157,6 +160,7 @@ window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.a
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
 </script>
 <main>
+<aside class="source-notice" aria-label="掲載情報について"><strong>掲載情報について</strong><span>掲載情報は、主催者等の一次情報をもとに収集・整理しています。更新のタイミングにより、最新の情報と異なる場合があります。詳細・最新情報は、必ず各公式サイトでご確認ください。</span></aside>
 <p class="note"><a href="../koubo.html">公募一覧</a> ／ <a href="../regions/yamagata.html">山形</a> ／ <a href="../money/free.html">無償・施設提供</a></p>
 <h1>山形県民俗芸能等担い手確保応援事業（担い手参加者募集）</h1>
 <p class="lede">山形県（観光文化スポーツ部県民文化芸術振興課） ・ 山形県（米沢市・山形市・遊佐町・真室川町・白鷹町）</p>
@@ -205,7 +209,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="discl">掲載情報は募集要項の明示内容に基づく参考情報で、採択・出演を保証するものではありません。応募前に必ず公式の最新要項をご確認ください。締切・条件・金額は変動します。</div>
 </main>
 <footer><div class="foot-in">
-情報は2026-07-18に各公式サイト・募集要項で一次確認したものです（順次更新）。締切・条件は変動します。応募前に必ず各主催の最新の募集要項をご確認ください。<br>
+掲載情報の更新には時間差があります。締切・条件は変動するため、応募前に必ず各主催の最新の募集要項をご確認ください。<br>
 <a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://aratama-ship-it.github.io/stage-grants/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
 </div></footer>
 </body>

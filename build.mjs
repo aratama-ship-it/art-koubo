@@ -383,6 +383,9 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 main{max-width:900px;margin:0 auto;padding:18px 14px 60px}
 h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .lede{color:var(--sub);margin:0 0 6px}
+.source-notice{display:grid;grid-template-columns:132px minmax(0,1fr);gap:7px 16px;align-items:start;margin:0 0 18px;padding:12px 14px;border:1px solid var(--accent-line);border-left:4px solid var(--accent);border-radius:11px;background:var(--accent-soft);color:var(--sub);font-size:13px;line-height:1.65}
+.source-notice strong{color:var(--accent);font-size:13px;letter-spacing:.04em}
+@media(max-width:640px){.source-notice{grid-template-columns:1fr;gap:2px;padding:11px 12px}}
 .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin:12px 0}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;display:block}
@@ -486,10 +489,11 @@ window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.a
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
 </script>
 <main>
+<aside class="source-notice" aria-label="掲載情報について"><strong>掲載情報について</strong><span>掲載情報は、主催者等の一次情報をもとに収集・整理しています。更新のタイミングにより、最新の情報と異なる場合があります。詳細・最新情報は、必ず各公式サイトでご確認ください。</span></aside>
 ${body}
 </main>
 <footer><div class="foot-in">
-情報は${VERIFIED}に各公式サイト・募集要項で一次確認したものです（順次更新）。締切・条件は変動します。応募前に必ず各主催の最新の募集要項をご確認ください。<br>
+掲載情報の更新には時間差があります。締切・条件は変動するため、応募前に必ず各主催の最新の募集要項をご確認ください。<br>
 <a href="${rel}about.html">このサイトについて</a> ・ <a href="${rel}saved.html">あとで見る</a> ・ <a href="${rel}privacy.html">プライバシー</a> ・ <a href="${rel}disclaimer.html">免責事項・情報訂正</a> ・ <a href="${SISTER_URL}" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
 </div></footer>
 </body>
@@ -781,7 +785,7 @@ write('about.html', layout({
 <li>各公募に出典（公式ページ）と最終確認日を明記し、募集要項の全文転載はせず事実項目のみを掲載します。</li>
 </ul>
 <h2>情報源と更新</h2>
-<p>掲載情報は各主催の公式サイト・募集要項を一次確認したものです（最終確認: ${VERIFIED}）。多くの公募は毎年募集時期が変わるため順次更新しますが、応募前には必ず各主催の最新要項をご確認ください。</p>
+<p>掲載情報は各主催の公式サイト・募集要項をもとに収集・整理しています。最終確認日は各公募の詳細ページに表示していますが、更新には時間差があります。応募前には必ず各主催の最新要項をご確認ください。</p>
 <p>掲載内容の誤り・更新・新しい公募のご連絡は <a href="disclaimer.html">情報訂正の窓口</a> へ。</p>
 </div>`,
   extraCss: `.mission{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:14px;align-items:end;overflow:hidden;background:#eef3ff;border-left:4px solid var(--accent);border-radius:12px;padding:16px 18px;margin:12px 0 24px}
