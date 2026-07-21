@@ -149,8 +149,17 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 .searchline button{border:0;border-radius:10px;padding:0 17px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
 .search-help,.search-status{font-size:12px;color:var(--sub);margin:7px 0 0}
 .search-status{font-weight:600;color:var(--accent)}
+.search-tags{border:0;margin:14px 0 0;padding:0}
+.search-tags legend{padding:0;font-size:12px;font-weight:700;color:var(--sub)}
+.search-tag-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.search-tag{display:inline-flex;align-items:center;gap:6px;border:1px solid #cfd5eb;border-radius:8px;padding:7px 9px;background:#f7f8ff;color:#405078;font:inherit;font-size:12.5px;font-weight:650;line-height:1.25;cursor:pointer}
+a.search-tag{color:#405078}
+.search-tag:hover{border-color:var(--accent);color:var(--accent);background:#f0f3ff;text-decoration:none}
+.search-tag[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:0 1px 0 rgba(51,85,224,.2)}
+.search-tag-count{font-size:11px;font-variant-numeric:tabular-nums;opacity:.82}
 .search-empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:18px;margin:14px 0;color:var(--sub)}
 .search-group[hidden],.gitem-wrap[hidden],.search-empty[hidden]{display:none!important}
+@media(max-width:520px){.searchline{flex-direction:column}.searchline button{min-height:42px}.search-tag{font-size:12px;padding:7px 8px}}
 .home-hero{display:grid;grid-template-columns:minmax(0,1fr) 188px;grid-template-rows:auto auto auto;align-items:center;column-gap:24px;min-height:190px;padding:4px 4px 8px 0}
 .home-site-name{grid-column:1;grid-row:1;align-self:end;display:flex;align-items:center;gap:9px;margin:4px 0 0;color:var(--accent);font-size:17px;font-weight:800;letter-spacing:.045em}
 .home-site-name::before{content:"";width:25px;height:3px;border-radius:2px;background:var(--accent);flex:0 0 auto}
@@ -214,6 +223,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <label for="koubo-q">名前・地域・ジャンル・応募条件からフリーワード検索</label>
 <div class="searchline"><input id="koubo-q" name="q" type="search" autocomplete="off" placeholder="例：兵庫 9月 演劇" aria-describedby="koubo-search-help"><button type="submit">探す</button></div>
 <p class="search-help" id="koubo-search-help">スペースで区切ると、すべての言葉を含む公募に絞れます。</p>
+<fieldset class="search-tags"><legend>募集の機会からタグで探す（複数選択可）</legend><div class="search-tag-list"><a class="search-tag" href="koubo.html?tag=regional-festival" aria-label="地域フェスティバル・出演者公募（114件）。地域の演劇祭・文化祭などへの出演・参加を探す" title="地域の演劇祭・文化祭などへの出演・参加を探す">地域フェスティバル・出演者公募 <span class="search-tag-count" aria-hidden="true">114</span></a><a class="search-tag" href="koubo.html?tag=event-performance" aria-label="イベント出演（109件）。イベント・舞台への出演者や出演団体の募集を探す" title="イベント・舞台への出演者や出演団体の募集を探す">イベント出演 <span class="search-tag-count" aria-hidden="true">109</span></a><a class="search-tag" href="koubo.html?tag=choreographer-development" aria-label="振付家育成プログラム（9件）。振付家・振付作品の育成や発表機会を探す" title="振付家・振付作品の育成や発表機会を探す">振付家育成プログラム <span class="search-tag-count" aria-hidden="true">9</span></a><a class="search-tag" href="koubo.html?tag=residency" aria-label="AIR・滞在制作（15件）。アーティスト・イン・レジデンスや滞在制作を探す" title="アーティスト・イン・レジデンスや滞在制作を探す">AIR・滞在制作 <span class="search-tag-count" aria-hidden="true">15</span></a></div></fieldset>
 
 </form>
 

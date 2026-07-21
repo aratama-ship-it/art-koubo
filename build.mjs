@@ -121,11 +121,52 @@ const BUCKETS = [
 ];
 const openKoubos = orderedKoubos.filter((k) => k.dlOpen);
 
+// ---- 検索用の募集形式タグ ----
+// タグは既存の名称・種別だけから判定する。応募条件や注記を推測で分類しない。
+const searchTagTextOf = (k) => `${k.name || ''} ${k.type || ''}`.normalize('NFKC').toLowerCase();
+const SEARCH_TAGS = [
+  {
+    key: 'regional-festival',
+    label: '地域フェスティバル・出演者公募',
+    description: '地域の演劇祭・文化祭などへの出演・参加を探す',
+    matches: (text) => /演劇祭|芸術祭|文化祭|フェスティバル|フェスタ|まつり|祭典|カーニバル|コンベンション/.test(text)
+      && /出演|参加|出展|公募|オーディション|オンステージ|ステージ|ショーケース|パフォーマー/.test(text),
+  },
+  {
+    key: 'event-performance',
+    label: 'イベント出演',
+    description: 'イベント・舞台への出演者や出演団体の募集を探す',
+    matches: (text) => /イベント出演|出演者|出演チーム|出演団体|出演オーディション|出演者募集|パフォーマー|オンステージ|ステージ出演|出演募集/.test(text),
+  },
+  {
+    key: 'choreographer-development',
+    label: '振付家育成プログラム',
+    description: '振付家・振付作品の育成や発表機会を探す',
+    matches: (text) => /振付家|振付|振り付け|コレオグラファ|choreograph/.test(text),
+  },
+  {
+    key: 'residency',
+    label: 'AIR・滞在制作',
+    description: 'アーティスト・イン・レジデンスや滞在制作を探す',
+    matches: (text) => /\bair\b|アーティスト・イン・レジデンス|滞在制作|レジデンス|residen/.test(text),
+  },
+];
+const SEARCH_TAG_BY_KEY = new Map(SEARCH_TAGS.map((tag) => [tag.key, tag]));
+const searchTagsOf = (k) => {
+  const text = searchTagTextOf(k);
+  return SEARCH_TAGS.filter((tag) => tag.matches(text)).map((tag) => tag.key);
+};
+const SEARCH_TAG_COUNTS = new Map(SEARCH_TAGS.map((tag) => [
+  tag.key,
+  koubos.filter((k) => tag.matches(searchTagTextOf(k))).length,
+]));
+
 // フリーワード検索用。表示カードには、見えている項目だけでなく応募条件・注記も検索語として持たせる。
 function searchTextOf(k) {
+  const tagLabels = searchTagsOf(k).map((key) => SEARCH_TAG_BY_KEY.get(key).label);
   const raw = [
     k.name, k.organizer, k.region, k.deadline, k.type, k.moneyLabel,
-    ...(k.genres || []), ...(k.conditions || []), k.note,
+    ...(k.genres || []), ...(k.conditions || []), k.note, ...tagLabels,
   ].filter(Boolean).join(' ').normalize('NFKC').toLowerCase();
   // 「9/18」と「9月18日」のどちらで入力しても拾えるよう、検索専用の別表記を加える。
   const dateAliases = [...raw.matchAll(/(\d{1,2})\/(\d{1,2})/g)].map((m) => `${m[1]}月${m[2]}日`).join(' ');
@@ -229,8 +270,17 @@ const SEARCH_CSS = `
 .searchline button{border:0;border-radius:10px;padding:0 17px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
 .search-help,.search-status{font-size:12px;color:var(--sub);margin:7px 0 0}
 .search-status{font-weight:600;color:var(--accent)}
+.search-tags{border:0;margin:14px 0 0;padding:0}
+.search-tags legend{padding:0;font-size:12px;font-weight:700;color:var(--sub)}
+.search-tag-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.search-tag{display:inline-flex;align-items:center;gap:6px;border:1px solid #cfd5eb;border-radius:8px;padding:7px 9px;background:#f7f8ff;color:#405078;font:inherit;font-size:12.5px;font-weight:650;line-height:1.25;cursor:pointer}
+a.search-tag{color:#405078}
+.search-tag:hover{border-color:var(--accent);color:var(--accent);background:#f0f3ff;text-decoration:none}
+.search-tag[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:0 1px 0 rgba(51,85,224,.2)}
+.search-tag-count{font-size:11px;font-variant-numeric:tabular-nums;opacity:.82}
 .search-empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:18px;margin:14px 0;color:var(--sub)}
-.search-group[hidden],.gitem-wrap[hidden],.search-empty[hidden]{display:none!important}`;
+.search-group[hidden],.gitem-wrap[hidden],.search-empty[hidden]{display:none!important}
+@media(max-width:520px){.searchline{flex-direction:column}.searchline button{min-height:42px}.search-tag{font-size:12px;padding:7px 8px}}`;
 
 const HOME_CSS = `
 .home-hero{display:grid;grid-template-columns:minmax(0,1fr) 188px;grid-template-rows:auto auto auto;align-items:center;column-gap:24px;min-height:190px;padding:4px 4px 8px 0}
@@ -505,11 +555,26 @@ function statusTags(k) {
   return t.join('');
 }
 function gitem(k, rel, searchable = false) {
-  return `<div class="gitem-wrap"${searchable ? ` data-search="${esc(searchTextOf(k))}"` : ''}><a class="gitem" href="${rel}koubo/${k.id}.html">
+  const searchAttrs = searchable
+    ? ` data-search="${esc(searchTextOf(k))}" data-search-tags="${esc(searchTagsOf(k).join(' '))}"`
+    : '';
+  return `<div class="gitem-wrap"${searchAttrs}><a class="gitem" href="${rel}koubo/${k.id}.html">
 <div class="t">${esc(k.name)}</div>
 <div class="m">${esc(k.organizer)} ・ ${esc(k.region)}</div>
 <div class="tags">${statusTags(k)}</div></a>
 <button class="save-toggle save-card" type="button" data-save-id="${esc(k.id)}" data-save-name="${esc(k.name)}" aria-pressed="false">☆</button></div>`;
+}
+
+function searchTagControls({ action, live }) {
+  const controls = SEARCH_TAGS.map((tag) => {
+    const count = SEARCH_TAG_COUNTS.get(tag.key);
+    const label = `${tag.label}（${count}件）。${tag.description}`;
+    if (live) {
+      return `<button class="search-tag" type="button" data-search-tag="${esc(tag.key)}" aria-pressed="false" aria-label="${esc(label)}" title="${esc(tag.description)}">${esc(tag.label)} <span class="search-tag-count" aria-hidden="true">${count}</span></button>`;
+    }
+    return `<a class="search-tag" href="${esc(action)}?tag=${encodeURIComponent(tag.key)}" aria-label="${esc(label)}" title="${esc(tag.description)}">${esc(tag.label)} <span class="search-tag-count" aria-hidden="true">${count}</span></a>`;
+  }).join('');
+  return `<fieldset class="search-tags"><legend>募集の機会からタグで探す（複数選択可）</legend><div class="search-tag-list">${controls}</div></fieldset>`;
 }
 
 function searchForm({ action = 'koubo.html', live = false } = {}) {
@@ -517,6 +582,7 @@ function searchForm({ action = 'koubo.html', live = false } = {}) {
 <label for="koubo-q${live ? '-live' : ''}">名前・地域・ジャンル・応募条件からフリーワード検索</label>
 <div class="searchline"><input id="koubo-q${live ? '-live' : ''}" name="q" type="search" autocomplete="off" placeholder="例：兵庫 9月 演劇" aria-describedby="koubo-search-help${live ? '-live' : ''}"><button type="submit">探す</button></div>
 <p class="search-help" id="koubo-search-help${live ? '-live' : ''}">スペースで区切ると、すべての言葉を含む公募に絞れます。</p>
+${searchTagControls({ action, live })}
 ${live ? '<p class="search-status" id="koubo-search-status" aria-live="polite"></p>' : ''}
 </form>`;
 }
@@ -630,7 +696,7 @@ document.getElementById('tab-'+b.dataset.tab).classList.remove('hidden');
   let body = `<h1>公募を探す（${koubos.length}件）</h1>
 <p class="lede">開催地別に全公募を掲載。地域内では受付中・締切が近い順に並び、各ページで締切・お金の向き・応募資格・出典を確認できます。</p>
 ${searchForm({ live: true })}
-<div class="search-empty" id="koubo-search-empty" hidden>該当する公募がありません。地域名・月・ジャンルなど、言葉を短くしてお試しください。</div>`;
+<div class="search-empty" id="koubo-search-empty" hidden>該当する公募がありません。タグを外すか、地域名・月・ジャンルなど、言葉を短くしてお試しください。</div>`;
   for (const b of BUCKETS) {
     const list = orderedKoubos.filter((k) => bucketOf(k.region).key === b.key);
     if (!list.length) continue;
@@ -644,28 +710,45 @@ var status=document.getElementById('koubo-search-status');
 var empty=document.getElementById('koubo-search-empty');
 var items=Array.prototype.slice.call(document.querySelectorAll('.search-group .gitem-wrap'));
 var groups=Array.prototype.slice.call(document.querySelectorAll('.search-group'));
+var tagButtons=Array.prototype.slice.call(document.querySelectorAll('[data-search-tag]'));
+var knownTags=${JSON.stringify(SEARCH_TAGS.map((tag) => tag.key))};
+var activeTags=(new URLSearchParams(location.search).get('tag')||'').split(',').filter(function(tag){return knownTags.indexOf(tag)!==-1;});
 function norm(s){return String(s||'').normalize('NFKC').toLowerCase().trim();}
+function syncTagButtons(){tagButtons.forEach(function(button){button.setAttribute('aria-pressed',String(activeTags.indexOf(button.getAttribute('data-search-tag'))!==-1));});}
+function updateUrl(){
+  var url=new URL(location.href);var q=input.value.trim();
+  if(q)url.searchParams.set('q',q);else url.searchParams.delete('q');
+  if(activeTags.length)url.searchParams.set('tag',activeTags.join(','));else url.searchParams.delete('tag');
+  history.replaceState(null,'',url.pathname+url.search+url.hash);
+}
 function apply(){
   var terms=norm(input.value).split(/\\s+/).filter(Boolean);
   var shown=0;
   items.forEach(function(item){
     var hay=norm(item.getAttribute('data-search'));
-    var match=terms.every(function(term){return hay.indexOf(term)!==-1;});
+    var itemTags=(item.getAttribute('data-search-tags')||'').split(/\\s+/).filter(Boolean);
+    var textMatch=terms.every(function(term){return hay.indexOf(term)!==-1;});
+    var tagMatch=!activeTags.length||activeTags.some(function(tag){return itemTags.indexOf(tag)!==-1;});
+    var match=textMatch&&tagMatch;
     item.hidden=!match;if(match)shown++;
   });
   groups.forEach(function(group){group.hidden=!group.querySelector('.gitem-wrap:not([hidden])');});
   empty.hidden=shown!==0;
-  status.textContent=terms.length ? shown+'件見つかりました' : '${koubos.length}件すべて表示しています';
+  status.textContent=(terms.length||activeTags.length) ? shown+'件見つかりました' : '${koubos.length}件すべて表示しています';
 }
 var initial=new URLSearchParams(location.search).get('q')||'';
 input.value=initial;
 input.addEventListener('input',apply);
+tagButtons.forEach(function(button){button.addEventListener('click',function(){
+  var tag=button.getAttribute('data-search-tag');
+  activeTags=activeTags.indexOf(tag)!==-1 ? activeTags.filter(function(value){return value!==tag;}) : activeTags.concat(tag);
+  syncTagButtons();updateUrl();apply();
+});});
 form.addEventListener('submit',function(e){
   e.preventDefault();
-  var url=new URL(location.href);var q=input.value.trim();
-  if(q)url.searchParams.set('q',q);else url.searchParams.delete('q');
-  history.replaceState(null,'',url.pathname+url.search+url.hash);apply();
+  updateUrl();apply();
 });
+syncTagButtons();
 apply();
 })();
 </script>`;
