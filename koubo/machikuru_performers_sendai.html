@@ -41,9 +41,11 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .menu-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .nav a{padding:6px 10px;border-radius:8px;font-size:13.5px;color:var(--sub);white-space:nowrap}
 .nav a.on{background:#eaeeff;color:var(--accent)}
+.nav a.brand{display:inline-flex;align-items:center;min-height:44px;padding:6px 0;font-size:17px;color:var(--ink)}
+.nav a.brand:hover{color:var(--accent);text-decoration:none}
 @media(max-width:900px){
   .nav-in{padding:7px 12px;gap:8px;flex-wrap:wrap}
-  .brand{margin-right:auto;max-width:calc(100% - 56px);font-size:15px;line-height:1.4}
+  .nav a.brand{margin-right:auto;max-width:calc(100% - 56px);font-size:15px;line-height:1.4}
   .menu-toggle{display:flex;flex:0 0 44px}
   .nav-links{display:none;flex:0 0 100%;width:100%;flex-direction:column;align-items:stretch;gap:2px;padding:8px 0 3px;border-top:1px solid var(--line)}
   .nav-links.is-open{display:flex}
@@ -130,7 +132,14 @@ ul.cond{margin:8px 0 0;padding-left:0;list-style:none}
 ul.cond li{padding:7px 0;border-top:1px dashed var(--line);font-size:14px}
 ul.cond li:first-child{border-top:none}
 .note{color:var(--sub);font-size:13px;margin-top:8px}
-.src{margin-top:12px;font-size:13px}
+.src{display:flex;align-items:center;gap:12px;min-height:64px;margin-top:16px;padding:12px 14px;border:1.5px solid var(--accent-line);border-left:4px solid var(--accent);border-radius:12px;background:#fff;box-shadow:var(--shadow);color:var(--ink)}
+.src:hover{border-color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.src:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.src-badge{flex:0 0 auto;border-radius:7px;padding:4px 7px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.05em}
+.src-copy{flex:1;min-width:0}
+.src-title{display:block;color:var(--accent);font-size:15px;font-weight:800;line-height:1.45}
+.src-name{display:block;margin-top:1px;color:var(--sub);font-size:12.5px;line-height:1.5}
+.src-arrow{flex:0 0 auto;color:var(--accent);font-size:18px;font-weight:800}
 .verified{color:var(--sub);font-size:12px;margin-top:6px}
 .discl{font-size:12px;color:var(--sub);background:#fff;border:1px dashed var(--line);border-radius:10px;padding:11px 13px;margin:16px 0}
 footer{border-top:1px solid var(--line);background:#fff;margin-top:30px}
@@ -151,7 +160,7 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><span class="brand">身体芸術・公募ものさし</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a></div></div></div>
+<div class="nav"><div class="nav-in"><a class="brand" href="../index.html" aria-label="身体芸術・公募ものさし ホームへ">身体芸術・公募ものさし</a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a></div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>900)close()})})();
 </script>
@@ -179,7 +188,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="kv"><div class="k">種別・ジャンル</div><div class="v">大道芸パフォーマー認定・ライセンス制度／大道芸・パフォーマンス</div></div>
 <div class="kv"><div class="k">主な応募条件</div><ul class="cond"><li>事務局による審査(1次・2次)に合格する必要あり</li><li>ライセンスは「指定の場所・時間」での活動許可</li></ul></div>
 <p class="note">ℹ️ 審査制のライセンス制度であることは確認済み。参加費・収入モデル・直近の募集時期は未確認、事務局(022-395-6101)へ要確認。</p>
-<div class="src">📄 出典: <a href="https://machi-kuru.com/performers/about" target="_blank" rel="noopener">仙台市中心部商店街活性化協議会 まちくるパフォーマーズ仙台事務局 公式ページ</a></div>
+<a class="src" href="https://machi-kuru.com/performers/about" target="_blank" rel="noopener"><span class="src-badge">公式</span><span class="src-copy"><strong class="src-title">出典はこちら</strong><span class="src-name">仙台市中心部商店街活性化協議会 まちくるパフォーマーズ仙台事務局 公式ページ</span></span><span class="src-arrow" aria-hidden="true">↗</span></a>
 <p class="verified">最終確認: 2026-07-18（公式ページで一次確認）</p>
 </div>
 <div class="grantbox">
