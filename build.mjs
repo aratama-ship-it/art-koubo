@@ -7,8 +7,8 @@ import { fileURLToPath } from 'node:url';
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const VERIFIED = '2026-07-18';
 const SITE_NAME = '身体芸術・公募ものさし';                         // 姉妹＝助成ものさし
-const BASE_URL = 'https://aratama-ship-it.github.io/art-koubo/';    // 公開後に確定
-const SISTER_URL = 'https://aratama-ship-it.github.io/stage-grants/'; // 助成ものさし
+const BASE_URL = 'https://koubo.art-monosashi.com/';
+const SISTER_URL = 'https://joseikin.art-monosashi.com/'; // 助成ものさし
 const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform'; // ご意見・情報訂正 共通フォーム
 const SAVED_KEY = 'monosashi-koubo-saved-v1';
 const koubos = JSON.parse(readFileSync(join(ROOT, 'data/koubo.data.json'), 'utf8'));
@@ -122,27 +122,33 @@ const BUCKETS = [
 const openKoubos = orderedKoubos.filter((k) => k.dlOpen);
 
 // ---- 検索用の募集形式タグ ----
+// 元データの詳細な「種別」は情報として保持し、一覧・検索では共通語彙へまとめる。
 // タグは既存の名称・種別だけから判定する。応募条件や注記を推測で分類しない。
 const searchTagTextOf = (k) => `${k.name || ''} ${k.type || ''}`.normalize('NFKC').toLowerCase();
 const SEARCH_TAGS = [
   {
-    key: 'regional-festival',
-    label: '地域フェスティバル・出演者公募',
-    description: '地域の演劇祭・文化祭などへの出演・参加を探す',
-    matches: (text) => /演劇祭|芸術祭|文化祭|フェスティバル|フェスタ|まつり|祭典|カーニバル|コンベンション/.test(text)
-      && /出演|参加|出展|公募|オーディション|オンステージ|ステージ|ショーケース|パフォーマー/.test(text),
+    key: 'festival-performance',
+    label: 'フェス・イベント出演',
+    description: '演劇祭・文化祭・地域イベントなどへの出演や参加を探す',
+    matches: (text) => /演劇祭|芸術祭|文化祭|音楽祭|フェス|まつり|祭り|祭典|カーニバル|コンベンション|イベント|オンステージ|ショーケース|ステージ|舞台発表|発表会|公演出演|出演者|出演団体|出演チーム|パフォーマー|参加団体|参加者募集|市民参加型/.test(text),
   },
   {
-    key: 'event-performance',
-    label: 'イベント出演',
-    description: 'イベント・舞台への出演者や出演団体の募集を探す',
-    matches: (text) => /イベント出演|出演者|出演チーム|出演団体|出演オーディション|出演者募集|パフォーマー|オンステージ|ステージ出演|出演募集/.test(text),
+    key: 'audition',
+    label: 'オーディション',
+    description: '出演者・演奏家などを審査で選ぶ募集を探す',
+    matches: (text) => /オーディション|audition|キャスト選考|出演者選考/.test(text),
   },
   {
-    key: 'choreographer-development',
-    label: '振付家育成プログラム',
-    description: '振付家・振付作品の育成や発表機会を探す',
-    matches: (text) => /振付家|振付|振り付け|コレオグラファ|choreograph/.test(text),
+    key: 'competition',
+    label: 'コンクール・コンペ',
+    description: '上演・演奏・ダンスなどの競技会や賞を探す',
+    matches: (text) => /コンクール|コンペ|コンテスト|競技会|競演|大会|アワード|賞(?:（|\(|$|・)|選考会|審査型/.test(text),
+  },
+  {
+    key: 'scripts-works',
+    label: '戯曲・脚本・作品募集',
+    description: '戯曲・脚本・台本や上演作品そのものの募集を探す',
+    matches: (text) => /戯曲|脚本|台本|シナリオ|作品公募|作品募集|創作作品|文学賞/.test(text),
   },
   {
     key: 'residency',
@@ -150,16 +156,65 @@ const SEARCH_TAGS = [
     description: 'アーティスト・イン・レジデンスや滞在制作を探す',
     matches: (text) => /\bair\b|アーティスト・イン・レジデンス|滞在制作|レジデンス|residen/.test(text),
   },
+  {
+    key: 'development',
+    label: '育成・研修',
+    description: '育成プログラム・研修・講座・ワークショップを探す',
+    matches: (text) => /育成|養成|研修|ワークショップ|講座|アカデミー|研究所|スクール|インテンシブ|フェローシップ/.test(text),
+  },
+  {
+    key: 'choreographer',
+    label: '振付家向け',
+    description: '振付家・振付作品を対象とする育成や発表機会を探す',
+    matches: (text) => /振付家|振付|振り付け|コレオグラファ|choreograph/.test(text),
+  },
+  {
+    key: 'venue-support',
+    label: '会場・創作支援',
+    description: '劇場・稽古場の提供や、公演・制作の支援枠を探す',
+    matches: (text) => /施設利用|利用団体|貸館|会場提供|稽古場|スタジオ|創造支援|創作支援|制作支援|公演支援|利用支援|施設提供|利用料割引|団体支援|共催事業|提携公演|共同製作|連携事業/.test(text),
+  },
+  {
+    key: 'member-recruitment',
+    label: '団員・メンバー募集',
+    description: '劇団・楽団・カンパニーなどの継続メンバー募集を探す',
+    matches: (text) => /団員募集|劇団員|楽団員|合唱団員|メンバー募集|会員募集|団体加入|カンパニー・メンバー/.test(text),
+  },
+  {
+    key: 'registration-license',
+    label: '登録・ライセンス',
+    description: '出演者登録・アーティストバンク・認定制度を探す',
+    matches: (text) => /登録制|参加事業登録|人材登録|人材バンク|アーティストバンク|パフォーマーバンク|ライセンス|認定制度|出演者登録/.test(text),
+  },
+  {
+    key: 'project-open-call',
+    label: '企画・プロジェクト公募',
+    description: '公演企画・自主企画・共同創作などの提案募集を探す',
+    matches: (text) => /企画公募|企画募集|公演企画|企画提案|自主企画|持ち込み企画|自主上演枠|新人公募|公募プログラム|共同創作|共同制作|プロジェクト公募|芸術監督|ディレクター公募/.test(text),
+  },
+  {
+    key: 'other',
+    label: 'その他',
+    description: '上の共通タグに当てはまらない公募を探す',
+    matches: () => false,
+  },
 ];
 const SEARCH_TAG_BY_KEY = new Map(SEARCH_TAGS.map((tag) => [tag.key, tag]));
 const searchTagsOf = (k) => {
   const text = searchTagTextOf(k);
-  return SEARCH_TAGS.filter((tag) => tag.matches(text)).map((tag) => tag.key);
+  const keys = SEARCH_TAGS.filter((tag) => tag.key !== 'other' && tag.matches(text)).map((tag) => tag.key);
+  return keys.length ? keys : ['other'];
 };
 const SEARCH_TAG_COUNTS = new Map(SEARCH_TAGS.map((tag) => [
   tag.key,
-  koubos.filter((k) => tag.matches(searchTagTextOf(k))).length,
+  koubos.filter((k) => searchTagsOf(k).includes(tag.key)).length,
 ]));
+const PRIMARY_TAG_PRIORITY = ['residency', 'scripts-works', 'audition', 'competition', 'development', 'venue-support', 'member-recruitment', 'registration-license', 'project-open-call', 'festival-performance', 'choreographer', 'other'];
+function primarySearchTagOf(k) {
+  const keys = searchTagsOf(k);
+  const key = PRIMARY_TAG_PRIORITY.find((candidate) => keys.includes(candidate)) || 'other';
+  return SEARCH_TAG_BY_KEY.get(key);
+}
 
 // フリーワード検索用。表示カードには、見えている項目だけでなく応募条件・注記も検索語として持たせる。
 function searchTextOf(k) {
@@ -552,10 +607,11 @@ ${body}
 function statusTags(k) {
   const t = [];
   const m = moneyOf(k);
+  const primaryTag = primarySearchTagOf(k);
   t.push(`<span class="tag ${m.cls}">${m.label}</span>`);
   if (k.dlOpen) t.push(`<span class="tag dl">締切: ${esc(k.deadline)}</span>`);
   else t.push(`<span class="tag">${esc(k.deadline)}</span>`);
-  t.push(`<span class="tag">${esc(k.type)}</span>`);
+  t.push(`<span class="tag">${esc(primaryTag.label)}</span>`);
   return t.join('');
 }
 function gitem(k, rel, searchable = false) {
@@ -570,7 +626,7 @@ function gitem(k, rel, searchable = false) {
 }
 
 function searchTagControls({ action, live }) {
-  const controls = SEARCH_TAGS.map((tag) => {
+  const controls = SEARCH_TAGS.filter((tag) => SEARCH_TAG_COUNTS.get(tag.key) > 0).map((tag) => {
     const count = SEARCH_TAG_COUNTS.get(tag.key);
     const label = `${tag.label}（${count}件）。${tag.description}`;
     if (live) {
@@ -578,7 +634,7 @@ function searchTagControls({ action, live }) {
     }
     return `<a class="search-tag" href="${esc(action)}?tag=${encodeURIComponent(tag.key)}" aria-label="${esc(label)}" title="${esc(tag.description)}">${esc(tag.label)} <span class="search-tag-count" aria-hidden="true">${count}</span></a>`;
   }).join('');
-  return `<fieldset class="search-tags"><legend>募集の機会からタグで探す（複数選択可）</legend><div class="search-tag-list">${controls}</div></fieldset>`;
+  return `<fieldset class="search-tags"><legend>公募の種類で絞り込む（全タグ・複数選択可）</legend><div class="search-tag-list">${controls}</div></fieldset>`;
 }
 
 function searchForm({ action = 'koubo.html', live = false } = {}) {
