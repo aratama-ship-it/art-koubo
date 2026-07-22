@@ -17,7 +17,7 @@ const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').
 
 // ---- お金の向き（差別化の核）----
 const MONEY = {
-  reward: { label: '報酬・賞金あり', cls: 'm-reward', hero: '出演料・賞金・制作費などが出る公募' },
+  reward: { label: '報酬・賞金・制作支援あり', cls: 'm-reward', hero: '出演料・賞金・制作費などが出る公募' },
   free: { label: '無償・施設提供', cls: 'm-free', hero: '金銭の授受はなく、会場や滞在の場が提供される公募' },
   paid: { label: '参加費あり', cls: 'm-paid', hero: '出演・出展に参加費がかかる公募' },
   unknown: { label: '費用は要確認', cls: 'm-unknown', hero: 'お金の向きが公式に明記されていない公募' },
@@ -735,7 +735,7 @@ ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}
 <div class="stat home-stat">
 <div><div class="n">${koubos.length}</div><div class="l">収録公募</div></div>
 <div><div class="n">${openKoubos.length}</div><div class="l">受付中</div></div>
-<div><div class="n">${koubos.filter((k) => k.money === 'reward').length}</div><div class="l">報酬・賞金あり</div></div>
+<div><div class="n">${koubos.filter((k) => k.money === 'reward').length}</div><div class="l">報酬・賞金・制作支援あり</div></div>
 <a class="stat-sister" href="${SISTER_URL}" target="_blank" rel="noopener"><span class="stat-sister-kicker">姉妹サイト</span><span class="stat-sister-name">助成ものさしへ →</span></a>
 </div>
 ${searchForm()}
