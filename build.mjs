@@ -11,6 +11,8 @@ const BASE_URL = 'https://koubo.art-monosashi.com/';
 const SISTER_URL = 'https://joseikin.art-monosashi.com/'; // 助成ものさし
 const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform'; // ご意見・情報訂正 共通フォーム
 const SAVED_KEY = 'monosashi-koubo-saved-v1';
+// Cloudflare Web Analytics（手動ビーコン。GitHub Pages配信のためHTMLへ直接挿入する）
+const CLOUDFLARE_WEB_ANALYTICS_TOKEN = '60f90222d9c947fc95e2c02c9dea472c';
 const koubos = JSON.parse(readFileSync(join(ROOT, 'data/koubo.data.json'), 'utf8'));
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -451,6 +453,7 @@ function layout({ title, desc, rel, body, active, extraCss = '' }) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${CLOUDFLARE_WEB_ANALYTICS_TOKEN}"}'></script>
 <style>
 :root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;--accent-soft:#eaeeff;--accent-line:#d7ddf6;
 --ok:#1a8f5a;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#c05621;--dl-bg:#fff4f0;
