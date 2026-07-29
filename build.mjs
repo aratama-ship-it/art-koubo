@@ -12,7 +12,7 @@ const SISTER_URL = 'https://joseikin.art-monosashi.com/'; // 助成ものさし
 const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform'; // ご意見・情報訂正 共通フォーム
 const SAVED_KEY = 'monosashi-koubo-saved-v1';
 // Cloudflare Web Analytics（手動ビーコン。GitHub Pages配信のためHTMLへ直接挿入する）
-const CLOUDFLARE_WEB_ANALYTICS_TOKEN = '60f90222d9c947fc95e2c02c9dea472c';
+const CLOUDFLARE_WEB_ANALYTICS_TOKEN = '8e76eb2d2ffe4c368e677d79abb81857'; // koubo.art-monosashi.com
 const koubos = JSON.parse(readFileSync(join(ROOT, 'data/koubo.data.json'), 'utf8'));
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
