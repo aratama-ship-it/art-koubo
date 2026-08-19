@@ -144,6 +144,23 @@ ul.cond li:first-child{border-top:none}
 .verified{color:var(--sub);font-size:12px;margin-top:6px}
 .discl{font-size:12px;color:var(--sub);background:#fff;border:1px dashed var(--line);border-radius:10px;padding:11px 13px;margin:16px 0}
 footer{border-top:1px solid var(--line);background:#fff;margin-top:30px}
+.series{border-top:1px solid var(--line);background:var(--card)}
+.series-in{max-width:900px;margin:0 auto;padding:20px 14px 2px}
+.series-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 10px}
+.series-title{font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.04em}
+.series-lede{font-size:12px;color:var(--sub)}
+.series-list{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0;padding:0}
+.series-card{display:flex;flex-direction:column;gap:3px;height:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);text-decoration:none}
+a.series-card:hover{border-color:var(--accent);background:#fff;text-decoration:none}
+.series-card.is-current{border-style:dashed;background:transparent}
+.series-name{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;line-height:1.35}
+a.series-card .series-name{color:var(--accent)}
+.series-arrow{font-size:11px}
+.series-here{font-size:10px;font-weight:700;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:1px 6px;background:#fff}
+.series-desc{font-size:11px;line-height:1.5;color:var(--sub)}
+.series-abroad{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin:10px 0 0;font-size:11px;line-height:1.5;color:var(--sub)}
+.series-abroad a{font-weight:700;color:var(--accent)}
+@media(max-width:720px){.series-list{grid-template-columns:1fr}.series-in{padding:16px 14px 2px}}
 .foot-in{max-width:900px;margin:0 auto;padding:18px 14px;font-size:12px;color:var(--sub)}
 .foot-in a{color:var(--sub)}
 .hidden{display:none}
@@ -180,47 +197,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <aside class="beta-notice" aria-label="ベータ版について"><span class="beta-notice__label">BETA</span><p><strong>このウェブサイトは現在ベータ版です。</strong> ご要望・ご意見、掲載情報の訂正などがありましたら、<a href="https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform" target="_blank" rel="noopener">フォーム</a>よりご連絡いただけると幸いです。</p></aside>
 <h1>参加費ありの公募（130件）</h1>
 <p class="lede">出演・出展に参加費がかかる公募。</p>
-<div class="gitem-wrap"><a class="gitem" href="../koubo/kitakyushu_furitsuke_juku_2026.html">
-<div class="t">北九州振付塾2026</div>
-<div class="m">NPO法人ジャパン・コンテンポラリーダンス・ネットワーク（JCDN）、北九州芸術劇場 ・ 福岡県北九州市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月30日締切）</span><span class="tag">育成・研修</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="kitakyushu_furitsuke_juku_2026" data-save-name="北九州振付塾2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kamagaya_shimin_bunkasai.html">
-<div class="t">かまがや市民文化祭 芸能発表会・市民音楽祭 出演者募集</div>
-<div class="m">鎌ケ谷市（鎌ケ谷市民文化祭実行委員会） ・ 千葉県鎌ケ谷市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（芸能発表会は7月30日必着、市民音楽祭は7月31日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="kamagaya_shimin_bunkasai" data-save-name="かまがや市民文化祭 芸能発表会・市民音楽祭 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/atsuta_kumin_geinou_onstage.html">
-<div class="t">令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集</div>
-<div class="m">名古屋市熱田区役所（地域力推進課） ・ 愛知県名古屋市熱田区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜7月31日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="atsuta_kumin_geinou_onstage" data-save-name="令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nagasaki_shimin_ongakusai.html">
-<div class="t">第74回長崎市民音楽祭 個人参加（混声合唱団）</div>
-<div class="m">長崎市・長崎市音楽振興会（長崎市民音楽祭実行委員会） ・ 長崎県長崎市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月31日必着、団体出演枠は締切済み）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="nagasaki_shimin_ongakusai" data-save-name="第74回長崎市民音楽祭 個人参加（混声合唱団）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/wjf_juggling_championships.html">
-<div class="t">ワールド・ジャグリング・フェデレーション選手権（World Juggling Federation Championships, WJF）</div>
-<div class="m">World Juggling Federation（WJF、米国） ・ 海外（アメリカ／2026年はワシントン州シアトル）</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（WJF23は2026年12月14〜20日シアトル開催。フルコンベンションパッケージの受付は7月31日まで）</span><span class="tag">コンクール・コンペ</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="wjf_juggling_championships" data-save-name="ワールド・ジャグリング・フェデレーション選手権（World Juggling Federation Championships, WJF）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nba_nagoya_ballet.html">
-<div class="t">NBA名古屋バレエコンクール</div>
-<div class="m">NBAバレエ団 ・ 愛知県名古屋市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月5日締切。定員到達時は早期締切あり）</span><span class="tag">コンクール・コンペ</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="nba_nagoya_ballet" data-save-name="NBA名古屋バレエコンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/zakoenji_otona_ws.html">
-<div class="t">座・高円寺「おとなのための演劇ワークショップ2026」受講者募集</div>
-<div class="m">座・高円寺（杉並区立杉並芸術会館） ・ 東京都杉並区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月12日必着）</span><span class="tag">育成・研修</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="zakoenji_otona_ws" data-save-name="座・高円寺「おとなのための演劇ワークショップ2026」受講者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ukyoku_fureai_bunka_festival.html">
-<div class="t">右京区民ふれあい文化フェスティバル2026 出演団体募集</div>
-<div class="m">右京区民ふれあい事業実行委員会・京都市右京区役所 ・ 京都府京都市右京区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（令和8年7月17日〜8月12日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="ukyoku_fureai_bunka_festival" data-save-name="右京区民ふれあい文化フェスティバル2026 出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/onomichi_ongaku_geinousai_2026.html">
-<div class="t">尾道市民音楽芸能祭2026 出演団体募集</div>
-<div class="m">尾道市文化協会（尾道市文化振興課内） ・ 広島県尾道市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月14日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="onomichi_ongaku_geinousai_2026" data-save-name="尾道市民音楽芸能祭2026 出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/okayama_daiku_gasshoudan.html">
-<div class="t">2026ベートーヴェン「第九」演奏会 合唱団員</div>
-<div class="m">公益財団法人岡山文化芸術創造 ・ 岡山県岡山市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月14日必着。WEB申込も同日締切）</span><span class="tag">団員・メンバー募集</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="okayama_daiku_gasshoudan" data-save-name="2026ベートーヴェン「第九」演奏会 合唱団員" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/biwako_youbu_moriyama.html">
+<div class="gitem-wrap"><a class="gitem" href="../koubo/biwako_youbu_moriyama.html">
 <div class="t">びわ湖・洋舞コンクール in もりやま（第10回）</div>
 <div class="m">びわ湖・洋舞コンクール事務局 ・ 滋賀県守山市（会場：守山市民ホール大ホール）</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月20日必着）</span><span class="tag">コンクール・コンペ</span></div></a>
@@ -272,7 +249,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">シアターグリーン 若手劇団支援企画「Sprout Support」</div>
 <div class="m">シアターグリーン（BASE THEATER） ・ 東京都豊島区</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年12月27日まで、各月2団体・枠埋まり次第終了）</span><span class="tag">会場・創作支援</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="theatergreen_sprout_support" data-save-name="シアターグリーン 若手劇団支援企画「Sprout Support」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fuchu_bunkasai.html">
+<button class="save-toggle save-card" type="button" data-save-id="theatergreen_sprout_support" data-save-name="シアターグリーン 若手劇団支援企画「Sprout Support」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/zakoenji_otona_ws.html">
+<div class="t">座・高円寺「おとなのための演劇ワークショップ2026」受講者募集</div>
+<div class="m">座・高円寺（杉並区立杉並芸術会館） ・ 東京都杉並区</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月12日必着）</span><span class="tag">育成・研修</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="zakoenji_otona_ws" data-save-name="座・高円寺「おとなのための演劇ワークショップ2026」受講者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fuchu_bunkasai.html">
 <div class="t">府中市民芸術文化祭 参加者募集</div>
 <div class="m">府中市（各文化団体連盟が種目別に実施） ・ 東京都府中市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: 種目により異なる（第62回は8/14〜10/23頃）</span><span class="tag">フェス・イベント出演</span></div></a>
@@ -288,11 +269,31 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">THEATRE E9 KYOTO 劇場利用団体・単日/時間貸利用団体募集</div>
 <div class="m">一般社団法人アーツシード京都（ARTS SEED KYOTO） ・ 京都府京都市南区</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年度追加募集。対象日程は先着順）</span><span class="tag">会場・創作支援</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="e9_kyoto_riyoudantai" data-save-name="THEATRE E9 KYOTO 劇場利用団体・単日/時間貸利用団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/miyazaki_supace_engeki_jikan.html">
+<button class="save-toggle save-card" type="button" data-save-id="e9_kyoto_riyoudantai" data-save-name="THEATRE E9 KYOTO 劇場利用団体・単日/時間貸利用団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/ukyoku_fureai_bunka_festival.html">
+<div class="t">右京区民ふれあい文化フェスティバル2026 出演団体募集</div>
+<div class="m">右京区民ふれあい事業実行委員会・京都市右京区役所 ・ 京都府京都市右京区</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（令和8年7月17日〜8月12日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="ukyoku_fureai_bunka_festival" data-save-name="右京区民ふれあい文化フェスティバル2026 出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nba_nagoya_ballet.html">
+<div class="t">NBA名古屋バレエコンクール</div>
+<div class="m">NBAバレエ団 ・ 愛知県名古屋市</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月5日締切。定員到達時は早期締切あり）</span><span class="tag">コンクール・コンペ</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nba_nagoya_ballet" data-save-name="NBA名古屋バレエコンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/atsuta_kumin_geinou_onstage.html">
+<div class="t">令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集</div>
+<div class="m">名古屋市熱田区役所（地域力推進課） ・ 愛知県名古屋市熱田区</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜7月31日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="atsuta_kumin_geinou_onstage" data-save-name="令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/miyazaki_supace_engeki_jikan.html">
 <div class="t">SuPace～舞台にひかれる人が集まる月いち演劇じかん～</div>
 <div class="m">公益財団法人宮崎県立芸術劇場 ・ 宮崎県宮崎市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時参加可（月1回開催、直近は2026年8月15日）</span><span class="tag">育成・研修</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="miyazaki_supace_engeki_jikan" data-save-name="SuPace～舞台にひかれる人が集まる月いち演劇じかん～" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/enkatsu_2026_kitakyushu.html">
+<button class="save-toggle save-card" type="button" data-save-id="miyazaki_supace_engeki_jikan" data-save-name="SuPace～舞台にひかれる人が集まる月いち演劇じかん～" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nagasaki_shimin_ongakusai.html">
+<div class="t">第74回長崎市民音楽祭 個人参加（混声合唱団）</div>
+<div class="m">長崎市・長崎市音楽振興会（長崎市民音楽祭実行委員会） ・ 長崎県長崎市</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月31日必着、団体出演枠は締切済み）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nagasaki_shimin_ongakusai" data-save-name="第74回長崎市民音楽祭 個人参加（混声合唱団）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kitakyushu_furitsuke_juku_2026.html">
+<div class="t">北九州振付塾2026</div>
+<div class="m">NPO法人ジャパン・コンテンポラリーダンス・ネットワーク（JCDN）、北九州芸術劇場 ・ 福岡県北九州市</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月30日締切）</span><span class="tag">育成・研修</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kitakyushu_furitsuke_juku_2026" data-save-name="北九州振付塾2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/enkatsu_2026_kitakyushu.html">
 <div class="t">演カツ!!2026 参加団体・個人募集（創造工房・稽古場提供）</div>
 <div class="m">公益財団法人北九州市芸術文化振興財団（北九州芸術劇場） ・ 福岡県北九州市小倉北区</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（利用期間2026年6月1日〜2027年1月31日、使用希望日の3週間前までに要申込）</span><span class="tag">会場・創作支援</span></div></a>
@@ -308,7 +309,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">郡山市民オーケストラ 団員募集</div>
 <div class="m">郡山市民オーケストラ ・ 福島県郡山市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（パートの状況により入団待ちの場合あり、特定の締切なし）</span><span class="tag">団員・メンバー募集</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="koriyama_shimin_orchestra" data-save-name="郡山市民オーケストラ 団員募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yonago_koukaidou_minna_no_stage.html">
+<button class="save-toggle save-card" type="button" data-save-id="koriyama_shimin_orchestra" data-save-name="郡山市民オーケストラ 団員募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/onomichi_ongaku_geinousai_2026.html">
+<div class="t">尾道市民音楽芸能祭2026 出演団体募集</div>
+<div class="m">尾道市文化協会（尾道市文化振興課内） ・ 広島県尾道市</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月14日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="onomichi_ongaku_geinousai_2026" data-save-name="尾道市民音楽芸能祭2026 出演団体募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yonago_koukaidou_minna_no_stage.html">
 <div class="t">公会堂みんなのステージ（利用者・出演者募集）</div>
 <div class="m">一般財団法人米子市文化財団 米子市公会堂 ・ 鳥取県米子市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（利用希望日の7日前までに申込、先着順）</span><span class="tag">フェス・イベント出演</span></div></a>
@@ -316,7 +321,15 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">あったか高知踊り子隊</div>
 <div class="m">高知市旅館ホテル協同組合 ・ 高知県高知市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★2026年8月10・11日開催（事前予約可、当日受付は各日30名限定）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="attaka_kochi_odorikotai" data-save-name="あったか高知踊り子隊" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/mie_junior_orchestra.html">
+<button class="save-toggle save-card" type="button" data-save-id="attaka_kochi_odorikotai" data-save-name="あったか高知踊り子隊" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/okayama_daiku_gasshoudan.html">
+<div class="t">2026ベートーヴェン「第九」演奏会 合唱団員</div>
+<div class="m">公益財団法人岡山文化芸術創造 ・ 岡山県岡山市</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月14日必着。WEB申込も同日締切）</span><span class="tag">団員・メンバー募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="okayama_daiku_gasshoudan" data-save-name="2026ベートーヴェン「第九」演奏会 合唱団員" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/kamagaya_shimin_bunkasai.html">
+<div class="t">かまがや市民文化祭 芸能発表会・市民音楽祭 出演者募集</div>
+<div class="m">鎌ケ谷市（鎌ケ谷市民文化祭実行委員会） ・ 千葉県鎌ケ谷市</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（芸能発表会は7月30日必着、市民音楽祭は7月31日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="kamagaya_shimin_bunkasai" data-save-name="かまがや市民文化祭 芸能発表会・市民音楽祭 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/mie_junior_orchestra.html">
 <div class="t">三重ジュニア管弦楽団 合奏コース 団員募集</div>
 <div class="m">三重県文化会館（三重ジュニア管弦楽団事務局） ・ 三重県津市（三重県総合文化センター）</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★随時募集（通年）</span><span class="tag">団員・メンバー募集</span></div></a>
@@ -332,7 +345,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">ヨーロピアン・ジャグリング・コンベンション（European Juggling Convention, EJC）</div>
 <div class="m">European Juggling Association（EJA）＋開催年ごとの現地実行委員会 ・ 海外（開催地は毎年欧州各国で変動／2026年はスロベニア・プトゥイ）</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年大会は8月1〜9日開催、本調査時点でチケット販売中）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="ejc_juggling_convention" data-save-name="ヨーロピアン・ジャグリング・コンベンション（European Juggling Convention, EJC）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/green_festa.html">
+<button class="save-toggle save-card" type="button" data-save-id="ejc_juggling_convention" data-save-name="ヨーロピアン・ジャグリング・コンベンション（European Juggling Convention, EJC）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/wjf_juggling_championships.html">
+<div class="t">ワールド・ジャグリング・フェデレーション選手権（World Juggling Federation Championships, WJF）</div>
+<div class="m">World Juggling Federation（WJF、米国） ・ 海外（アメリカ／2026年はワシントン州シアトル）</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（WJF23は2026年12月14〜20日シアトル開催。フルコンベンションパッケージの受付は7月31日まで）</span><span class="tag">コンクール・コンペ</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="wjf_juggling_championships" data-save-name="ワールド・ジャグリング・フェデレーション選手権（World Juggling Federation Championships, WJF）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/green_festa.html">
 <div class="t">グリーンフェスタ（GREEN FESTA）参加団体募集</div>
 <div class="m">シアターグリーン ・ 東京都豊島区</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">例年冬〜春開催、参加団体募集は前年秋頃（現在は募集期間外の見込み）</span><span class="tag">会場・創作支援</span></div></a>
@@ -703,9 +720,20 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <button class="save-toggle save-card" type="button" data-save-id="long_thibaud_crespin_competition" data-save-name="ロン=ティボー国際コンクール（Concours Long-Thibaud-Crespin）" aria-pressed="false">☆</button></div>
 <p class="note"><a href="../koubo.html">← 全公募の一覧に戻る</a></p>
 </main>
-<footer><div class="foot-in">
+<footer><nav class="series" aria-label="ものさしシリーズ">
+<div class="series-in">
+<p class="series-head"><span class="series-title">ものさしシリーズ</span><span class="series-lede">名前や印象ではなく、条件と根拠で比べる。</span></p>
+<ul class="series-list">
+<li><span class="series-card is-current" aria-current="page"><span class="series-name">身体芸術・公募ものさし<span class="series-here">表示中</span></span><span class="series-desc">出演・出展・滞在制作の公募を、お金の向きつきで探す</span></span></li>
+<li><a class="series-card" href="https://joseikin.art-monosashi.com/" target="_blank" rel="noopener"><span class="series-name">助成ものさし<span class="series-arrow" aria-hidden="true">↗</span></span><span class="series-desc">文化芸術の助成金を、対象・締切の根拠つきで探す</span></a></li>
+<li><a class="series-card" href="https://venue.art-monosashi.com/" target="_blank" rel="noopener"><span class="series-name">会場ものさし<span class="series-arrow" aria-hidden="true">↗</span></span><span class="series-desc">全国のイベント会場を、面積・客席・料金で見比べる</span></a></li>
+</ul>
+<p class="series-abroad"><a href="https://mesure.art-monosashi.com/" target="_blank" rel="noopener">MESURE（海外版）<span class="series-arrow" aria-hidden="true">↗</span></a><span>カナダ・米国の公募と助成を扱う姉妹サイト。仏語主表示（英語・日本語に切替可）。</span></p>
+</div>
+</nav>
+<div class="foot-in">
 掲載情報の更新には時間差があります。締切・条件は変動するため、応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://joseikin.art-monosashi.com/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a>
 </div></footer>
 </body>
 </html>

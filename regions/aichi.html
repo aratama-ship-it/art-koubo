@@ -144,6 +144,23 @@ ul.cond li:first-child{border-top:none}
 .verified{color:var(--sub);font-size:12px;margin-top:6px}
 .discl{font-size:12px;color:var(--sub);background:#fff;border:1px dashed var(--line);border-radius:10px;padding:11px 13px;margin:16px 0}
 footer{border-top:1px solid var(--line);background:#fff;margin-top:30px}
+.series{border-top:1px solid var(--line);background:var(--card)}
+.series-in{max-width:900px;margin:0 auto;padding:20px 14px 2px}
+.series-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 10px}
+.series-title{font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.04em}
+.series-lede{font-size:12px;color:var(--sub)}
+.series-list{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0;padding:0}
+.series-card{display:flex;flex-direction:column;gap:3px;height:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);text-decoration:none}
+a.series-card:hover{border-color:var(--accent);background:#fff;text-decoration:none}
+.series-card.is-current{border-style:dashed;background:transparent}
+.series-name{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;line-height:1.35}
+a.series-card .series-name{color:var(--accent)}
+.series-arrow{font-size:11px}
+.series-here{font-size:10px;font-weight:700;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:1px 6px;background:#fff}
+.series-desc{font-size:11px;line-height:1.5;color:var(--sub)}
+.series-abroad{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin:10px 0 0;font-size:11px;line-height:1.5;color:var(--sub)}
+.series-abroad a{font-weight:700;color:var(--accent)}
+@media(max-width:720px){.series-list{grid-template-columns:1fr}.series-in{padding:16px 14px 2px}}
 .foot-in{max-width:900px;margin:0 auto;padding:18px 14px;font-size:12px;color:var(--sub)}
 .foot-in a{color:var(--sub)}
 .hidden{display:none}
@@ -180,41 +197,41 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <aside class="beta-notice" aria-label="ベータ版について"><span class="beta-notice__label">BETA</span><p><strong>このウェブサイトは現在ベータ版です。</strong> ご要望・ご意見、掲載情報の訂正などがありましたら、<a href="https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform" target="_blank" rel="noopener">フォーム</a>よりご連絡いただけると幸いです。</p></aside>
 <h1>愛知のアート公募（13件）</h1>
 <p class="lede">愛知で応募できる舞台芸術の公募。受付中・締切が近い順で、締切・お金の向き・応募資格を掲載しています。</p>
-<h2>受付中（4）</h2><div class="gitem-wrap"><a class="gitem" href="../koubo/higashimikawa_engeki_festival.html">
-<div class="t">東三河演劇フェスティバル 出演者募集</div>
-<div class="m">東三河演劇祭実行委員会 ・ 愛知県東三河地域</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（令和8年7月31日締切）</span><span class="tag">オーディション</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="higashimikawa_engeki_festival" data-save-name="東三河演劇フェスティバル 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/atsuta_kumin_geinou_onstage.html">
-<div class="t">令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集</div>
-<div class="m">名古屋市熱田区役所（地域力推進課） ・ 愛知県名古屋市熱田区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜7月31日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="atsuta_kumin_geinou_onstage" data-save-name="令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nba_nagoya_ballet.html">
-<div class="t">NBA名古屋バレエコンクール</div>
-<div class="m">NBAバレエ団 ・ 愛知県名古屋市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月5日締切。定員到達時は早期締切あり）</span><span class="tag">コンクール・コンペ</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="nba_nagoya_ballet" data-save-name="NBA名古屋バレエコンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/showa_kumin_fureai_geijutsusai.html">
+<h2>受付中（4）</h2><div class="gitem-wrap"><a class="gitem" href="../koubo/showa_kumin_fureai_geijutsusai.html">
 <div class="t">令和8年度 区民ふれあい芸術祭 参加者募集</div>
 <div class="m">名古屋市昭和区／昭和文化小劇場 ・ 愛知県名古屋市昭和区</div>
 <div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年9月15日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="showa_kumin_fureai_geijutsusai" data-save-name="令和8年度 区民ふれあい芸術祭 参加者募集" aria-pressed="false">☆</button></div>
+<button class="save-toggle save-card" type="button" data-save-id="showa_kumin_fureai_geijutsusai" data-save-name="令和8年度 区民ふれあい芸術祭 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/higashimikawa_engeki_festival.html">
+<div class="t">東三河演劇フェスティバル 出演者募集</div>
+<div class="m">東三河演劇祭実行委員会 ・ 愛知県東三河地域</div>
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（令和8年7月31日締切）</span><span class="tag">オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="higashimikawa_engeki_festival" data-save-name="東三河演劇フェスティバル 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nba_nagoya_ballet.html">
+<div class="t">NBA名古屋バレエコンクール</div>
+<div class="m">NBAバレエ団 ・ 愛知県名古屋市</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月5日締切。定員到達時は早期締切あり）</span><span class="tag">コンクール・コンペ</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nba_nagoya_ballet" data-save-name="NBA名古屋バレエコンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/atsuta_kumin_geinou_onstage.html">
+<div class="t">令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集</div>
+<div class="m">名古屋市熱田区役所（地域力推進課） ・ 愛知県名古屋市熱田区</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜7月31日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="atsuta_kumin_geinou_onstage" data-save-name="令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集" aria-pressed="false">☆</button></div>
 <h2>公募一覧</h2>
-<div class="gitem-wrap"><a class="gitem" href="../koubo/higashimikawa_engeki_festival.html">
-<div class="t">東三河演劇フェスティバル 出演者募集</div>
-<div class="m">東三河演劇祭実行委員会 ・ 愛知県東三河地域</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（令和8年7月31日締切）</span><span class="tag">オーディション</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="higashimikawa_engeki_festival" data-save-name="東三河演劇フェスティバル 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/atsuta_kumin_geinou_onstage.html">
-<div class="t">令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集</div>
-<div class="m">名古屋市熱田区役所（地域力推進課） ・ 愛知県名古屋市熱田区</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜7月31日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="atsuta_kumin_geinou_onstage" data-save-name="令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nba_nagoya_ballet.html">
-<div class="t">NBA名古屋バレエコンクール</div>
-<div class="m">NBAバレエ団 ・ 愛知県名古屋市</div>
-<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月5日締切。定員到達時は早期締切あり）</span><span class="tag">コンクール・コンペ</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="nba_nagoya_ballet" data-save-name="NBA名古屋バレエコンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/showa_kumin_fureai_geijutsusai.html">
+<div class="gitem-wrap"><a class="gitem" href="../koubo/showa_kumin_fureai_geijutsusai.html">
 <div class="t">令和8年度 区民ふれあい芸術祭 参加者募集</div>
 <div class="m">名古屋市昭和区／昭和文化小劇場 ・ 愛知県名古屋市昭和区</div>
 <div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年9月15日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="showa_kumin_fureai_geijutsusai" data-save-name="令和8年度 区民ふれあい芸術祭 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/aaf_gikyoku_sho.html">
+<button class="save-toggle save-card" type="button" data-save-id="showa_kumin_fureai_geijutsusai" data-save-name="令和8年度 区民ふれあい芸術祭 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/higashimikawa_engeki_festival.html">
+<div class="t">東三河演劇フェスティバル 出演者募集</div>
+<div class="m">東三河演劇祭実行委員会 ・ 愛知県東三河地域</div>
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（令和8年7月31日締切）</span><span class="tag">オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="higashimikawa_engeki_festival" data-save-name="東三河演劇フェスティバル 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/nba_nagoya_ballet.html">
+<div class="t">NBA名古屋バレエコンクール</div>
+<div class="m">NBAバレエ団 ・ 愛知県名古屋市</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年8月5日締切。定員到達時は早期締切あり）</span><span class="tag">コンクール・コンペ</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="nba_nagoya_ballet" data-save-name="NBA名古屋バレエコンクール" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/atsuta_kumin_geinou_onstage.html">
+<div class="t">令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集</div>
+<div class="m">名古屋市熱田区役所（地域力推進課） ・ 愛知県名古屋市熱田区</div>
+<div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月1日〜7月31日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="atsuta_kumin_geinou_onstage" data-save-name="令和8年度 熱田区区民まつり事業「区民芸能オンステージ」出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/aaf_gikyoku_sho.html">
 <div class="t">AAF戯曲賞</div>
 <div class="m">愛知県芸術劇場（愛知県文化振興事業団） ・ 愛知県名古屋市</div>
 <div class="tags"><span class="tag m-reward">報酬・賞金・制作支援あり</span><span class="tag">★情報源間で食い違いあり(要注意、下記note参照)</span><span class="tag">戯曲・脚本・作品募集</span></div></a>
@@ -253,9 +270,20 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <button class="save-toggle save-card" type="button" data-save-id="toyohashi_plat_dance_residence" data-save-name="ダンス・レジデンス2026 レジデンスアーティスト募集" aria-pressed="false">☆</button></div>
 <p class="note"><a href="../koubo.html">← 全地域の一覧に戻る</a></p>
 </main>
-<footer><div class="foot-in">
+<footer><nav class="series" aria-label="ものさしシリーズ">
+<div class="series-in">
+<p class="series-head"><span class="series-title">ものさしシリーズ</span><span class="series-lede">名前や印象ではなく、条件と根拠で比べる。</span></p>
+<ul class="series-list">
+<li><span class="series-card is-current" aria-current="page"><span class="series-name">身体芸術・公募ものさし<span class="series-here">表示中</span></span><span class="series-desc">出演・出展・滞在制作の公募を、お金の向きつきで探す</span></span></li>
+<li><a class="series-card" href="https://joseikin.art-monosashi.com/" target="_blank" rel="noopener"><span class="series-name">助成ものさし<span class="series-arrow" aria-hidden="true">↗</span></span><span class="series-desc">文化芸術の助成金を、対象・締切の根拠つきで探す</span></a></li>
+<li><a class="series-card" href="https://venue.art-monosashi.com/" target="_blank" rel="noopener"><span class="series-name">会場ものさし<span class="series-arrow" aria-hidden="true">↗</span></span><span class="series-desc">全国のイベント会場を、面積・客席・料金で見比べる</span></a></li>
+</ul>
+<p class="series-abroad"><a href="https://mesure.art-monosashi.com/" target="_blank" rel="noopener">MESURE（海外版）<span class="series-arrow" aria-hidden="true">↗</span></a><span>カナダ・米国の公募と助成を扱う姉妹サイト。仏語主表示（英語・日本語に切替可）。</span></p>
+</div>
+</nav>
+<div class="foot-in">
 掲載情報の更新には時間差があります。締切・条件は変動するため、応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://joseikin.art-monosashi.com/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a>
 </div></footer>
 </body>
 </html>

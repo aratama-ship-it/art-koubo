@@ -144,6 +144,23 @@ ul.cond li:first-child{border-top:none}
 .verified{color:var(--sub);font-size:12px;margin-top:6px}
 .discl{font-size:12px;color:var(--sub);background:#fff;border:1px dashed var(--line);border-radius:10px;padding:11px 13px;margin:16px 0}
 footer{border-top:1px solid var(--line);background:#fff;margin-top:30px}
+.series{border-top:1px solid var(--line);background:var(--card)}
+.series-in{max-width:900px;margin:0 auto;padding:20px 14px 2px}
+.series-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 10px}
+.series-title{font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.04em}
+.series-lede{font-size:12px;color:var(--sub)}
+.series-list{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0;padding:0}
+.series-card{display:flex;flex-direction:column;gap:3px;height:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);text-decoration:none}
+a.series-card:hover{border-color:var(--accent);background:#fff;text-decoration:none}
+.series-card.is-current{border-style:dashed;background:transparent}
+.series-name{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;line-height:1.35}
+a.series-card .series-name{color:var(--accent)}
+.series-arrow{font-size:11px}
+.series-here{font-size:10px;font-weight:700;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:1px 6px;background:#fff}
+.series-desc{font-size:11px;line-height:1.5;color:var(--sub)}
+.series-abroad{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin:10px 0 0;font-size:11px;line-height:1.5;color:var(--sub)}
+.series-abroad a{font-weight:700;color:var(--accent)}
+@media(max-width:720px){.series-list{grid-template-columns:1fr}.series-in{padding:16px 14px 2px}}
 .foot-in{max-width:900px;margin:0 auto;padding:18px 14px;font-size:12px;color:var(--sub)}
 .foot-in a{color:var(--sub)}
 .hidden{display:none}
@@ -180,19 +197,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <aside class="beta-notice" aria-label="ベータ版について"><span class="beta-notice__label">BETA</span><p><strong>このウェブサイトは現在ベータ版です。</strong> ご要望・ご意見、掲載情報の訂正などがありましたら、<a href="https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform" target="_blank" rel="noopener">フォーム</a>よりご連絡いただけると幸いです。</p></aside>
 <h1>費用は要確認の公募（115件）</h1>
 <p class="lede">お金の向きが公式に明記されていない公募。</p>
-<div class="gitem-wrap"><a class="gitem" href="../koubo/higashimikawa_engeki_festival.html">
-<div class="t">東三河演劇フェスティバル 出演者募集</div>
-<div class="m">東三河演劇祭実行委員会 ・ 愛知県東三河地域</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（令和8年7月31日締切）</span><span class="tag">オーディション</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="higashimikawa_engeki_festival" data-save-name="東三河演劇フェスティバル 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fukushima_bungakusho_drama.html">
-<div class="t">福島県文学賞 ドラマ部門</div>
-<div class="m">福島県・福島民報社（福島県教育委員会共催） ・ 福島県</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（令和8年7月1日〜7月31日必着・消印有効）</span><span class="tag">戯曲・脚本・作品募集</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="fukushima_bungakusho_drama" data-save-name="福島県文学賞 ドラマ部門" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/sakura_shimin_bunkasai_buyou.html">
-<div class="t">佐倉市民文化祭 舞踊まつり 参加者募集</div>
-<div class="m">佐倉市（佐倉市舞踊団体連合会） ・ 千葉県佐倉市</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（2026年7月31日締切）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="sakura_shimin_bunkasai_buyou" data-save-name="佐倉市民文化祭 舞踊まつり 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/yokkaichi_ginga_tetsudo_no_yoru_audition.html">
+<div class="gitem-wrap"><a class="gitem" href="../koubo/yokkaichi_ginga_tetsudo_no_yoru_audition.html">
 <div class="t">劇場版「銀河鉄道の夜」オーディション（四日市市文化会館）</div>
 <div class="m">四日市市文化会館 ・ 三重県四日市市</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（2026年8月21日まで）</span><span class="tag">オーディション</span></div></a>
@@ -220,7 +225,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">舞踏新人シリーズ</div>
 <div class="m">テルプシコール（主宰：秦かのこ） ・ 東京都中野区</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★随時（参加者2名以上で毎年春開催）</span><span class="tag">企画・プロジェクト公募</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="terpsichore_butoh_shinjin" data-save-name="舞踏新人シリーズ" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/htb_tenko_audition.html">
+<button class="save-toggle save-card" type="button" data-save-id="terpsichore_butoh_shinjin" data-save-name="舞踏新人シリーズ" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/higashimikawa_engeki_festival.html">
+<div class="t">東三河演劇フェスティバル 出演者募集</div>
+<div class="m">東三河演劇祭実行委員会 ・ 愛知県東三河地域</div>
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（令和8年7月31日締切）</span><span class="tag">オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="higashimikawa_engeki_festival" data-save-name="東三河演劇フェスティバル 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/htb_tenko_audition.html">
 <div class="t">ハウステンボス天鼓 メンバーオーディション</div>
 <div class="m">ハウステンボス株式会社 ・ 長崎県佐世保市</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★随時募集（締切設定なし）</span><span class="tag">オーディション</span></div></a>
@@ -228,7 +237,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">熊本市現代美術館 アーティスト登録事業（舞踊・ダンス／演劇・芝居／音楽）</div>
 <div class="m">公益財団法人熊本市美術文化振興財団（熊本市現代美術館） ・ 熊本県熊本市</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★随時受付（通年）</span><span class="tag">登録・ライセンス</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="camk_artist_touroku" data-save-name="熊本市現代美術館 アーティスト登録事業（舞踊・ダンス／演劇・芝居／音楽）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/gekidan_maekabu_danin_boshu.html">
+<button class="save-toggle save-card" type="button" data-save-id="camk_artist_touroku" data-save-name="熊本市現代美術館 アーティスト登録事業（舞踊・ダンス／演劇・芝居／音楽）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fukushima_bungakusho_drama.html">
+<div class="t">福島県文学賞 ドラマ部門</div>
+<div class="m">福島県・福島民報社（福島県教育委員会共催） ・ 福島県</div>
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（令和8年7月1日〜7月31日必着・消印有効）</span><span class="tag">戯曲・脚本・作品募集</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fukushima_bungakusho_drama" data-save-name="福島県文学賞 ドラマ部門" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/gekidan_maekabu_danin_boshu.html">
 <div class="t">劇団マエカブ 団員募集（俳優・スタッフ）</div>
 <div class="m">株式劇団マエカブ ・ 香川県高松市・坂出市</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★随時受付（メール・電話で通年募集）</span><span class="tag">団員・メンバー募集</span></div></a>
@@ -240,7 +253,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">文化人材バンク「パフォーマーズやまぐち」</div>
 <div class="m">やまぐち文化プログラム実行委員会（山口県文化振興課） ・ 山口県（県内全域）</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（公式ページに登録票・申込先を掲載。締切設定なし）</span><span class="tag">登録・ライセンス</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="performers_yamaguchi_bank" data-save-name="文化人材バンク「パフォーマーズやまぐち」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/sengawa_concours.html">
+<button class="save-toggle save-card" type="button" data-save-id="performers_yamaguchi_bank" data-save-name="文化人材バンク「パフォーマーズやまぐち」" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/sakura_shimin_bunkasai_buyou.html">
+<div class="t">佐倉市民文化祭 舞踊まつり 参加者募集</div>
+<div class="m">佐倉市（佐倉市舞踊団体連合会） ・ 千葉県佐倉市</div>
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★受付中（2026年7月31日締切）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="sakura_shimin_bunkasai_buyou" data-save-name="佐倉市民文化祭 舞踊まつり 参加者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/sengawa_concours.html">
 <div class="t">せんがわ劇場演劇コンクール</div>
 <div class="m">調布市文化・コミュニティ振興財団（せんがわ劇場） ・ 東京都</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">隔年開催（次回募集時期は要確認）</span><span class="tag">コンクール・コンペ</span></div></a>
@@ -643,9 +660,20 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <button class="save-toggle save-card" type="button" data-save-id="sydney_piano_competition" data-save-name="シドニー国際ピアノコンクール（Sydney International Piano Competition）" aria-pressed="false">☆</button></div>
 <p class="note"><a href="../koubo.html">← 全公募の一覧に戻る</a></p>
 </main>
-<footer><div class="foot-in">
+<footer><nav class="series" aria-label="ものさしシリーズ">
+<div class="series-in">
+<p class="series-head"><span class="series-title">ものさしシリーズ</span><span class="series-lede">名前や印象ではなく、条件と根拠で比べる。</span></p>
+<ul class="series-list">
+<li><span class="series-card is-current" aria-current="page"><span class="series-name">身体芸術・公募ものさし<span class="series-here">表示中</span></span><span class="series-desc">出演・出展・滞在制作の公募を、お金の向きつきで探す</span></span></li>
+<li><a class="series-card" href="https://joseikin.art-monosashi.com/" target="_blank" rel="noopener"><span class="series-name">助成ものさし<span class="series-arrow" aria-hidden="true">↗</span></span><span class="series-desc">文化芸術の助成金を、対象・締切の根拠つきで探す</span></a></li>
+<li><a class="series-card" href="https://venue.art-monosashi.com/" target="_blank" rel="noopener"><span class="series-name">会場ものさし<span class="series-arrow" aria-hidden="true">↗</span></span><span class="series-desc">全国のイベント会場を、面積・客席・料金で見比べる</span></a></li>
+</ul>
+<p class="series-abroad"><a href="https://mesure.art-monosashi.com/" target="_blank" rel="noopener">MESURE（海外版）<span class="series-arrow" aria-hidden="true">↗</span></a><span>カナダ・米国の公募と助成を扱う姉妹サイト。仏語主表示（英語・日本語に切替可）。</span></p>
+</div>
+</nav>
+<div class="foot-in">
 掲載情報の更新には時間差があります。締切・条件は変動するため、応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://joseikin.art-monosashi.com/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a>
 </div></footer>
 </body>
 </html>

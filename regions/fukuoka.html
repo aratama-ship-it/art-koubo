@@ -144,6 +144,23 @@ ul.cond li:first-child{border-top:none}
 .verified{color:var(--sub);font-size:12px;margin-top:6px}
 .discl{font-size:12px;color:var(--sub);background:#fff;border:1px dashed var(--line);border-radius:10px;padding:11px 13px;margin:16px 0}
 footer{border-top:1px solid var(--line);background:#fff;margin-top:30px}
+.series{border-top:1px solid var(--line);background:var(--card)}
+.series-in{max-width:900px;margin:0 auto;padding:20px 14px 2px}
+.series-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 10px}
+.series-title{font-size:13px;font-weight:800;color:var(--ink);letter-spacing:.04em}
+.series-lede{font-size:12px;color:var(--sub)}
+.series-list{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0;padding:0}
+.series-card{display:flex;flex-direction:column;gap:3px;height:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);text-decoration:none}
+a.series-card:hover{border-color:var(--accent);background:#fff;text-decoration:none}
+.series-card.is-current{border-style:dashed;background:transparent}
+.series-name{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;line-height:1.35}
+a.series-card .series-name{color:var(--accent)}
+.series-arrow{font-size:11px}
+.series-here{font-size:10px;font-weight:700;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:1px 6px;background:#fff}
+.series-desc{font-size:11px;line-height:1.5;color:var(--sub)}
+.series-abroad{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin:10px 0 0;font-size:11px;line-height:1.5;color:var(--sub)}
+.series-abroad a{font-weight:700;color:var(--accent)}
+@media(max-width:720px){.series-list{grid-template-columns:1fr}.series-in{padding:16px 14px 2px}}
 .foot-in{max-width:900px;margin:0 auto;padding:18px 14px;font-size:12px;color:var(--sub)}
 .foot-in a{color:var(--sub)}
 .hidden{display:none}
@@ -184,11 +201,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">北九州振付塾2026</div>
 <div class="m">NPO法人ジャパン・コンテンポラリーダンス・ネットワーク（JCDN）、北九州芸術劇場 ・ 福岡県北九州市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月30日締切）</span><span class="tag">育成・研修</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="kitakyushu_furitsuke_juku_2026" data-save-name="北九州振付塾2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fureai_nukumori_festa_kitakyushu.html">
-<div class="t">ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）</div>
-<div class="m">公益財団法人北九州市身体障害者福祉協会 ・ 福岡県北九州市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月1日〜8月15日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="fureai_nukumori_festa_kitakyushu" data-save-name="ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/enkatsu_2026_kitakyushu.html">
+<button class="save-toggle save-card" type="button" data-save-id="kitakyushu_furitsuke_juku_2026" data-save-name="北九州振付塾2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/enkatsu_2026_kitakyushu.html">
 <div class="t">演カツ!!2026 参加団体・個人募集（創造工房・稽古場提供）</div>
 <div class="m">公益財団法人北九州市芸術文化振興財団（北九州芸術劇場） ・ 福岡県北九州市小倉北区</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（利用期間2026年6月1日〜2027年1月31日、使用希望日の3週間前までに要申込）</span><span class="tag">会場・創作支援</span></div></a>
@@ -196,7 +209,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">まちなかオープンステージ 出演者募集</div>
 <div class="m">久留米シティプラザ ・ 福岡県久留米市</div>
 <div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（ほぼ毎月開催のローリング募集。例: 10/23公演→8/17締切）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="kurume_machinaka_open_stage" data-save-name="まちなかオープンステージ 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/pom_plaza_hall_riyoudantai.html">
+<button class="save-toggle save-card" type="button" data-save-id="kurume_machinaka_open_stage" data-save-name="まちなかオープンステージ 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fureai_nukumori_festa_kitakyushu.html">
+<div class="t">ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）</div>
+<div class="m">公益財団法人北九州市身体障害者福祉協会 ・ 福岡県北九州市</div>
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月1日〜8月15日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fureai_nukumori_festa_kitakyushu" data-save-name="ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/pom_plaza_hall_riyoudantai.html">
 <div class="t">ぽんプラザホール 利用団体募集（貸館・抽選）</div>
 <div class="m">福岡舞台芸術施設運営共同事業体（福岡市祇園音楽・演劇練習場） ・ 福岡県福岡市博多区</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★通年ローリング（利用月の約6か月前に抽選申請受付。例: 2026年5月分は2025年11月1〜10日受付）</span><span class="tag">会場・創作支援</span></div></a>
@@ -206,11 +223,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">北九州振付塾2026</div>
 <div class="m">NPO法人ジャパン・コンテンポラリーダンス・ネットワーク（JCDN）、北九州芸術劇場 ・ 福岡県北九州市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年7月30日締切）</span><span class="tag">育成・研修</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="kitakyushu_furitsuke_juku_2026" data-save-name="北九州振付塾2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fureai_nukumori_festa_kitakyushu.html">
-<div class="t">ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）</div>
-<div class="m">公益財団法人北九州市身体障害者福祉協会 ・ 福岡県北九州市</div>
-<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月1日〜8月15日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="fureai_nukumori_festa_kitakyushu" data-save-name="ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/enkatsu_2026_kitakyushu.html">
+<button class="save-toggle save-card" type="button" data-save-id="kitakyushu_furitsuke_juku_2026" data-save-name="北九州振付塾2026" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/enkatsu_2026_kitakyushu.html">
 <div class="t">演カツ!!2026 参加団体・個人募集（創造工房・稽古場提供）</div>
 <div class="m">公益財団法人北九州市芸術文化振興財団（北九州芸術劇場） ・ 福岡県北九州市小倉北区</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（利用期間2026年6月1日〜2027年1月31日、使用希望日の3週間前までに要申込）</span><span class="tag">会場・創作支援</span></div></a>
@@ -218,7 +231,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">まちなかオープンステージ 出演者募集</div>
 <div class="m">久留米シティプラザ ・ 福岡県久留米市</div>
 <div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（ほぼ毎月開催のローリング募集。例: 10/23公演→8/17締切）</span><span class="tag">フェス・イベント出演</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="kurume_machinaka_open_stage" data-save-name="まちなかオープンステージ 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/pom_plaza_hall_riyoudantai.html">
+<button class="save-toggle save-card" type="button" data-save-id="kurume_machinaka_open_stage" data-save-name="まちなかオープンステージ 出演者募集" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/fureai_nukumori_festa_kitakyushu.html">
+<div class="t">ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）</div>
+<div class="m">公益財団法人北九州市身体障害者福祉協会 ・ 福岡県北九州市</div>
+<div class="tags"><span class="tag m-free">無償・施設提供</span><span class="tag dl">締切: ★受付中（2026年8月1日〜8月15日必着）</span><span class="tag">フェス・イベント出演</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="fureai_nukumori_festa_kitakyushu" data-save-name="ふれあい×NUKUMORIフェスタ2026 ステージ出演者募集（北九州市障害者芸術祭）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="../koubo/pom_plaza_hall_riyoudantai.html">
 <div class="t">ぽんプラザホール 利用団体募集（貸館・抽選）</div>
 <div class="m">福岡舞台芸術施設運営共同事業体（福岡市祇園音楽・演劇練習場） ・ 福岡県福岡市博多区</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★通年ローリング（利用月の約6か月前に抽選申請受付。例: 2026年5月分は2025年11月1〜10日受付）</span><span class="tag">会場・創作支援</span></div></a>
@@ -269,9 +286,20 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <button class="save-toggle save-card" type="button" data-save-id="kasuga_bunkasai_geinou_happyoukai" data-save-name="春日市文化祭「芸能発表会」出演団体募集" aria-pressed="false">☆</button></div>
 <p class="note"><a href="../koubo.html">← 全地域の一覧に戻る</a></p>
 </main>
-<footer><div class="foot-in">
+<footer><nav class="series" aria-label="ものさしシリーズ">
+<div class="series-in">
+<p class="series-head"><span class="series-title">ものさしシリーズ</span><span class="series-lede">名前や印象ではなく、条件と根拠で比べる。</span></p>
+<ul class="series-list">
+<li><span class="series-card is-current" aria-current="page"><span class="series-name">身体芸術・公募ものさし<span class="series-here">表示中</span></span><span class="series-desc">出演・出展・滞在制作の公募を、お金の向きつきで探す</span></span></li>
+<li><a class="series-card" href="https://joseikin.art-monosashi.com/" target="_blank" rel="noopener"><span class="series-name">助成ものさし<span class="series-arrow" aria-hidden="true">↗</span></span><span class="series-desc">文化芸術の助成金を、対象・締切の根拠つきで探す</span></a></li>
+<li><a class="series-card" href="https://venue.art-monosashi.com/" target="_blank" rel="noopener"><span class="series-name">会場ものさし<span class="series-arrow" aria-hidden="true">↗</span></span><span class="series-desc">全国のイベント会場を、面積・客席・料金で見比べる</span></a></li>
+</ul>
+<p class="series-abroad"><a href="https://mesure.art-monosashi.com/" target="_blank" rel="noopener">MESURE（海外版）<span class="series-arrow" aria-hidden="true">↗</span></a><span>カナダ・米国の公募と助成を扱う姉妹サイト。仏語主表示（英語・日本語に切替可）。</span></p>
+</div>
+</nav>
+<div class="foot-in">
 掲載情報の更新には時間差があります。締切・条件は変動するため、応募前に必ず各主催の最新の募集要項をご確認ください。<br>
-<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a> ・ <a href="https://joseikin.art-monosashi.com/" target="_blank" rel="noopener">姉妹サイト 助成ものさし</a>
+<a href="../about.html">このサイトについて</a> ・ <a href="../saved.html">あとで見る</a> ・ <a href="../privacy.html">プライバシー</a> ・ <a href="../disclaimer.html">免責事項・情報訂正</a>
 </div></footer>
 </body>
 </html>
