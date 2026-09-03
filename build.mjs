@@ -13,7 +13,86 @@ const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-
 const SAVED_KEY = 'monosashi-koubo-saved-v1';
 // Cloudflare Web Analytics（手動ビーコン。GitHub Pages配信のためHTMLへ直接挿入する）
 const CLOUDFLARE_WEB_ANALYTICS_TOKEN = '8e76eb2d2ffe4c368e677d79abb81857'; // koubo.art-monosashi.com
+
+// 締切超過の自動降格: ../_maintenance/DEADLINE_AUTO_EXPIRY_SPEC.md
+const todayParts = Object.fromEntries(new Intl.DateTimeFormat('en', {
+  timeZone: 'Asia/Tokyo', year: 'numeric', month: 'numeric', day: 'numeric',
+}).formatToParts(new Date()).filter((part) => part.type !== 'literal').map((part) => [part.type, Number(part.value)]));
+const { year: sortYear, month: sortMonth, day: sortDay } = todayParts;
+const sortBaseTime = Date.UTC(sortYear, sortMonth - 1, sortDay);
+const dateTokenSource = '(?:\\d{4}年\\d{1,2}月\\d{1,2}日|\\d{4}\\/\\d{1,2}\\/\\d{1,2}|\\d{1,2}月\\d{1,2}日|\\d{1,2}\\/\\d{1,2})';
+const legacyNeverDeadline = /(?:とみられる|二次情報|正確な締切|締切日.*要確認|詳細締切.*未確認|締切明記なし|チケット販売中|種目により異なる|事前申込不要|開催直前まで|使用日の|使用希望日の|公演日の|利用希望日の|本番\d+週間前|順次開始)/;
+const neverExpireDeadline = /(?:とみられる|二次情報|正確な締切|締切日.*要確認|詳細締切.*未確認|締切明記なし|チケット販売中|種目により異なる|事前申込不要|開催直前まで|使用日の|使用希望日の|公演日の|利用希望日の|本番\d+週間前|順次開始|随時|通年|記載なし|明記なし|締切設定なし|締切なし|特定の締切)/;
+const rollingExampleDeadline = /(?:ローリング|ほぼ毎月).*(?:例:|例：)/;
+
+function deadlineCandidatesOf(deadline, { expiry = false } = {}) {
+  const text = String(deadline || '').replace(/令和(\d+)年/g, (_, year) => `${2018 + Number(year)}年`);
+  if ((expiry ? neverExpireDeadline : legacyNeverDeadline).test(text) || rollingExampleDeadline.test(text)) return [];
+  const candidates = [];
+  const tokenRe = new RegExp(dateTokenSource, 'g');
+  let match;
+  while ((match = tokenRe.exec(text))) {
+    const token = match[0];
+    let year = sortYear;
+    let month;
+    let day;
+    let parts = token.match(/^(?:(\d{4})年)?(\d{1,2})月(\d{1,2})日$/);
+    if (parts) {
+      year = Number(parts[1] || sortYear);
+      month = Number(parts[2]);
+      day = Number(parts[3]);
+    } else {
+      parts = token.match(/^(?:(\d{4})\/)?(\d{1,2})\/(\d{1,2})$/);
+      if (!parts) continue;
+      year = Number(parts[1] || sortYear);
+      month = Number(parts[2]);
+      day = Number(parts[3]);
+    }
+    const time = Date.UTC(year, month - 1, day);
+    if (!expiry && time < sortBaseTime) continue;
+    const before = text.slice(Math.max(0, match.index - 24), match.index);
+    const after = text.slice(match.index + token.length, match.index + token.length + 24);
+    let score = 0;
+    if (/(?:締切|必着|消印|期限|エントリー期間|作品受付|申込)[^。、（）()]{0,16}$/.test(before)) score += 100;
+    const closeAt = after.search(/締切|必着|消印|まで/);
+    const anotherDateAt = after.search(new RegExp(dateTokenSource));
+    if (closeAt >= 0 && (anotherDateAt < 0 || closeAt < anotherDateAt)) score += 100;
+    if (/〜\s*$/.test(before)) score += 160;
+    if (!candidates.length && /^★?(?:受付中|募集中|次回募集)/.test(text)) score += 60;
+    if (/^[^。、（）()]{0,6}(?:開催分|実施分|対象)/.test(after)) score -= 200;
+    if (expiry && /(?:演奏会|本審査|開催|公演|上演|審査|発表|実施|大会|フェス|本番|コンサート)[^。、（）()]{0,8}$/.test(before)) score -= 200;
+    if (expiry && /^\s*〜/.test(after)) score -= 200;
+    candidates.push({ time, score });
+  }
+  return candidates;
+}
+
+function expiredDeadlineTimeOf(item) {
+  const candidates = deadlineCandidatesOf(item.deadline, { expiry: true });
+  if (!candidates.length) return null;
+  const maxScore = Math.max(...candidates.map((candidate) => candidate.score));
+  if (maxScore < 50) return null;
+  if (candidates.some((candidate) => candidate.score >= 0 && candidate.time >= sortBaseTime)) return null;
+  const deadlineTime = Math.max(...candidates.filter((candidate) => candidate.score === maxScore).map((candidate) => candidate.time));
+  return deadlineTime < sortBaseTime ? deadlineTime : null;
+}
+
 const koubos = JSON.parse(readFileSync(join(ROOT, 'data/koubo.data.json'), 'utf8'));
+const expiredKoubos = [];
+for (const k of koubos) {
+  if (!k.dlOpen) continue;
+  const deadlineTime = expiredDeadlineTimeOf(k);
+  if (deadlineTime === null) continue;
+  k.dlOpen = false;
+  k.dlExpired = true;
+  k.dlExpiredAt = deadlineTime;
+  expiredKoubos.push(k);
+}
+const sortBaseDate = `${sortYear}-${String(sortMonth).padStart(2, '0')}-${String(sortDay).padStart(2, '0')}`;
+console.log(`[deadline-expiry] 基準日 ${sortBaseDate}（Asia/Tokyo）`);
+console.log(`[deadline-expiry] 受付中→受付終了に自動降格: ${expiredKoubos.length}件`);
+for (const k of expiredKoubos) console.log(`  - ${k.id} ${k.name} / 締切 ${new Date(k.dlExpiredAt).toISOString().slice(0, 10)}`);
+console.log(`[deadline-expiry] 降格後の受付中: ${koubos.filter((k) => k.dlOpen).length}件`);
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -47,58 +126,10 @@ function bucketOf(region) {
 // 受付中の公募は、表示用の締切文から確認できる最終日を読み取り、近い順に並べる。
 // 随時募集・締切未確認・「利用日の○日前」のような相対期限は、固定日案件の後ろへ置く。
 const sourceOrder = new Map(koubos.map((k, i) => [k.id, i]));
-const todayParts = Object.fromEntries(new Intl.DateTimeFormat('en', {
-  timeZone: 'Asia/Tokyo', year: 'numeric', month: 'numeric', day: 'numeric',
-}).formatToParts(new Date()).filter((part) => part.type !== 'literal').map((part) => [part.type, Number(part.value)]));
-const { year: sortYear, month: sortMonth, day: sortDay } = todayParts;
-const sortBaseTime = Date.UTC(sortYear, sortMonth - 1, sortDay);
-const dateTokenSource = '(?:\\d{4}年\\d{1,2}月\\d{1,2}日|\\d{4}\\/\\d{1,2}\\/\\d{1,2}|\\d{1,2}月\\d{1,2}日|\\d{1,2}\\/\\d{1,2})';
 
 function deadlineTimeOf(k) {
   if (!k.dlOpen) return Number.POSITIVE_INFINITY;
-  const text = String(k.deadline || '').replace(/令和(\d+)年/g, (_, year) => `${2018 + Number(year)}年`);
-  // 開催日や二次情報しかない案件は、日付を締切として扱わない。
-  if (/(?:とみられる|二次情報|正確な締切|締切日.*要確認|詳細締切.*未確認|締切明記なし|チケット販売中|種目により異なる|事前申込不要|開催直前まで|使用日の|使用希望日の|公演日の|利用希望日の|本番\d+週間前|順次開始)/.test(text)) {
-    return Number.POSITIVE_INFINITY;
-  }
-  if (/(?:ローリング|ほぼ毎月).*(?:例:|例：)/.test(text)) return Number.POSITIVE_INFINITY;
-
-  const candidates = [];
-  const tokenRe = new RegExp(dateTokenSource, 'g');
-  let match;
-  while ((match = tokenRe.exec(text))) {
-    const token = match[0];
-    let year = sortYear;
-    let month;
-    let day;
-    let parts = token.match(/^(?:(\d{4})年)?(\d{1,2})月(\d{1,2})日$/);
-    if (parts) {
-      year = Number(parts[1] || sortYear);
-      month = Number(parts[2]);
-      day = Number(parts[3]);
-    } else {
-      parts = token.match(/^(?:(\d{4})\/)?(\d{1,2})\/(\d{1,2})$/);
-      if (!parts) continue;
-      year = Number(parts[1] || sortYear);
-      month = Number(parts[2]);
-      day = Number(parts[3]);
-    }
-
-    const time = Date.UTC(year, month - 1, day);
-    if (time < sortBaseTime) continue;
-    const before = text.slice(Math.max(0, match.index - 24), match.index);
-    const after = text.slice(match.index + token.length, match.index + token.length + 24);
-    let score = 0;
-    if (/(?:締切|必着|消印|期限|エントリー期間|作品受付|申込)[^。、（）()]{0,16}$/.test(before)) score += 100;
-    const closeAt = after.search(/締切|必着|消印|まで/);
-    const anotherDateAt = after.search(new RegExp(dateTokenSource));
-    if (closeAt >= 0 && (anotherDateAt < 0 || closeAt < anotherDateAt)) score += 100;
-    if (/〜\s*$/.test(before)) score += 160;
-    if (!candidates.length && /^★?(?:受付中|募集中|次回募集)/.test(text)) score += 60;
-    if (/^[^。、（）()]{0,6}(?:開催分|実施分|対象)/.test(after)) score -= 200;
-    candidates.push({ time, score });
-  }
-
+  const candidates = deadlineCandidatesOf(k.deadline);
   if (!candidates.length) return Number.POSITIVE_INFINITY;
   const maxScore = Math.max(...candidates.map((candidate) => candidate.score));
   if (maxScore < 50) return Number.POSITIVE_INFINITY;
@@ -654,10 +685,17 @@ function statusTags(k) {
   const m = moneyOf(k);
   const primaryTag = primarySearchTagOf(k);
   t.push(`<span class="tag ${m.cls}">${m.label}</span>`);
-  if (k.dlOpen) t.push(`<span class="tag dl">締切: ${esc(k.deadline)}</span>`);
-  else t.push(`<span class="tag">${esc(k.deadline)}</span>`);
+  if (k.dlOpen) t.push(`<span class="tag dl">締切: ${esc(displayDeadline(k))}</span>`);
+  else t.push(`<span class="tag">${esc(displayDeadline(k))}</span>`);
   t.push(`<span class="tag">${esc(primaryTag.label)}</span>`);
   return t.join('');
+}
+function displayDeadline(k) {
+  if (!k.dlExpired) return k.deadline;
+  const s = String(k.deadline);
+  const replaced = s.replace(/^★?\s*(?:受付中|募集中|次回募集)/, '受付終了');
+  if (replaced !== s) return replaced;
+  return `受付終了 ／ ${s}`;
 }
 function gitem(k, rel, searchable = false) {
   const searchAttrs = searchable
@@ -909,7 +947,7 @@ for (const k of koubos) {
 <button class="save-toggle save-inline" type="button" data-save-id="${esc(k.id)}" data-save-name="${esc(k.name)}" aria-pressed="false">☆ あとで見る</button>
 <div class="card">
 <div class="kv"><div class="k">お金の向き</div><div class="v"><span class="tag ${m.cls}">${m.label}</span> ${esc(k.moneyLabel)}</div></div>
-<div class="kv"><div class="k">締切・募集状況</div><div class="v">${esc(k.deadline)}</div></div>
+<div class="kv"><div class="k">締切・募集状況</div><div class="v">${esc(displayDeadline(k))}</div></div>
 <div class="kv"><div class="k">種別・ジャンル</div><div class="v">${esc(k.type)}／${(k.genres || []).map(esc).join('・')}</div></div>
 <div class="kv"><div class="k">主な応募条件</div><ul class="cond">${(k.conditions || []).map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div>
 ${k.note ? `<p class="note">ℹ️ ${esc(k.note)}</p>` : ''}
