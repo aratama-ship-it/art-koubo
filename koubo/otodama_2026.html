@@ -23,7 +23,7 @@
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"8e76eb2d2ffe4c368e677d79abb81857"}'></script>
 <style>
 :root{--bg:#f2f3f7;--card:#fff;--ink:#1c1c22;--sub:#6a6d7a;--line:#e4e5ec;--accent:#3355e0;--accent-soft:#eaeeff;--accent-line:#d7ddf6;
---ok:#1a8f5a;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#c05621;--dl-bg:#fff4f0;
+--ok:#167c4e;--ok-bg:#e6f5ee;--chk:#b7791f;--chk-bg:#fbf3e2;--dl:#b5511f;--dl-bg:#fff4f0;
 --shadow:0 1px 3px rgba(20,20,40,.06),0 8px 24px rgba(20,20,40,.05)}
 *{box-sizing:border-box}
 html{scrollbar-gutter:stable}
@@ -56,11 +56,11 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 main{max-width:900px;margin:0 auto;padding:18px 14px 60px}
 h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .lede{color:var(--sub);margin:0 0 6px}
-.source-notice{display:grid;grid-template-columns:132px minmax(0,1fr);gap:7px 16px;align-items:start;margin:0 0 18px;padding:12px 14px;border:1px solid var(--accent-line);border-left:4px solid var(--accent);border-radius:11px;background:var(--accent-soft);color:var(--sub);font-size:13px;line-height:1.65}
-.source-notice strong{color:var(--accent);font-size:13px;letter-spacing:.04em}
-.beta-notice{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:baseline;margin:0 0 18px;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;background:var(--card);color:var(--sub);font-size:13px;line-height:1.65}
-.beta-notice__label{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.1em}.beta-notice p{margin:0}.beta-notice a{color:var(--accent);font-weight:800;text-decoration-thickness:1.5px;text-underline-offset:2px}
-@media(max-width:640px){.source-notice{grid-template-columns:1fr;gap:2px;padding:11px 12px}.beta-notice{grid-template-columns:1fr;gap:1px;padding:10px 12px}}
+.site-notice{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin:0 0 18px;padding:9px 14px;border:1px solid var(--accent-line);border-left:4px solid var(--accent);border-radius:11px;background:var(--accent-soft);color:var(--sub);font-size:12.5px;line-height:1.55}
+.site-notice__label{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.08em;flex:0 0 auto}
+.site-notice a{color:var(--accent);font-weight:700;text-decoration-thickness:1.5px;text-underline-offset:2px;white-space:nowrap}
+.site-version{color:var(--sub);font-size:11px;font-weight:600;margin-left:8px;opacity:.75}
+@media(max-width:640px){.site-notice{padding:9px 12px;font-size:12px}}
 .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin:12px 0}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;display:block}
@@ -101,9 +101,9 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:11.5px;background:#f4f5fa;color:var(--sub);border-radius:6px;padding:3px 8px}
 .tag.dl{background:var(--dl-bg);color:var(--dl);font-weight:600}
-.tag.m-reward{background:#e6f5ee;color:#1a8f5a;font-weight:700}
+.tag.m-reward{background:#e6f5ee;color:#167c4e;font-weight:700}
 .tag.m-free{background:#eef3ff;color:#3355e0;font-weight:700}
-.tag.m-paid{background:#fff4f0;color:#c05621;font-weight:700}
+.tag.m-paid{background:#fff4f0;color:#b5511f;font-weight:700}
 .tag.m-unknown{background:#f4f5fa;color:#6a6d7a;font-weight:600}
 .cta{display:inline-block;background:var(--accent);color:#fff;padding:11px 18px;border-radius:11px;font-weight:700}
 .cta:hover{text-decoration:none;opacity:.94}
@@ -122,7 +122,7 @@ h1{font-size:22px;margin:6px 0 6px}h2{font-size:17px;margin:26px 0 12px}
 .gcard .m{color:var(--sub);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gcard .a{color:#147a4a;font-size:12px;font-weight:600;margin-top:3px}
 .gtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
-.tag.glabel{background:#e6f5ee;color:#1a8f5a;font-weight:600}
+.tag.glabel{background:#e6f5ee;color:#167c4e;font-weight:600}
 @media(max-width:640px){
   .grantbox{padding:15px 14px}
   .grantbox .grow{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;overflow:visible;padding:2px 0 4px}
@@ -178,7 +178,7 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><a class="brand" href="../index.html" aria-label="身体芸術・公募ものさし ホームへ">身体芸術・公募ものさし</a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a></div></div></div>
+<div class="nav"><div class="nav-in"><a class="brand" href="../index.html" aria-label="身体芸術・公募ものさし ホームへ">身体芸術・公募ものさし</a><span class="site-version" aria-hidden="true">v2026.09.04</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="../index.html">ホーム</a><a href="../koubo.html" class="on">公募を探す</a><a href="../calendar.html">締切・募集状況</a><a href="../saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="../about.html">このサイトについて</a></div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>900)close()})})();
 </script>
@@ -193,8 +193,7 @@ window.addEventListener('storage',(event)=>{if(event.key===key)sync()});window.a
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync()})();
 </script>
 <main>
-<aside class="source-notice" aria-label="掲載情報について"><strong>掲載情報について</strong><span>掲載情報は、主催者等の一次情報をもとに収集・整理しています。更新のタイミングにより、最新の情報と異なる場合があります。詳細・最新情報は、必ず各公式サイトでご確認ください。</span></aside>
-<aside class="beta-notice" aria-label="ベータ版について"><span class="beta-notice__label">BETA</span><p><strong>このウェブサイトは現在ベータ版です。</strong> ご要望・ご意見、掲載情報の訂正などがありましたら、<a href="https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform" target="_blank" rel="noopener">フォーム</a>よりご連絡いただけると幸いです。</p></aside>
+<aside class="site-notice" aria-label="掲載情報について"><span class="site-notice__label">BETA</span><span>掲載情報は一次情報をもとに収集・整理した参考情報です（<a href="../about.html">詳細</a>）。訂正・ご要望は<a href="https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform" target="_blank" rel="noopener">フォーム</a>へ。</span></aside>
 <p class="note"><a href="../koubo.html">公募一覧</a> ／ <a href="../regions/ishikawa.html">石川</a> ／ <a href="../money/free.html">無償・施設提供</a></p>
 <h1>音魂2026 参加者募集</h1>
 <p class="lede">金沢市民芸術村ミュージック工房アクションプラン ・ 石川県金沢市</p>
