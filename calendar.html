@@ -178,7 +178,7 @@ a.pref:hover{text-decoration:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="nav"><div class="nav-in"><a class="brand" href="index.html" aria-label="身体芸術・公募ものさし ホームへ">身体芸術・公募ものさし</a><span class="site-version" aria-hidden="true">v2026.09.20</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="index.html">ホーム</a><a href="koubo.html">公募を探す</a><a href="calendar.html" class="on">締切・募集状況</a><a href="saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="about.html">このサイトについて</a></div></div></div>
+<div class="nav"><div class="nav-in"><a class="brand" href="index.html" aria-label="身体芸術・公募ものさし ホームへ">身体芸術・公募ものさし</a><span class="site-version" aria-hidden="true">v2026.09.21</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button><div class="nav-links" id="site-menu"><a href="index.html">ホーム</a><a href="koubo.html">公募を探す</a><a href="calendar.html" class="on">締切・募集状況</a><a href="saved.html">あとで見る <span class="saved-count" aria-label="保存件数">0</span></a><a href="about.html">このサイトについて</a></div></div></div>
 <script>
 (()=>{const button=document.querySelector('.menu-toggle');const menu=document.getElementById('site-menu');if(!button||!menu)return;const close=(focus=false)=>{button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','メニューを開く');menu.classList.remove('is-open');if(focus)button.focus()};button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')==='true';if(open){close()}else{button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','メニューを閉じる');menu.classList.add('is-open')}});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true')close(true)});window.addEventListener('resize',()=>{if(window.innerWidth>900)close()})})();
 </script>
@@ -196,16 +196,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <aside class="site-notice" aria-label="掲載情報について"><span class="site-notice__label">BETA</span><span>掲載情報は一次情報をもとに収集・整理した参考情報です（<a href="about.html">詳細</a>）。訂正・ご要望は<a href="https://docs.google.com/forms/d/e/1FAIpQLSc1pPGdqvVjMyocYNT7q-4JcVkn-c7c__ef1cveCDZ1Jf6hAQ/viewform" target="_blank" rel="noopener">フォーム</a>へ。</span></aside>
 <h1>締切・募集状況</h1>
 <p class="lede">「受付中」と「締切済み・次回募集の目安」を一覧。受付中は締切が近い順で、日付を特定できない随時募集などはその後に表示します。</p>
-<h2>受付中（49）</h2>
-<div class="gitem-wrap"><a class="gitem" href="koubo/biwakohall_ensemble_audition.html">
-<div class="t">びわ湖ホール声楽アンサンブル 新メンバーオーディション（令和9年度）</div>
-<div class="m">公益財団法人びわ湖芸術文化財団（滋賀県立芸術劇場びわ湖ホール） ・ 滋賀県大津市</div>
-<div class="tags"><span class="tag m-reward">報酬・賞金・制作支援あり</span><span class="tag dl">締切: ★受付中（応募締切2026年9月20日、本審査11月15日、採用開始2027年4月1日）</span><span class="tag">オーディション</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="biwakohall_ensemble_audition" data-save-name="びわ湖ホール声楽アンサンブル 新メンバーオーディション（令和9年度）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="koubo/iwaki_alios_engekibu_plus.html">
-<div class="t">いわきアリオス演劇部Plus 出演者・運営コース公募</div>
-<div class="m">いわき芸術文化交流館アリオス ・ 福島県いわき市</div>
-<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag dl">締切: ★募集中（運営コース: 2026年7月11日〜9月20日必着。出演者オーディション: 2026年9月26〜27日、本公演2027年3月21-22日）</span><span class="tag">オーディション</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="iwaki_alios_engekibu_plus" data-save-name="いわきアリオス演劇部Plus 出演者・運営コース公募" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="koubo/akita_seishonen_music_concours.html">
+<h2>受付中（48）</h2>
+<div class="gitem-wrap"><a class="gitem" href="koubo/akita_seishonen_music_concours.html">
 <div class="t">秋田県青少年音楽コンクール（第30回）</div>
 <div class="m">秋田県（観光文化スポーツ部文化振興課） ・ 秋田県秋田市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（ピアノ部門2026年8月21日、弦楽器・声楽・管打楽器部門2026年9月25日）</span><span class="tag">コンクール・コンペ</span></div></a>
@@ -257,7 +249,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">リーズ国際ピアノコンクール（The Leeds International Piano Competition）</div>
 <div class="m">The Leeds International Piano Competition（イギリス） ・ 海外（イギリス・リーズ）</div>
 <div class="tags"><span class="tag m-reward">報酬・賞金・制作支援あり</span><span class="tag dl">締切: ★受付中（早期割引2026年9月30日／通常10月31日／延長11月7日締切。本大会は2027年3〜9月開催）</span><span class="tag">コンクール・コンペ</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="leeds_piano_competition" data-save-name="リーズ国際ピアノコンクール（The Leeds International Piano Competition）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="koubo/yamagata_jido_gekidan_kyakuhon.html">
+<button class="save-toggle save-card" type="button" data-save-id="leeds_piano_competition" data-save-name="リーズ国際ピアノコンクール（The Leeds International Piano Competition）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="koubo/biwakohall_ensemble_audition.html">
+<div class="t">びわ湖ホール声楽アンサンブル 新メンバーオーディション（令和9年度）</div>
+<div class="m">公益財団法人びわ湖芸術文化財団（滋賀県立芸術劇場びわ湖ホール） ・ 滋賀県大津市</div>
+<div class="tags"><span class="tag m-reward">報酬・賞金・制作支援あり</span><span class="tag dl">締切: ★受付中（応募締切2026年9月20日、本審査11月15日、採用開始2027年4月1日）</span><span class="tag">オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="biwakohall_ensemble_audition" data-save-name="びわ湖ホール声楽アンサンブル 新メンバーオーディション（令和9年度）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="koubo/yamagata_jido_gekidan_kyakuhon.html">
 <div class="t">山形市児童劇団 上演脚本募集</div>
 <div class="m">山形市民会館（山形市児童劇団事務局） ・ 山形県山形市</div>
 <div class="tags"><span class="tag m-reward">報酬・賞金・制作支援あり</span><span class="tag dl">締切: ★受付中（2026年11月27日締切。郵送は当日消印有効）</span><span class="tag">戯曲・脚本・作品募集</span></div></a>
@@ -394,7 +390,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="m">European Juggling Association（EJA）＋開催年ごとの現地実行委員会 ・ 海外（開催地は毎年欧州各国で変動／2026年はスロベニア・プトゥイ）</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag dl">締切: ★受付中（2026年大会は8月1〜9日開催、本調査時点でチケット販売中）</span><span class="tag">フェス・イベント出演</span></div></a>
 <button class="save-toggle save-card" type="button" data-save-id="ejc_juggling_convention" data-save-name="ヨーロピアン・ジャグリング・コンベンション（European Juggling Convention, EJC）" aria-pressed="false">☆</button></div>
-<h2>締切済み・次回募集待ち（360）</h2>
+<h2>締切済み・次回募集待ち（361）</h2>
 <div class="gitem-wrap"><a class="gitem" href="koubo/tokyo_stage_opencall.html">
 <div class="t">東京舞台芸術祭 Open Call Programs</div>
 <div class="m">東京舞台芸術祭実行委員会（東京芸術劇場・緊急事態舞台芸術ネットワーク） ・ 東京都</div>
@@ -1343,7 +1339,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="t">声楽アンサンブルコンテスト全国大会（一般部門ほか）</div>
 <div class="m">声楽アンサンブルコンテスト全国大会実行委員会（福島県文化振興課内） ・ 福島県福島市</div>
 <div class="tags"><span class="tag m-paid">参加費あり</span><span class="tag">公募審査は例年12月上旬〜1月上旬受付(第19回実績: 2025/12/8〜2026/1/9)。次回(第20回)は2026年12月頃受付開始見込み</span><span class="tag">コンクール・コンペ</span></div></a>
-<button class="save-toggle save-card" type="button" data-save-id="vocal_ensemble_contest_fukushima" data-save-name="声楽アンサンブルコンテスト全国大会（一般部門ほか）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="koubo/fukushima_geijutsusai_sanka_gyouji.html">
+<button class="save-toggle save-card" type="button" data-save-id="vocal_ensemble_contest_fukushima" data-save-name="声楽アンサンブルコンテスト全国大会（一般部門ほか）" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="koubo/iwaki_alios_engekibu_plus.html">
+<div class="t">いわきアリオス演劇部Plus 出演者・運営コース公募</div>
+<div class="m">いわき芸術文化交流館アリオス ・ 福島県いわき市</div>
+<div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">受付終了（運営コース: 2026年7月11日〜9月20日必着。出演者オーディション: 2026年9月26〜27日、本公演2027年3月21-22日）</span><span class="tag">オーディション</span></div></a>
+<button class="save-toggle save-card" type="button" data-save-id="iwaki_alios_engekibu_plus" data-save-name="いわきアリオス演劇部Plus 出演者・運営コース公募" aria-pressed="false">☆</button></div><div class="gitem-wrap"><a class="gitem" href="koubo/fukushima_geijutsusai_sanka_gyouji.html">
 <div class="t">福島県芸術祭 参加行事</div>
 <div class="m">福島県芸術文化団体連合会（福島県・福島県教育委員会共催） ・ 福島県</div>
 <div class="tags"><span class="tag m-unknown">費用は要確認</span><span class="tag">令和8年4月24日締切（募集終了）。次回(令和9年度)も例年4月頃の募集が見込まれる</span><span class="tag">フェス・イベント出演</span></div></a>
