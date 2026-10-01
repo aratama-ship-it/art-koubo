@@ -86,6 +86,7 @@ for (const k of expiredKoubos) console.log(`  - ${k.id} ${k.name} / 締切 ${new
 console.log(`[deadline-expiry] 降格後の受付中: ${koubos.filter((k) => k.dlOpen).length}件`);
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const BUILD_SHA_META = process.env.BUILD_SHA ? `<meta name="build-sha" content="${esc(process.env.BUILD_SHA)}">\n` : '';
 
 // ---- お金の向き（差別化の核）----
 const MONEY = {
@@ -471,7 +472,7 @@ function layout({ title, desc, rel, body, active, extraCss = '' }) {
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
+${BUILD_SHA_META}<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">

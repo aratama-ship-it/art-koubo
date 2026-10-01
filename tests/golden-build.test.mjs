@@ -60,3 +60,30 @@ test('固定基準日の生成HTMLがgolden snapshotと一致する', () => {
     rmSync(tempRoot, { recursive: true, force: true });
   }
 });
+
+test('BUILD_SHA指定時は全生成HTMLにbuild-sha metaを埋め込む', () => {
+  const tempRoot = mkdtempSync(join(tmpdir(), 'art-koubo-build-sha-'));
+  const outputDir = join(tempRoot, 'site');
+  const buildSha = 'test-build-sha';
+  try {
+    const result = spawnSync(process.execPath, ['build.mjs'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        BUILD_OUTPUT_DIR: outputDir,
+        BUILD_REFERENCE_DATE: REFERENCE_DATE,
+        BUILD_SHA: buildSha,
+      },
+    });
+    assert.equal(result.status, 0, `build failed\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`);
+
+    const htmlFiles = htmlFilesUnder(outputDir);
+    assert.ok(htmlFiles.length > 0);
+    for (const path of htmlFiles) {
+      assert.match(readFileSync(path, 'utf8'), new RegExp(`<meta name="build-sha" content="${buildSha}">`));
+    }
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
