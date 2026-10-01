@@ -1,3 +1,18 @@
 # iCloudの同期競合コピー(「app 2.js」等)は追跡しない
 * [0-9].*
 .DS_Store
+
+# 生成物（Actions が build.mjs で毎回生成して deploy-pages で配信する。コミットしない）
+/_site/
+/sitemap.xml
+/robots.txt
+/koubo/
+/money/
+/regions/
+/about.html
+/calendar.html
+/disclaimer.html
+/index.html
+/koubo.html
+/privacy.html
+/saved.html
