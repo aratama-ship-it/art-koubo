@@ -1,4 +1,5 @@
-# 提案専用。承認前に .github/workflows/ へ置かないこと。
+# 日次リビルド＋Pages配信: main への push・毎日 03:xx JST・手動の3経路で build → test → deploy-pages。
+# 締切超過の自動降格は build.mjs がビルド時にメモリ上で判定する（data/*.json は変更しない）。
 name: Build and deploy Pages
 
 on:
