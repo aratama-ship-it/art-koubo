@@ -6,7 +6,6 @@ import { fileURLToPath } from 'node:url';
 import { expiredDeadlineTimeOf } from './lib/deadline-expiry.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
-const VERIFIED = '2026-07-18';
 const SITE_NAME = '身体芸術・公募ものさし';                         // 姉妹＝助成ものさし
 const BASE_URL = 'https://koubo.art-monosashi.com/';
 const SISTER_URL = 'https://joseikin.art-monosashi.com/'; // 助成ものさし
@@ -939,8 +938,8 @@ for (const k of koubos) {
 <div class="kv"><div class="k">種別・ジャンル</div><div class="v">${esc(k.type)}／${(k.genres || []).map(esc).join('・')}</div></div>
 <div class="kv"><div class="k">主な応募条件</div><ul class="cond">${(k.conditions || []).map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div>
 ${k.note ? `<p class="note">ℹ️ ${esc(k.note)}</p>` : ''}
-<a class="src" href="${esc(k.src)}" target="_blank" rel="noopener"><span class="src-badge">公式</span><span class="src-copy"><strong class="src-title">出典はこちら</strong><span class="src-name">${esc(k.organizer)} 公式ページ</span></span><span class="src-arrow" aria-hidden="true">↗</span></a>
-<p class="verified">最終確認: ${esc(k.verified)}（公式ページで一次確認）</p>
+<a class="src" href="${esc(k.src)}" target="_blank" rel="noopener"><span class="src-badge">公式</span><span class="src-copy"><strong class="src-title">出典はこちら</strong><span class="src-name">一次情報・公式発表</span></span><span class="src-arrow" aria-hidden="true">↗</span></a>
+<p class="verified">最終確認: ${esc(k.verified)}（一次情報・公式発表で確認）</p>
 </div>
 ${grantBlock(k)}${tour ? `\n${tour}` : ''}
 ${related.length ? `<h2>${esc(bucketOf(k.region).label)}の他の公募</h2>${related.map((q) => gitem(q, '../')).join('')}` : ''}
@@ -1030,16 +1029,22 @@ write('disclaimer.html', layout({
 <p>掲載内容の誤り・古い情報、新しい公募のご連絡のほか、ご要望・ご意見も下記フォームからお寄せください（姉妹サイトと共通の窓口です）。確認のうえ速やかに修正します。匿名で送信できます。</p>
 <p><a class="cta" href="${FORM_URL}" target="_blank" rel="noopener">ご意見・情報訂正フォームを開く →</a></p>
 <h2>更新履歴</h2>
-<ul><li>${VERIFIED}: 舞台芸術の公募${koubos.length}件でプロトタイプ公開（助成ものさしの姉妹サイト）。</li></ul>
+<ul><li>2026-07-18: 舞台芸術の公募${koubos.length}件でプロトタイプ公開（助成ものさしの姉妹サイト）。</li></ul>
 </div>`,
 }));
 
 // ---- sitemap / robots ----
 {
-  const urls = WRITTEN.map((rel) => BASE_URL + rel.replace(/^index\.html$/, ''));
+  const verifiedByPath = new Map(koubos
+    .filter((k) => /^\d{4}-\d{2}-\d{2}$/.test(String(k.verified || '')))
+    .map((k) => [`koubo/${k.id}.html`, k.verified]));
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `<url><loc>${u}</loc><lastmod>${VERIFIED}</lastmod></url>`).join('\n')}
+${WRITTEN.map((rel) => {
+    const url = BASE_URL + rel.replace(/^index\.html$/, '');
+    const verified = verifiedByPath.get(rel);
+    return `<url><loc>${url}</loc>${verified ? `<lastmod>${verified}</lastmod>` : ''}</url>`;
+  }).join('\n')}
 </urlset>`;
   writeFileSync(join(ROOT, 'sitemap.xml'), sitemap);
   writeFileSync(join(ROOT, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${BASE_URL}sitemap.xml\n`);
