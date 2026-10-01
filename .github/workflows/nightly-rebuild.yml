@@ -1,65 +1,72 @@
-# 日次リビルド: 締切超過の自動降格（build.mjs のビルド時判定）を毎日反映する。
-# 仕様: web-projects/monosashi/_maintenance/DEADLINE_AUTO_EXPIRY_SPEC.md（ワークスペース側）
-# data/*.json（正本）は変更しない。生成HTMLに差分がある日だけコミットし、Pages のビルドを明示的に要求する。
-name: Nightly rebuild
+# 提案専用。承認前に .github/workflows/ へ置かないこと。
+name: Build and deploy Pages
 
 on:
+  push:
+    branches: [main]
   schedule:
-    - cron: "0 18 * * *"   # 03:00 JST
+    - cron: "0 18 * * *" # 03:00 JST
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
+  id-token: write
 
 concurrency:
-  group: nightly-rebuild
+  group: "pages-${{ github.repository }}"
   cancel-in-progress: false
 
 jobs:
-  rebuild:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (this repo)
-        uses: actions/checkout@v4
+      - name: Checkout this repository
+        uses: actions/checkout@v7
         with:
           path: art-koubo-site
 
-      - name: Checkout sister data (stage-grants)
-        # build.mjs は隣接する ../stage-grants-site/data/programs.data.json を読む
-        uses: actions/checkout@v4
+      - name: Checkout sister grant data
+        # build.mjs は隣接する ../stage-grants-site/data/programs.data.json を読む。
+        uses: actions/checkout@v7
         with:
           repository: aratama-ship-it/stage-grants
           path: stage-grants-site
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 20
 
+      - name: Prepare artifact directory
+        run: |
+          mkdir -p art-koubo-site/_site
+          cp -R art-koubo-site/assets art-koubo-site/_site/assets
+          cp art-koubo-site/CNAME art-koubo-site/_site/CNAME
+
       - name: Build
         working-directory: art-koubo-site
+        env:
+          BUILD_OUTPUT_DIR: _site
+          BUILD_SHA: ${{ github.sha }}
         run: node build.mjs
 
-      - name: Commit and push if changed
-        id: commit
+      - name: Test
         working-directory: art-koubo-site
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "no changes"
-            exit 0
-          fi
-          git commit -m "chore: 日次リビルド $(TZ=Asia/Tokyo date +%F)（締切超過の自動降格を反映）"
-          git push
-          echo "changed=true" >> "$GITHUB_OUTPUT"
+        run: node --test tests/
 
-      - name: Request Pages build
-        # GITHUB_TOKEN による push は Pages のビルドを起動しない場合があるため明示的に要求する
-        if: steps.commit.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: art-koubo-site/_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
