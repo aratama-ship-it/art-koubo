@@ -1,11 +1,14 @@
 // アート公募メディア 静的サイトジェネレータ（依存なし・Node ESM）※助成ものさしの姉妹サイト
 // data/koubo.data.json → 各ページのHTMLを生成する。使い方: node build.mjs
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expiredDeadlineTimeOf } from './lib/deadline-expiry.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
+const OUTPUT_ROOT = process.env.BUILD_OUTPUT_DIR ? resolve(process.env.BUILD_OUTPUT_DIR) : ROOT;
+const referenceDate = process.env.BUILD_REFERENCE_DATE ? new Date(process.env.BUILD_REFERENCE_DATE) : new Date();
+if (Number.isNaN(referenceDate.getTime())) throw new Error('BUILD_REFERENCE_DATE must be a valid date');
 const SITE_NAME = '身体芸術・公募ものさし';                         // 姉妹＝助成ものさし
 const BASE_URL = 'https://koubo.art-monosashi.com/';
 const SISTER_URL = 'https://joseikin.art-monosashi.com/'; // 助成ものさし
@@ -17,7 +20,7 @@ const CLOUDFLARE_WEB_ANALYTICS_TOKEN = '8e76eb2d2ffe4c368e677d79abb81857'; // ko
 // 締切超過の自動降格: ../_maintenance/DEADLINE_AUTO_EXPIRY_SPEC.md
 const todayParts = Object.fromEntries(new Intl.DateTimeFormat('en', {
   timeZone: 'Asia/Tokyo', year: 'numeric', month: 'numeric', day: 'numeric',
-}).formatToParts(new Date()).filter((part) => part.type !== 'literal').map((part) => [part.type, Number(part.value)]));
+}).formatToParts(referenceDate).filter((part) => part.type !== 'literal').map((part) => [part.type, Number(part.value)]));
 const { year: sortYear, month: sortMonth, day: sortDay } = todayParts;
 const sortBaseTime = Date.UTC(sortYear, sortMonth - 1, sortDay);
 const sortBaseDate = `${sortYear}-${String(sortMonth).padStart(2, '0')}-${String(sortDay).padStart(2, '0')}`;
@@ -738,7 +741,7 @@ function write(rel, html) {
 <meta name="twitter:image" content="${BASE_URL}assets/og-card.png">`;
   html = html.replace(/(<meta name="description" content="[\s\S]*?">)/, `$1\n${head}`);
   WRITTEN.push(rel);
-  const abs = join(ROOT, rel);
+  const abs = join(OUTPUT_ROOT, rel);
   mkdirSync(dirname(abs), { recursive: true });
   writeFileSync(abs, html);
 }
@@ -1046,8 +1049,8 @@ ${WRITTEN.map((rel) => {
     return `<url><loc>${url}</loc>${verified ? `<lastmod>${verified}</lastmod>` : ''}</url>`;
   }).join('\n')}
 </urlset>`;
-  writeFileSync(join(ROOT, 'sitemap.xml'), sitemap);
-  writeFileSync(join(ROOT, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${BASE_URL}sitemap.xml\n`);
+  writeFileSync(join(OUTPUT_ROOT, 'sitemap.xml'), sitemap);
+  writeFileSync(join(OUTPUT_ROOT, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${BASE_URL}sitemap.xml\n`);
 }
 
 console.log(`Generated: index, koubo, calendar, ${BUCKETS.length} regions, money pages, ${koubos.length} koubo pages, 3 policy pages, sitemap(${WRITTEN.length} urls), robots.txt.`);
