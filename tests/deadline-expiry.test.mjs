@@ -5,6 +5,12 @@ import { expiredDeadlineTimeOf } from '../lib/deadline-expiry.mjs';
 
 const REFERENCE_DATE = '2026-10-01';
 
+test('公式の申込期限を優先し、最後の期限の翌日に終了する', () => {
+  const item = { deadline: '対象公演は2027年3月25日まで', applicationDeadlines: ['2026-11-26', '2027-01-14'] };
+  assert.equal(expiredDeadlineTimeOf(item, '2027-01-14'), null);
+  assert.equal(expiredDeadlineTimeOf(item, '2027-01-15'), Date.UTC(2027, 0, 14));
+});
+
 test('明示された過去の締切を降格対象にする', () => {
   const actual = expiredDeadlineTimeOf({ deadline: '★受付中（応募締切2026年9月20日）' }, REFERENCE_DATE);
   assert.equal(actual, Date.UTC(2026, 8, 20));

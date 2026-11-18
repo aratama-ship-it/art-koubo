@@ -121,6 +121,10 @@ const sourceOrder = new Map(koubos.map((k, i) => [k.id, i]));
 
 function deadlineTimeOf(k) {
   if (!k.dlOpen) return Number.POSITIVE_INFINITY;
+  if (k.applicationDeadlines) {
+    const upcoming = k.applicationDeadlines.filter((date) => date >= sortBaseDate);
+    return Math.min(...upcoming.map((date) => Date.parse(date)));
+  }
   const candidates = deadlineCandidatesOf(k.deadline);
   if (!candidates.length) return Number.POSITIVE_INFINITY;
   const maxScore = Math.max(...candidates.map((candidate) => candidate.score));
@@ -145,6 +149,8 @@ const BUCKETS = [
   ...(activeBucketKeys.has('overseas') ? [{ key: 'overseas', label: '海外' }] : []),
 ];
 const openKoubos = orderedKoubos.filter((k) => k.dlOpen);
+const inquiryKoubos = koubos.filter((k) => k.applicationStatus === 'inquiry');
+const otherKoubos = koubos.filter((k) => !k.dlOpen && k.applicationStatus !== 'inquiry');
 
 // ---- 検索用の募集形式タグ ----
 // 元データの詳細な「種別」は情報として保持し、一覧・検索では共通語彙へまとめる。
@@ -268,7 +274,8 @@ try {
     // 国際的な活動に対応しうるか（海外公募向けの優先判定に使う）
     const intl = /海外|国際|アジア|欧|グローバル/.test(region + (g.amount || '') + (g.note || ''));
     return { id: g.id, name: g.name, funder: g.funder, region, deadline: g.deadline,
-             dlUrgent: !!g.dlUrgent, amount: g.amount || '', genres: g.genres || [], isNational, prefSlug, intl };
+             dlUrgent: g.dlUrgent && expiredDeadlineTimeOf(g, sortBaseDate) === null, partial: g.applicationStatus === 'partial',
+             amount: g.amount || '', genres: g.genres || [], isNational, prefSlug, intl };
   });
 } catch { GRANTS = []; }
 
@@ -431,7 +438,7 @@ function grantBlock(k) {
 <div class="t">${esc(g.name)}</div>
 <div class="m">${esc(g.funder)}</div>
 ${g.amount ? `<div class="a">${esc(g.amount)}</div>` : ''}
-<div class="gtags">${g.dlUrgent ? '<span class="tag dl">受付中</span>' : ''}<span class="tag">${esc(g.region)}</span>${note ? `<span class="tag glabel">${note}</span>` : ''}</div></a>`;
+<div class="gtags">${g.dlUrgent || g.partial ? `<span class="tag dl">${g.partial ? '一部受付' : '受付中'}</span>` : ''}<span class="tag">${esc(g.region)}</span>${note ? `<span class="tag glabel">${note}</span>` : ''}</div></a>`;
 
   const r = relatedGrants(k);
   if (!r) {
@@ -676,6 +683,9 @@ function statusTags(k) {
   const m = moneyOf(k);
   const primaryTag = primarySearchTagOf(k);
   t.push(`<span class="tag ${m.cls}">${m.label}</span>`);
+  if (k.dlOpen) t.push('<span class="tag dl">受付中</span>');
+  else if (k.applicationStatus === 'inquiry') t.push('<span class="tag">要確認</span>');
+  else if (k.applicationStatus === 'closed' || k.dlExpired) t.push('<span class="tag">受付終了</span>');
   if (k.dlOpen) t.push(`<span class="tag dl">締切: ${esc(displayDeadline(k))}</span>`);
   else t.push(`<span class="tag">${esc(displayDeadline(k))}</span>`);
   t.push(`<span class="tag">${esc(primaryTag.label)}</span>`);
@@ -777,12 +787,12 @@ ${overseasN ? `<a class="pref" href="regions/overseas.html" style="font-size:14p
 </div>
 <p class="note" style="margin:0 0 6px">開催地から探す（掲載のある地域が青。順次拡充します）</p>
 ${CHIHO.map(([label, prefs]) => `<div class="prefgroup"><div class="gh">${label}</div><div class="prefs">${prefs.map(prefChip).join('')}</div></div>`).join('')}`;
-  const closedN = koubos.length - openKoubos.length;
   const deadlinePane = `
 <p class="note" style="margin:2px 0 12px">締切・募集状況から探す。締切済みも「次回募集の目安」として掲載しています。</p>
 <div class="regionbar">
 <a class="pref" href="calendar.html" style="font-size:14px;padding:9px 16px">受付中（${openKoubos.length}件）</a>
-<a class="pref" href="calendar.html" style="font-size:14px;padding:9px 16px">締切済み・次回待ち（${closedN}件）</a>
+<a class="pref" href="calendar.html#inquiry" style="font-size:14px;padding:9px 16px">要確認（${inquiryKoubos.length}件）</a>
+<a class="pref" href="calendar.html#past" style="font-size:14px;padding:9px 16px">締切済み・次回待ち（${otherKoubos.length}件）</a>
 </div>
 <p><a class="cta" href="calendar.html">締切・募集状況の一覧を見る →</a></p>`;
   const body = `
@@ -891,13 +901,15 @@ apply();
 
 // ---- 締切・募集状況 ----
 {
-  const closed = koubos.filter((k) => !k.dlOpen);
   const body = `<h1>締切・募集状況</h1>
 <p class="lede">「受付中」と「締切済み・次回募集の目安」を一覧。受付中は締切が近い順で、日付を特定できない随時募集などはその後に表示します。</p>
 <h2>受付中（${openKoubos.length}）</h2>
 ${openKoubos.map((k) => gitem(k, '')).join('') || '<p class="note">現在受付中の公募はありません。</p>'}
-<h2>締切済み・次回募集待ち（${closed.length}）</h2>
-${closed.map((k) => gitem(k, '')).join('')}`;
+<h2 id="inquiry">要確認（${inquiryKoubos.length}）</h2>
+<p class="note">現在応募できるかは、各公募の詳細にある主催者窓口へお問い合わせください。</p>
+${inquiryKoubos.map((k) => gitem(k, '')).join('')}
+<h2 id="past">締切済み・次回募集待ち（${otherKoubos.length}）</h2>
+${otherKoubos.map((k) => gitem(k, '')).join('')}`;
   write('calendar.html', layout({ title: `締切・募集状況｜${SITE_NAME}`, desc: `舞台芸術公募の受付中・締切済み・次回募集の目安を一覧。`, rel: '', active: 'calendar', body }));
 }
 
@@ -942,7 +954,9 @@ for (const k of koubos) {
 <div class="kv"><div class="k">種別・ジャンル</div><div class="v">${esc(k.type)}／${(k.genres || []).map(esc).join('・')}</div></div>
 <div class="kv"><div class="k">主な応募条件</div><ul class="cond">${(k.conditions || []).map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div>
 ${k.note ? `<p class="note">ℹ️ ${esc(k.note)}</p>` : ''}
+${k.contact ? `<div class="kv"><div class="k">受付状況の問い合わせ先</div><div class="v">${esc(k.contact.name)}　<a href="tel:${esc(k.contact.phone)}">${esc(k.contact.phone)}</a></div></div>` : ''}
 <a class="src" href="${esc(k.src)}" target="_blank" rel="noopener"><span class="src-badge">公式</span><span class="src-copy"><strong class="src-title">出典はこちら</strong><span class="src-name">${esc(k.organizer)} 公式ページ</span></span><span class="src-arrow" aria-hidden="true">↗</span></a>
+${(k.relatedSources || []).map((source) => `<p class="note"><a href="${esc(source.url)}" target="_blank" rel="noopener">${esc(source.label)}</a></p>`).join('')}
 <p class="verified">最終確認: ${esc(k.verified)}（一次情報・公式発表で確認）</p>
 </div>
 ${grantBlock(k)}${tour ? `\n${tour}` : ''}
